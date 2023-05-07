@@ -1,16 +1,16 @@
 # 一、source-map 是什么？
 
-前端工程化项目，打包后的代码，运行在浏览器上时，是经过压缩的：
+前端工程化项目，打包后的代码，运行在浏览器上，是经过压缩的：
 - 比如：在打包过程中，babel 将 ES6 代码转换成 ES5；
 - 比如：代码行号、列号，在经过压缩后，肯定会不一致；
-- 比如：代码进行丑化压缩时，会将变量名称，等等，修改；
+- 比如：代码进行丑化压缩时，会将变量名称，修改；
 - 比如：TypeScript 编写的代码，经由 babel 最终转换成 JavaScript；
 
-也就是说，当打包后的代码，在浏览器运行报错，需要调试时（debug），调试压缩的代码是很困难的。
+也就是说，当打包后的代码，在浏览器运行报错，需要调试时（debug），是很困难的。
 
-那，如果要正确地调试压缩后的代码,就需要 source-map 映射文件。
+那么，如果要正确地调试压缩后的代码,就需要 source-map 映射文件。
 
-source-map 映射文件，将压缩的代码，映射到源文件；
+source-map 映射文件，可将压缩的代码，映射到源文件；
 
 浏览器通过加载 source-map 映射文件，重构原始源，并在调试器中显示重建的原始源；
 
@@ -192,7 +192,7 @@ foo()
 
 - webpack 在打包时，配置 `devtool` 生成 source-map 文件；
 
-2. 转换后的代码，最后添加了一个注释，它指向 source-map 文件，比如：
+2. 打包好的代码，最后添加了一个注释，它指向 source-map 文件，比如：
 
    ```js
    //# sourceMappingURL=common.bundle.js.map
@@ -208,7 +208,7 @@ foo()
 
 最初，生成的 source-map 文件大小,是原始文件的 10 倍;
 
-第二版减少了约 50%；第三版又减少了50%；
+第二版，减少了约 50%；第三版，又减少了 50%；
 
 所以目前，一个 133kb 的文件，最终的 source-map 的大小，大概在 300kb。
 
@@ -216,16 +216,17 @@ foo()
 - `version`：当前使用的版本，也就是最新的第三版；
 - `sources`：source-map 文件的源文件；
 - `names`：转换前的变量和属性名称（上方案例使用的是 `development` 模式，所以没有保留转换前的名称）；
-- `mappings`：source-map 用来和源文件映射的信息（比如位置信息等），是一串 base64 VLQ（veriable-length quantity可变长度值）编码；
+- `mappings`：source-map 用来和源文件映射的信息（比如位置信息等）；
+  - 是一串 base64 VLQ（veriable-length quantity 可变长度值）编码；
 - `file`：打包后的文件（浏览器加载的文件）；
 - `sourceContent`：转换前的具体代码信息（和 `sources` 是对应的关系）；
 - `sourceRoot`：所有的 `sources` 相对的根目录；
 
-浏览器会更具 source-map 文件，还原出源代码。
+浏览器会根据 source-map 文件，还原出源代码。
 
 # 四、source-map 生成
 
-在 `webpack.config.js` 配置文件中，`devtool` 选项，可配置非常多值（目前是 26 个），来处理 source-map；
+在 `webpack.config.js` 配置文件中，`devtool` 选项，可配置很多值（目前是 26 个），来处理 source-map；
 
 详见[官方文档](https://webpack.docschina.org/configuration/devtool/)；
 
@@ -237,8 +238,8 @@ foo()
 - `none`：`production` 模式下的默认值（什么值都不写） ，不生成 source-map。
 - `eval`：`development` 模式下的默认值，不生成 source-map；
   - 但会在 `eval` 执行的代码中，添加 `//# sourceURL=`；
-  - 会被浏览器在执行时解析，并且在调试面板中生成对应的一些文件目录，方便调试代码；
-  - 也就是说，`eval` 可以还原出源代码，但没有那么准确。
+  - 浏览器在执行时解析，并且在调试面板中，生成对应的一些文件目录，方便调试代码；
+  - 也就是说，该值（”eval“）可以还原出源代码，但没有那么准确。
 
 生产环境，一般设置 `devtool: none`，
 
@@ -254,13 +255,13 @@ foo()
 
 会生成一个独立的 source-map 文件，并且在 bundle 文件中有一个注释，指向 source-map 文件；
 
-浏览器会根据这个注释，找到 source-map 文件，并且解析；
+浏览器会根据这个注释，找到 source-map 文件，解析，还原出源文件；
 
 见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解2.
 
 ## 3.“eval-source-map”
 
-会生成 source-map，但是再 `boundle.js` 中，以 DataUrl 添加到 eval 函数的后面的。
+会生成 source-map，不过，是在 `boundle.js` 中，以 DataUrl 添加到 eval 函数的后面的。
 
 demo-project\02-source-map\build\boundle.js
 
@@ -301,7 +302,7 @@ eval("// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nc
 
 ## 4."inline-source-map"
 
-会生成 source-map，但是再 `boundle.js` 文件中，以 DataUrl 添加到文件的后方。
+会生成 source-map，不过，是在 `boundle.js` 文件中，以 DataUrl 添加到文件的后方。
 
 demo-project\02-source-map\build\boundle.js
 
@@ -332,9 +333,9 @@ foo()
 
 ## 5."cheap-source-map"
 
-会生成 sourcemap，但是会更加高效一些（cheap 低开销），因为它没有生成列映射（Column Mapping）
+会生成 source-map，但是会更加高效一些（”cheap“在编程中，意为低开销）；
 
-在开发中，我们只需要行信息通常就可以定位到错误了.
+因为它没有生成列映射（Column Mapping）在开发中，通常只需要行信息，就可以定位到错误了.
 
 demo-project\02-source-map\build\boundle.js
 
@@ -373,7 +374,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 会生成 sourcemap，类似于 “cheap-source-map”，但是对源自 loader 的 sourcemap 处理会更好。
 
-如果 loader 对源码进行了特殊的处理，
+如果 loader 对源码进行了特殊的处理，那么使用该值，
 
 - 比如，能准确映射 babel-loader 转化后的代码；
 
@@ -387,7 +388,7 @@ demo-project\02-source-map\build\boundle.js.map
 // 被删除掉的 //# sourceMappingURL=bundle.js.map
 ```
 
-如果我们添加进来，那么 sourcemap 就会生效了。
+如果手动添加进来，那么 sourcemap 就会生效了。
 
 ## 8.“nosources-source-map”
 
@@ -428,7 +429,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 ## 9.其它值
 
-事实上，webpack 提供的 26 个值，上方没有被介绍到的，都是根据上放置组合而成的。
+事实上，提供的 26 个值，上方没有被介绍到的，都是根据上方已介绍到的值，组合而成的。
 
 组合的规则如下：
 
@@ -450,7 +451,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 测试阶段：推荐使用 `source-map` 或者 `cheap-module-source-map`； 
 
-- 测试阶段我们也希望在浏览器下看到正确的错误提示；
+- 测试阶段，我们也希望在浏览器下看到正确的错误提示；
 
 发布阶段：`false`、缺省值（不写）
 
@@ -460,9 +461,9 @@ demo-project\02-source-map\build\boundle.js.map
 
 但是 babel 对于前端开发来说，目前是不可缺少的一部分： 
 
-- 比如，开发中，使用 ES6+ 的语法，使用 TypeScript，开发 Vue / React 项目...，都离不开 Babel； 
+- 比如，开发中，使用 ES6+ 的语法、用 TypeScript、开发 Vue / React 项目...，都离不开 Babel； 
 
-Babel 是一个工具链，最早用于在旧浏览器或环境中将 ES6+ 代码转成向后兼容的版本。
+Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的版本。
 
 - 包括：语法转换、源代码转换、Polyfill 实现目标环境缺少的功能等；
 
@@ -473,7 +474,7 @@ webpack 底层，也使用 babel 对代码进行转换。
 
 # 六、Babel 命令行使用
 
-创建 03_babel核心使用：
+创建“03_babel核心使用”项目：
 
 ## 1.基本使用
 
@@ -524,7 +525,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
 
 插件过多，一个个设置比较麻烦，可以使用预设：
 
-安装预设，并在命令中使用
+安装 Babel 的预设，并在命令中使用。
 
 会自动开启严格模式。
 
@@ -540,11 +541,9 @@ npx babel demo.js --out-dir dist --presets=@babel/preset-env
 
 # 七、Babel 底层原理
 
-babel 将一段代码（ES6、TypeScript、React）转成另外一段代码.
+babel 可将一段代码（ES6、TypeScript、React）转成另外一段代码.
 
-就是编译器在做的工作。
-
-Babel 本质上是一个编译器，可以将源代码，转换成浏览器可以直接识别的另外一段源代码；
+Babel 本质上是一个编译器，可以将源代码，转换成浏览器可以识别的另外一段源代码；
 
 Babel 编译器的工作流程，3 点：对应的步骤，理解原理图。
 
@@ -557,5 +556,4 @@ Babel 编译器的工作流程，3 点：对应的步骤，理解原理图。
 
 <img src="NodeAssets/Babel的执行流程.jpg" alt="Babel的执行流程" style="zoom:150%;" />
 
-
-
+[github 上，优秀的小型编译器项目](https://github.com/jamiebuilds/the-super-tiny-compiler)

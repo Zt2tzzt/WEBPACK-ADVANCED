@@ -557,3 +557,5 @@ Babel 编译器的工作流程，3 点：对应的步骤，理解原理图。
 <img src="NodeAssets/Babel的执行流程.jpg" alt="Babel的执行流程" style="zoom:150%;" />
 
 [github 上，优秀的小型编译器项目](https://github.com/jamiebuilds/the-super-tiny-compiler)
+
+将 lisp 语言的代码，转成 C 语言的代码。

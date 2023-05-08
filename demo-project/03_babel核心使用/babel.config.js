@@ -4,6 +4,7 @@ module.exports = {
   //   "@babel/plugin-transform-block-scoping"
   // ]
   presets: [
+    "stage-0"
     ["@babel/preset-env", {
       // 在开发中针对babel的浏览器兼容查询使用browserslist工具, 而不是设置target
       // 因为browserslist工具, 可以在多个前端工具之间进行共享浏览器兼容性(postcss/babel)

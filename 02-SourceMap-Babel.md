@@ -188,9 +188,7 @@ foo()
 # 二、source-map 使用
 
 使用 source-map，有两个步骤：
-1. 根据源文件，生成 source-map 文件；
-
-- webpack 在打包时，配置 `devtool` 生成 source-map 文件；
+1. webpack 在打包时，配置 `devtool` 根据源文件，生成 source-map 文件；
 
 2. 打包好的代码，最后添加了一个注释，它指向 source-map 文件，比如：
 
@@ -214,9 +212,9 @@ foo()
 
 目前的 source-map 文件，通常有如下属性：
 - `version`：当前使用的版本，也就是最新的第三版；
-- `sources`：source-map 文件的源文件；
-- `names`：转换前的变量和属性名称（上方案例使用的是 `development` 模式，所以没有保留转换前的名称）；
-- `mappings`：source-map 用来和源文件映射的信息（比如位置信息等）；
+- `sources`：源文件；
+- `names`：源文件的变量和属性名称（上方案例使用的是 `development` 模式，所以没有保留转换前的名称）；
+- `mappings`：源文件映射的信息（比如位置信息等）；
   - 是一串 base64 VLQ（veriable-length quantity 可变长度值）编码；
 - `file`：打包后的文件（浏览器加载的文件）；
 - `sourceContent`：转换前的具体代码信息（和 `sources` 是对应的关系）；
@@ -253,7 +251,7 @@ foo()
 
 ## 2."source-map"
 
-会生成一个独立的 source-map 文件，并且在 bundle 文件中有一个注释，指向 source-map 文件；
+会生成一个独立的 source-map 文件，并在 `bundle.js` 文件中有一个注释，指向 source-map 文件；
 
 浏览器会根据这个注释，找到 source-map 文件，解析，还原出源文件；
 
@@ -261,7 +259,9 @@ foo()
 
 ## 3.“eval-source-map”
 
-会生成 source-map，不过，是在 `boundle.js` 中，以 DataUrl 添加到 eval 函数的后面的。
+会生成 source-map;
+
+不过，是在 `boundle.js` 中，以 DataUrl 添加到 eval 函数的后面的。
 
 demo-project\02-source-map\build\boundle.js
 
@@ -302,7 +302,9 @@ eval("// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nc
 
 ## 4."inline-source-map"
 
-会生成 source-map，不过，是在 `boundle.js` 文件中，以 DataUrl 添加到文件的后方。
+会生成 source-map;
+
+不过，是在 `boundle.js` 文件中，以 DataUrl 添加到文件的后方。
 
 demo-project\02-source-map\build\boundle.js
 
@@ -333,9 +335,11 @@ foo()
 
 ## 5."cheap-source-map"
 
-会生成 source-map，但是会更加高效一些（”cheap“在编程中，意为低开销）；
+会生成 source-map
 
-因为它没有生成列映射（Column Mapping）在开发中，通常只需要行信息，就可以定位到错误了.
+不过，会更加高效一些（”cheap“在编程中，意为低开销）；
+
+没有生成列映射（Column Mapping），在开发中，通常只需要行信息，就可以定位到错误了.
 
 demo-project\02-source-map\build\boundle.js
 
@@ -372,7 +376,9 @@ demo-project\02-source-map\build\boundle.js.map
 
 ## 6."cheap-module-source-map"
 
-会生成 sourcemap，类似于 “cheap-source-map”，但是对源自 loader 的 sourcemap 处理会更好。
+会生成 sourcemap；
+
+类似于 “cheap-source-map”，但是对源自 loader 的 sourcemap 处理会更好。
 
 如果 loader 对源码进行了特殊的处理，那么使用该值，
 
@@ -380,19 +386,21 @@ demo-project\02-source-map\build\boundle.js.map
 
 ## 7.“hidden-source-map”
 
-会生成 sourcemap，但是不会对 source-map 文件进行引用；
+会生成 sourcemap；
 
-相当于删除了打包文件中对 sourcemap 的引用注释；
+不过，在 `boundle.js` 文件中，不会对 source-map 文件进行引用；
 
 ```js
 // 被删除掉的 //# sourceMappingURL=bundle.js.map
 ```
 
-如果手动添加进来，那么 sourcemap 就会生效了。
+如果手动添加，那么 sourcemap 就会生效了。
 
 ## 8.“nosources-source-map”
 
-会生成 sourcemap，但是生成的 sourcemap 只有错误信息的提示，不会生成源代码文件；
+会生成 sourcemap；
+
+不过，生成的 sourcemap 只有错误信息的提示，不会生成源代码文件；
 
 demo-project\02-source-map\build\boundle.js
 
@@ -459,11 +467,11 @@ demo-project\02-source-map\build\boundle.js.map
 
 事实上，在实际开发中，我们很少直接接触 babel；
 
-但是 babel 对于前端开发来说，目前是不可缺少的一部分： 
+但是，目前 babel 对于前端开发来说，是不可缺少的一部分： 
 
 - 比如，开发中，使用 ES6+ 的语法、用 TypeScript、开发 Vue / React 项目...，都离不开 Babel； 
 
-Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的版本。
+Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的代码。
 
 - 包括：语法转换、源代码转换、Polyfill 实现目标环境缺少的功能等；
 
@@ -537,13 +545,13 @@ npm install @babel/preset-env -D
 npx babel demo.js --out-dir dist --presets=@babel/preset-env
 ```
 
-> 安装库的方式如 `@babel/core`，表示代码仓库通过 monoRepo 的方式来管理。
+> 安装库的方式如 “@babel/core”，表示代码仓库通过 monoRepo 的方式来管理。
 
 # 七、Babel 底层原理
 
 babel 可将一段代码（ES6、TypeScript、React）转成另外一段代码.
 
-Babel 本质上是一个编译器，可以将源代码，转换成浏览器可以识别的另外一段源代码；
+Babel 本质上是一个**编译器**，可以将源代码，转换成浏览器可以识别的另外一段源代码；
 
 Babel 编译器的工作流程，3 点：对应的步骤，理解原理图。
 

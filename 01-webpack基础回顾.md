@@ -50,7 +50,6 @@ foo()
 
 console.log(add(20, 30))
 console.log(sub(20, 30))
-
 ```
 
 demo-project\02-source-map\src\utils\math.js
@@ -87,7 +86,7 @@ module.exports = {
 }
 ```
 
-执行命令命令。使用 webpack，根据配置文件，进行打包。
+执行命令。使用 webpack，根据配置文件，进行打包。
 
 ```shell
 npx webpack
@@ -105,7 +104,7 @@ demo-project\02-source-map\build\boundle.js
 
 `mode` 配置选项：用于告知 webpack 使用响应模式的内置优化：
 
-- `production`：默认值，准备打包上线的时候，设置.打包的文件会被压缩和丑化。
+- `production`：默认值，准备打包上线的时候设置，打包的文件会被压缩和丑化。
 - `development`：一般在开发阶段设置。
 - `none`：不使用任何默认优化选项（只有 `entry`，`output` 两个配置，其它都不加）。
 
@@ -231,6 +230,8 @@ console.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.sub)(20, 30))
 /******/ })()
 ;
 ```
+
+当 `mode: development,`
 
 demo-project\02-source-map\build\boundle.js
 

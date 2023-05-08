@@ -404,24 +404,73 @@ module.exports = {
 > - arrow-function/package.json
 > - ...
 
+# 十三、polyfill 是什么？
 
+Polyfill 直译为一种用于衣物、床具的聚酯填充材料, 使这些物品更加温暖舒适；
 
-polyfill 是什么？
+在前端中，表示：填充物（垫片），一个补丁，可以帮助我们更好的使用 JavaScript；
 
-babel 将高级语法，转成低级语法，但有些 API，没法转换
+事实上，babel 将高级语法特性，转成向下兼容的语法，但有些 API，没法转换；
 
-- 比如 Promise，Array.prototype.includes()...
+当使用了一些 API 特性（例如：Promise, Generator, Symbol、实例方法例如 Array.prototype.includes...）
+
+就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，能够正确的转换代码；
 
 polyfill 就是把没有的 API，填充进来。
 
----
+# 十四、polyfill 的使用
 
-如何使用 polufill
+babel7.4.0 之前，可以使用 *@babel/polyfill* 的包，但现在已经不推荐使用了：
 
-安装两个依赖。
+babel7.4.0 之后，可以通过单独引入 *core-js* 和 *regenerator-runtime* 来完成 polyfill 的使用：
 
----
+```shell
+npm install core-js regenerator-runtime # 生产环境和开发阶段都需要依赖。
+```
 
-在哦 babel.config.js 中，配置。
+在哦 `babel.config.js` 中，配置。
 
-推荐使用 usage。
+demo-project\03_babel核心使用\babel.config.js
+
+```js
+module.exports = {
+  presets: [
+    ["@babel/preset-env", {
+      corejs: 3,
+      useBuiltIns: "entry"
+    }],
+  ]
+}
+
+```
+
+`corejs`：设置 corejs 的版本，目前使用较多的是 3.x 的版本；
+
+- 另外 corejs 可以设置是否对提议阶段的特性进行支持；
+- 设置 proposals 属性为 true 即可；
+
+`useBuiltIns`：设置以什么样的方式来使用 polyfill，常见的有 3 个值；
+
+- `false`
+  
+  - 打包后的文件，不使用 polyfill 来进行适配；
+  - 并且这时，不需要设置 `corejs` 属性的；
+- `usage`（推荐使用）
+  
+  - 会根据源代码中，出现的语言特性，自动检测所需要的 `polyfill`；
+  - 可以确保，最终包里的 polyfill 数量的最小化，打包的包相对会小一些；
+  - 可以设置 corejs 属性来确定使用的 corejs 的版本；
+- `entry`
+  
+  - 如果依赖的某一个库，本身使用了某些 polyfill 的特性，这时使用 `usage`，用户浏览器可能会报错；
+  
+  - 如果你担心出现这种情况，可以使用 `entry`；
+  
+  - 并且需要在入口文件中添加
+  
+    ```js
+    import 'core-js/stable';
+    import 'regenerator-runtime/runtime
+    ```
+  
+  - 这样做，会根据 browserslist 目标，导入所有的 polyfill，但是对应的包也会变大；

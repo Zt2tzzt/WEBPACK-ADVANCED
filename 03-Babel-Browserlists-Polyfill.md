@@ -6,81 +6,76 @@ Babel 的预设，是根据要适配的浏览器，进行查询的，会用到 `
 
 ## 1.babel-loader
 
-1. 安装 *@babel/core*，*babel-loader*；
+1.安装 *@babel/core*，*babel-loader*；
 
-   ```shell
-   npm install @babel/core babel-loader -D
-   ```
+```shell
+npm install @babel/core babel-loader -D
+```
 
 ## 2.babel-preset
 
-1. 安装对应的插件，预设：
+1.安装对应的插件，预设：
 
-   ```shell
-   npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block-scoping -D
-   ```
+```shell
+npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block-scoping -D
+```
 
-   ```shell
-   npm install @babel/preset-env -D
-   ```
+```shell
+npm install @babel/preset-env -D
+```
 
-2. 在 `webpoack.config.js` 文件中做配置：
+2.在 `webpoack.config.js` 文件中做配置：
 
-   ```javascript
-   module.exports = {
-     module: {
-       rules: [
-         {
-           test: /\.m?js$/,
-           use: {
-             loader: 'babel-loader',
-             options: {
-               // 配置插件
-               /* plugins: [
-                 "@babel/plugin-transform-arrow-function",
-                 "@babel/plugin-transform-block-scoping"
-               ] */
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // 配置插件
+            /* plugins: [
+              "@babel/plugin-transform-arrow-function",
+              "@babel/plugin-transform-block-scoping"
+            ] */
 
-               // 配置预设, 常见的有 env，react，TypeScript
-               presets: [
-                 // presets 的两种写法，在数组中，做更多配置。
-                 ['@babel/preset-env']
-                 // 另一种写法，用于配置预设
-                 // ['@babel/preset-env', {xxx: xxx}]
-               ]
-             }
-           }
-         }
-       ]
-     }
-   }
-   ```
+            // 配置预设, 常见的有 env，react，TypeScript
+            presets: [
+              // presets 的两种写法，在数组中，做更多配置。
+              '@babel/preset-env'
+              // 另一种写法，用于配置预设
+              // ['@babel/preset-env', {xxx: xxx}]
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
+```
 
-如果一个个去安装插件，那么要手动管理大量的 babel 插件;
+如果一个个去安装插件，意味着要手动管理大量插件;
 
-webpack 中使用 babel preset；
+在 webpack 中，使用预设（babel preset），来加载对应的插件列表；
 
-webpack 会根据预设，来加载对应的插件列表，并将其传递给 babel。
-
-babel 比如常见的预设有三个：
+常见的 babel 预设有三个：
 - env
 - react
 - TypeScript
 
 
-> 【补充】：在 output 中，配置 clear，每次打包，清空 build 文件夹。
->
-> - 以前没有这个配置，需要通过插件完成。
-> - 在新版本中的特性。
+> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹。在新版本中的特性，以前没有这个配置，需要通过插件完成。
 >
 > demo-project\03_babel核心使用\webpack.config.js
->
-> ```js
+> 
+>```js
 > const path = require('path')
 >
 > module.exports = {
 >   mode: 'development',
->   devtool: false,
+>  devtool: false,
 >   entry: './src/index.js',
 >   output: {
 >     path: path.resolve(__dirname, './build'),
@@ -94,22 +89,24 @@ babel 比如常见的预设有三个：
 
 ## 3.为什么要使用 babel
 
-webpack 压缩代码，添加了模块化内容；babel 包含的是代码转化的功能。
+webpack 压缩代码后，仅有模块化内容；
 
-所以，需要将 webpack 和 babel 结合在一起。才是我们想要的效果。
+babel 添加了代码语法转化的功能。
+
+将 webpack 和 babel 结合在一起。才是我们想要的效果。
 
 # 二、浏览器兼容性
 
-这里指的兼容性，是针对不同的浏览器支持的特性：
+这里指的兼容性，是指浏览器支持的代码特性：
 
-- 比如 css 特性、js 语法之间的兼容性；HTML 基本不需要兼容；
+- 比如 css 特性、js 语法的兼容性（HTML 基本不需要兼容）；
 
 前端开发，急需一些工具，帮助做代码兼容。
 
 - CSS，一般用 PostCSS 做转化。
 - JS 一般用 Babel 做转化。
 
-在适配新版本浏览器时，通常不需要转化，在适配旧浏览器时，需要转换。所以代码是否要做兼容，取决于要是配的浏览器。
+在适配新版本浏览器时，通常不需要转化，在适配旧浏览器时，需要转换。所以代码是否要做兼容，取决于要适配的浏览器。
 
 市面上有大量的浏览器：
 - 比如 Chrome、Safari、IE、Edge、Chrome for Android、UC Browser、QQ Browser...；
@@ -119,19 +116,13 @@ webpack 压缩代码，添加了模块化内容；babel 包含的是代码转化
 
 - 通常在 [caniuse](https://caniuse.com/usage-table) 则个网站进行查询；
 
-browserslist 工具，用于指定要兼容的浏览器。
-
-- postcss，bable 做代码转换时，会根据 browserslist，查询要适配的浏览器。
-
 # 三、browserslist 工具
 
-如何在 css 兼容性、js 兼容性下，共享配置的兼容性条件呢？
-- 当设置了一个条件：> 1%；
-- 表达的意思是：css、js 要兼容市场占有率大于 1% 的浏览器；
+browserslist 工具，用于指定要兼容的浏览器。
 
-那么在适配工具（比如：postcss-preset-env、babel、autoprefixer...)，如何共享配置呢？
+在适配工具，用 Browserslist 共享目标浏览器和 Node.js 版本的配置：
 
-这时，要用到 Browserslist；它可在不同的前端工具（比如以下工具）之间，共享目标浏览器和 Node.js 版本的配置：
+可适配以下工具：
 
 - Autoprefixer
 - Babel
@@ -151,9 +142,9 @@ last 2 versions
 not dead
 ```
 
-*browserslist* 工具，会根据配置，来获取相关的浏览器信息，以决定是否需要进行兼容性的支持：
+*browserslist* 工具，来获取相关的浏览器信息，以决定是否需要进行兼容性的支持：
 
-*caniuse-lite* 工具，用于条件查询，这个工具的数据，来自于 caniuse 的网站上；
+*caniuse-lite* 工具，用于条件查询，数据，来自于 caniuse 的网站上；
 
 demo-project\03_babel核心使用\node_modules\browserslist\index.js
 
@@ -167,7 +158,7 @@ var agents = require('caniuse-lite/dist/unpacker/agents').agents
 
 browserslist 常用的编写的条件如下：
 
-`defaults`：默认条件（> 0.5%, last 2 versions, Firefox ESR, not dead）。
+`defaults`：默认条件（`> 0.5%, last 2 versions, Firefox ESR, not dead`）。
 
 `5%`：浏览器市场占有率，与 `>=`、`<`、`<=`...结合使用；
 
@@ -221,7 +212,7 @@ browserslist 常用的编写的条件如下：
 
 # 六、browserslist 命令行使用
 
-在安装 Babel 时，自带了 browserslist 工具和 caniuse-lite 工具。
+安装 Babel，自带了 browserslist 工具和 caniuse-lite 工具。
 
 运行命令
 
@@ -313,11 +304,11 @@ browserslist.defaults = [
 
 上面介绍的，都是使用了 browserslist 工具进行适配；
 
-事实上，还可以在转化工具中，使用 `target` 属性，进行适配，开发中很少使用。
+事实上，还可以在转化工具中，使用 `target` 属性，进行适配（开发中很少使用）。
 
 ## 2.targets
 
-通过 targets 属性，来进行配置：
+通过 `targets` 属性，进行配置，会覆盖 browserslist 的配置；：
 
 demo-project\03_babel核心使用\babel.config.js
 
@@ -333,11 +324,11 @@ module.exports = {
 }
 ```
 
-targets 属性，会覆盖 browserslist 的配置；
+
 
 ## 3.如何选择？
 
-在开发中，还是推荐通过 browserslist 来配置，因为类似于 postcss 工具，也会使用 browserslist，进行统一浏览器的适配；
+在开发中，推荐使用 browserslist 来配置；进行统一浏览器的适配；
 
 # 十、Stage-X 是什么？
 
@@ -389,11 +380,11 @@ module.exports = {
 `babel.config.json`（或者 .js，.cjs，.mjs）文件；
 
 - babel7 之后的方案：可以直接作用于 Monorepos 项目的子包，更加推荐；
-- 目前很多的项目都采用了多包管理的方式（babel 本身、element-plus、umi 等）；
+- 目前很多的项目都采用了多包管理的方式（babel、element-plus、umi...）；
 
 `.babelrc.json`（或者 .babelrc，.js，.cjs，.mjs）文件；
 
-- 早期使用较多的配置方式，但是对于配置Monorepos项目是比较麻烦的；
+- 早期使用较多的配置方式，对于配置 Monorepos 项目是比较麻烦的；
 
 > 【补充】：Monorepos 项目（多见于第三方框架的项目）：
 >
@@ -406,7 +397,7 @@ module.exports = {
 
 # 十三、polyfill 是什么？
 
-Polyfill 直译为一种用于衣物、床具的聚酯填充材料, 使这些物品更加温暖舒适；
+Polyfill 直译为：一种用于衣物、床具的聚酯填充材料, 使这些物品更加温暖舒适；
 
 在前端中，表示：填充物（垫片），一个补丁，可以帮助我们更好的使用 JavaScript；
 
@@ -420,15 +411,15 @@ polyfill 就是把没有的 API，填充进来。
 
 # 十四、polyfill 的使用
 
-babel7.4.0 之前，可以使用 *@babel/polyfill* 的包，但现在已经不推荐使用了：
+babel7.4.0 之前，可以使用 *@babel/polyfill* 包，现在已经不推荐使用了：
 
 babel7.4.0 之后，可以通过单独引入 *core-js* 和 *regenerator-runtime* 来完成 polyfill 的使用：
 
 ```shell
-npm install core-js regenerator-runtime # 生产环境和开发阶段都需要依赖。
+npm install core-js regenerator-runtime # 生产环境和开发阶段都需要该依赖。
 ```
 
-在哦 `babel.config.js` 中，配置。
+在 `babel.config.js` 中，配置。
 
 demo-project\03_babel核心使用\babel.config.js
 
@@ -441,7 +432,6 @@ module.exports = {
     }],
   ]
 }
-
 ```
 
 `corejs`：设置 corejs 的版本，目前使用较多的是 3.x 的版本；
@@ -457,9 +447,8 @@ module.exports = {
   - 并且这时，不需要设置 `corejs` 属性的；
 - `usage`（推荐使用）
   
-  - 会根据源代码中，出现的语言特性，自动检测所需要的 `polyfill`；
-  - 可以确保，最终包里的 polyfill 数量的最小化，打包的包相对会小一些；
-  - 可以设置 corejs 属性来确定使用的 corejs 的版本；
+  - 根据源代码中出现的语言特性，自动检测所需要的 `polyfill`；
+  - 确保，最终打包里的 polyfill 数量最小化；
 - `entry`
   
   - 如果依赖的某一个库，本身使用了某些 polyfill 的特性，这时使用 `usage`，用户浏览器可能会报错；

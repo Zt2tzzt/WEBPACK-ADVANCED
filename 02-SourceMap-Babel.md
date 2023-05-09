@@ -1,6 +1,7 @@
 # 一、source-map 是什么？
 
 前端工程化项目，打包后的代码，运行在浏览器上，是经过压缩的：
+
 - 比如：babel 会将 ES6 代码转换成 ES5；
 - 比如：压缩后，代码行号、列号，会不一致；
 - 比如：丑化压缩时，变量名称会改变；
@@ -12,7 +13,7 @@
 
 浏览器加载 source-map 映射文件，重构原始源，并在调试器中，显示重建的原始源；
 
-:egg: 案例理解1：
+:egg: 案例理解 1：
 
 编写一个报错的文件。
 
@@ -65,30 +66,33 @@ demo-project\02-source-map\build\boundle.js
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/main.js":
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  /******/ var __webpack_modules__ = {
+    /***/ './src/main.js':
+      /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-/***/ (() => {
+      /***/ () => {
+        eval(
+          "// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n\n\n//# sourceURL=webpack://02-source-map/./src/main.js?"
+        )
 
-eval("// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n\n\n//# sourceURL=webpack://02-source-map/./src/main.js?");
+        /***/
+      }
 
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/main.js"]();
-/******/
-/******/ })()
-;
+    /******/
+  }
+  /************************************************************************/
+  /******/
+  /******/ // startup
+  /******/ // Load entry module and return exports
+  /******/ // This entry module can't be inlined because the eval devtool is used.
+  /******/ var __webpack_exports__ = {}
+  /******/ __webpack_modules__['./src/main.js']()
+  /******/
+  /******/
+})()
 ```
 
 在 `index.html` 文件中，引入 `build/bundle.js` 文件，
@@ -98,17 +102,17 @@ demo-project\02-source-map\index.html
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>哈哈</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>哈哈</h1>
 
-  <script src="./build/boundle.js"></script>
-</body>
+    <script src="./build/boundle.js"></script>
+  </body>
 </html>
 ```
 
@@ -122,7 +126,7 @@ in.js:5 Uncaught ReferenceError: address is not defined
     at boundle.js:31:12
 ```
 
-:egg: 案例理解2
+:egg: 案例理解 2
 
 在 `webpack.config.js` 配置文件中，配置 `devtool: "source-map"`；
 
@@ -153,39 +157,51 @@ npx webpack
 demo-project\02-source-map\build\boundle.js
 
 ```js
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  var __webpack_exports__ = {}
+  /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-// import { add, sub } from './utils/math';
+  // import { add, sub } from './utils/math';
 
-const msg = 'Hello Frog'
-console.log(msg)
-console.log(address)
+  const msg = 'Hello Frog'
+  console.log(msg)
+  console.log(address)
 
-const foo = () => {
-  console.log('foo function exec~')
-}
-foo()
+  const foo = () => {
+    console.log('foo function exec~')
+  }
+  foo()
 
-// console.log(add(20, 30))
-// console.log(sub(20, 30))
+  // console.log(add(20, 30))
+  // console.log(sub(20, 30))
 
-/******/ })()
-;
+  /******/
+})()
 //# sourceMappingURL=boundle.js.map
 ```
 
 在 build 目录下，生成了 `bundle.js.map` 文件。
 
 ```json
-{"version":3,"file":"boundle.js","mappings":";;;;;AAAA,YAAY,WAAW;;AAEvB;AACA;AACA;;AAEA;AACA;AACA;AACA;;AAEA;AACA","sources":["webpack://02-source-map/./src/main.js"],"sourcesContent":["// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n"],"names":[],"sourceRoot":""}
+{
+  "version": 3,
+  "file": "boundle.js",
+  "mappings": ";;;;;AAAA,YAAY,WAAW;;AAEvB;AACA;AACA;;AAEA;AACA;AACA;AACA;;AAEA;AACA",
+  "sources": ["webpack://02-source-map/./src/main.js"],
+  "sourcesContent": [
+    "// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n"
+  ],
+  "names": [],
+  "sourceRoot": ""
+}
 ```
 
 # 二、source-map 使用
 
 使用 source-map，有两个步骤：
+
 1. webpack 在打包时，配置 `devtool` 根据源文件，生成 source-map 文件；
 
 2. 打包好的代码，最后添加了一个注释，它指向 source-map 文件，比如：
@@ -207,6 +223,7 @@ foo()
 所以目前，一个 133kb 的文件，最终的 source-map 的大小，大概在 300kb。
 
 目前的 source-map 文件，通常有如下属性：
+
 - `version`：当前使用的版本，一般是最新的第三版；
 - `sources`：源文件；
 - `names`：源文件的变量和属性名称（上方案例使用的是 `development` 模式，所以没有保留转换前的名称）；
@@ -243,7 +260,7 @@ foo()
 
 ## 1."eval"
 
-见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解1.
+见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解 1.
 
 ## 2."source-map"
 
@@ -251,7 +268,7 @@ foo()
 
 浏览器会根据这个注释，找到 source-map 文件，解析，还原出源文件；
 
-见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解2.
+见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解 2.
 
 ## 3.“eval-source-map”
 
@@ -270,30 +287,33 @@ demo-project\02-source-map\build\boundle.js
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/main.js":
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  /******/ var __webpack_modules__ = {
+    /***/ './src/main.js':
+      /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-/***/ (() => {
+      /***/ () => {
+        eval(
+          "// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvbWFpbi5qcy5qcyIsIm1hcHBpbmdzIjoiQUFBQSxZQUFZLFdBQVc7O0FBRXZCO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vMDItc291cmNlLW1hcC8uL3NyYy9tYWluLmpzPzU2ZDciXSwic291cmNlc0NvbnRlbnQiOlsiLy8gaW1wb3J0IHsgYWRkLCBzdWIgfSBmcm9tICcuL3V0aWxzL21hdGgnO1xuXG5jb25zdCBtc2cgPSAnSGVsbG8gRnJvZydcbmNvbnNvbGUubG9nKG1zZylcbmNvbnNvbGUubG9nKGFkZHJlc3MpXG5cbmNvbnN0IGZvbyA9ICgpID0+IHtcbiAgY29uc29sZS5sb2coJ2ZvbyBmdW5jdGlvbiBleGVjficpXG59XG5mb28oKVxuXG4vLyBjb25zb2xlLmxvZyhhZGQoMjAsIDMwKSlcbi8vIGNvbnNvbGUubG9nKHN1YigyMCwgMzApKVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/main.js\n"
+        )
 
-eval("// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvbWFpbi5qcy5qcyIsIm1hcHBpbmdzIjoiQUFBQSxZQUFZLFdBQVc7O0FBRXZCO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vMDItc291cmNlLW1hcC8uL3NyYy9tYWluLmpzPzU2ZDciXSwic291cmNlc0NvbnRlbnQiOlsiLy8gaW1wb3J0IHsgYWRkLCBzdWIgfSBmcm9tICcuL3V0aWxzL21hdGgnO1xuXG5jb25zdCBtc2cgPSAnSGVsbG8gRnJvZydcbmNvbnNvbGUubG9nKG1zZylcbmNvbnNvbGUubG9nKGFkZHJlc3MpXG5cbmNvbnN0IGZvbyA9ICgpID0+IHtcbiAgY29uc29sZS5sb2coJ2ZvbyBmdW5jdGlvbiBleGVjficpXG59XG5mb28oKVxuXG4vLyBjb25zb2xlLmxvZyhhZGQoMjAsIDMwKSlcbi8vIGNvbnNvbGUubG9nKHN1YigyMCwgMzApKVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/main.js\n");
+        /***/
+      }
 
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval-source-map devtool is used.
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/main.js"]();
-/******/
-/******/ })()
-;
+    /******/
+  }
+  /************************************************************************/
+  /******/
+  /******/ // startup
+  /******/ // Load entry module and return exports
+  /******/ // This entry module can't be inlined because the eval-source-map devtool is used.
+  /******/ var __webpack_exports__ = {}
+  /******/ __webpack_modules__['./src/main.js']()
+  /******/
+  /******/
+})()
 ```
 
 ## 4."inline-source-map"
@@ -305,27 +325,28 @@ eval("// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nc
 demo-project\02-source-map\build\boundle.js
 
 ```js
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  var __webpack_exports__ = {}
+  /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-// import { add, sub } from './utils/math';
+  // import { add, sub } from './utils/math';
 
-const msg = 'Hello Frog'
-console.log(msg)
-console.log(address)
+  const msg = 'Hello Frog'
+  console.log(msg)
+  console.log(address)
 
-const foo = () => {
-  console.log('foo function exec~')
-}
-foo()
+  const foo = () => {
+    console.log('foo function exec~')
+  }
+  foo()
 
-// console.log(add(20, 30))
-// console.log(sub(20, 30))
+  // console.log(add(20, 30))
+  // console.log(sub(20, 30))
 
-/******/ })()
-;
+  /******/
+})()
 //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYm91bmRsZS5qcyIsIm1hcHBpbmdzIjoiOzs7OztBQUFBLFlBQVksV0FBVzs7QUFFdkI7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8wMi1zb3VyY2UtbWFwLy4vc3JjL21haW4uanMiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gaW1wb3J0IHsgYWRkLCBzdWIgfSBmcm9tICcuL3V0aWxzL21hdGgnO1xuXG5jb25zdCBtc2cgPSAnSGVsbG8gRnJvZydcbmNvbnNvbGUubG9nKG1zZylcbmNvbnNvbGUubG9nKGFkZHJlc3MpXG5cbmNvbnN0IGZvbyA9ICgpID0+IHtcbiAgY29uc29sZS5sb2coJ2ZvbyBmdW5jdGlvbiBleGVjficpXG59XG5mb28oKVxuXG4vLyBjb25zb2xlLmxvZyhhZGQoMjAsIDMwKSlcbi8vIGNvbnNvbGUubG9nKHN1YigyMCwgMzApKVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9
 ```
 
@@ -340,34 +361,45 @@ foo()
 demo-project\02-source-map\build\boundle.js
 
 ```js
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  var __webpack_exports__ = {}
+  /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-// import { add, sub } from './utils/math';
+  // import { add, sub } from './utils/math';
 
-const msg = 'Hello Frog'
-console.log(msg)
-console.log(address)
+  const msg = 'Hello Frog'
+  console.log(msg)
+  console.log(address)
 
-const foo = () => {
-  console.log('foo function exec~')
-}
-foo()
+  const foo = () => {
+    console.log('foo function exec~')
+  }
+  foo()
 
-// console.log(add(20, 30))
-// console.log(sub(20, 30))
+  // console.log(add(20, 30))
+  // console.log(sub(20, 30))
 
-/******/ })()
-;
+  /******/
+})()
 //# sourceMappingURL=boundle.js.map
 ```
 
 demo-project\02-source-map\build\boundle.js.map
 
 ```json
-{"version":3,"file":"boundle.js","mappings":";;;;;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","sources":["webpack://02-source-map/./src/main.js"],"sourcesContent":["// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n"],"names":[],"sourceRoot":""}
+{
+  "version": 3,
+  "file": "boundle.js",
+  "mappings": ";;;;;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA",
+  "sources": ["webpack://02-source-map/./src/main.js"],
+  "sourcesContent": [
+    "// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n"
+  ],
+  "names": [],
+  "sourceRoot": ""
+}
 ```
 
 ## 6."cheap-module-source-map"
@@ -401,34 +433,42 @@ demo-project\02-source-map\build\boundle.js.map
 demo-project\02-source-map\build\boundle.js
 
 ```js
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  var __webpack_exports__ = {}
+  /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-// import { add, sub } from './utils/math';
+  // import { add, sub } from './utils/math';
 
-const msg = 'Hello Frog'
-console.log(msg)
-console.log(address)
+  const msg = 'Hello Frog'
+  console.log(msg)
+  console.log(address)
 
-const foo = () => {
-  console.log('foo function exec~')
-}
-foo()
+  const foo = () => {
+    console.log('foo function exec~')
+  }
+  foo()
 
-// console.log(add(20, 30))
-// console.log(sub(20, 30))
+  // console.log(add(20, 30))
+  // console.log(sub(20, 30))
 
-/******/ })()
-;
+  /******/
+})()
 //# sourceMappingURL=boundle.js.map
 ```
 
 demo-project\02-source-map\build\boundle.js.map
 
 ```json
-{"version":3,"file":"boundle.js","mappings":";;;;;AAAA,YAAY,WAAW;;AAEvB;AACA;AACA;;AAEA;AACA;AACA;AACA;;AAEA;AACA","sources":["webpack://02-source-map/./src/main.js"],"names":[],"sourceRoot":""}
+{
+  "version": 3,
+  "file": "boundle.js",
+  "mappings": ";;;;;AAAA,YAAY,WAAW;;AAEvB;AACA;AACA;;AAEA;AACA;AACA;AACA;;AAEA;AACA",
+  "sources": ["webpack://02-source-map/./src/main.js"],
+  "names": [],
+  "sourceRoot": ""
+}
 ```
 
 ## 9.其它值
@@ -449,11 +489,11 @@ demo-project\02-source-map\build\boundle.js.map
 
 在开发中，最佳的实践：
 
-开发阶段：`source-map` 或者 `cheap-module-source-map`； 
+开发阶段：`source-map` 或者 `cheap-module-source-map`；
 
 - 这分别是 vue 和 react 使用的值，可以获取调试信息，方便快速开发；
 
-测试阶段：推荐使用 `source-map` 或者 `cheap-module-source-map`； 
+测试阶段：推荐使用 `source-map` 或者 `cheap-module-source-map`；
 
 - 测试阶段，我们也希望在浏览器下看到正确的错误提示；
 
@@ -463,9 +503,9 @@ demo-project\02-source-map\build\boundle.js.map
 
 在实际开发中，开发者一般很少直接接触 babel；
 
-但是，目前 babel 对于前端开发来说，是不可缺少的一部分： 
+但是，目前 babel 对于前端开发来说，是不可缺少的一部分：
 
-- 比如，开发中，使用 ES6+ 的语法、用 TypeScript、开发 Vue / React 项目...，都离不开 Babel； 
+- 比如，开发中，使用 ES6+ 的语法、用 TypeScript、开发 Vue / React 项目...，都离不开 Babel；
 
 Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的代码。
 
@@ -473,12 +513,11 @@ Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ �
 
 Babel 本质上是一个编译器。
 
-
 webpack 底层，也使用 babel 对代码进行转换。
 
 # 六、Babel 命令行使用
 
-创建“03_babel核心使用”项目：
+创建“03_babel 核心使用”项目：
 
 ## 1.基本使用
 
@@ -486,12 +525,12 @@ Babel 支持（脱离 webpack）在命令行单独运行：
 
 1. 安装两个库：
 
-   - *@babel/core*，babel 核心代码，必须安装。
-   - *@babek/cli*：在命令行使用 babel。
+   - _@babel/core_，babel 核心代码，必须安装。
+   - _@babek/cli_：在命令行使用 babel。
 
    ```shell
    npm install @babel/core @babel/cli -D
-   
+
    npx babel --version # 查看安装版本
    ```
 

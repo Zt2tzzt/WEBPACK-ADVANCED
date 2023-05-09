@@ -7,8 +7,8 @@ webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包
 以下是对关键词的解释：
 
 - 打包 bundler：webpack 是一个打包工具；
-- 静态的 static：webpack 将前端工程化项目，打包成静态资源（部署到静态服务器）； 
-- 模块化 module：webpack 默认支持各种模块化开发，比如：ES Module、CommonJS、AMD...； 
+- 静态的 static：webpack 将前端工程化项目，打包成静态资源（部署到静态服务器）；
+- 模块化 module：webpack 默认支持各种模块化开发，比如：ES Module、CommonJS、AMD...；
 - 现代的 modern：正是因为，现代前端开发，面临各种各样的问题，才催生了 webpack 的出现和发展；
 
 回顾：前端项目开发模式，发展的三个阶段：
@@ -28,7 +28,7 @@ webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包
 
 创建 02-source-map 项目；
 
-安装 *webpack*、*webpack-cli*
+安装 _webpack_、_webpack-cli_
 
 ```shell
 pnpm add webpack webpack-cli -D
@@ -39,7 +39,7 @@ pnpm add webpack webpack-cli -D
 demo-project\02-source-map\src\main.js
 
 ```js
-import { add, sub } from './utils/math';
+import { add, sub } from './utils/math'
 
 const msg = 'Hello Frog'
 console.log(msg)
@@ -67,9 +67,7 @@ function sub(num1, num2) {
 
 console.log(count)
 
-export {
-  add, sub
-}
+export { add, sub }
 ```
 
 编写 `webpack.config.js` 配置文件。
@@ -99,7 +97,15 @@ npx webpack
 demo-project\02-source-map\build\boundle.js
 
 ```js
-(()=>{"use strict";console.log(count),console.log("Hello Frog"),console.log(address),console.log("foo function exec~"),console.log(50),console.log(-10)})();
+;(() => {
+  'use strict'
+  console.log(count),
+    console.log('Hello Frog'),
+    console.log(address),
+    console.log('foo function exec~'),
+    console.log(50),
+    console.log(-10)
+})()
 ```
 
 # 四、Mode 配置
@@ -110,11 +116,11 @@ demo-project\02-source-map\build\boundle.js
 - `development`：一般在开发阶段设置。
 - `none`：不使用任何默认优化选项（只有 `entry`，`output` 两个配置，其它都不加）。
 
-| 选项          | 描述                                                         |
-| :------------ | :----------------------------------------------------------- |
-| `development` | 会将 `DefinePlugin` 中 `process.env.NODE_ENV` 的值设置为 `development`. 为模块和 chunk 启用有效的名。 |
+| 选项          | 描述                                                                                                                                                                                                                                         |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `development` | 会将 `DefinePlugin` 中 `process.env.NODE_ENV` 的值设置为 `development`. 为模块和 chunk 启用有效的名。                                                                                                                                        |
 | `production`  | 会将 `DefinePlugin` 中 `process.env.NODE_ENV` 的值设置为 `production`。为模块和 chunk 启用确定性的混淆名称，`FlagDependencyUsagePlugin`，`FlagIncludedChunksPlugin`，`ModuleConcatenationPlugin`，`NoEmitOnErrorsPlugin` 和 `TerserPlugin`。 |
-| `none`        | 不使用任何默认优化选项                                       |
+| `none`        | 不使用任何默认优化选项                                                                                                                                                                                                                       |
 
 <img src="NodeAssets/Mode配置代表更多.jpg" alt="Mode配置代表更多" style="zoom:150%;" />
 
@@ -127,110 +133,123 @@ demo-project\02-source-map\build\boundle.js
 demo-project\02-source-map\build\boundle.js
 
 ```js
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/******/ ;(() => {
+  // webpackBootstrap
+  /******/ 'use strict'
+  /******/ var __webpack_modules__ = [
+    ,
+    /* 0 */ /* 1 */
+    /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.r(__webpack_exports__)
+      /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+        /* harmony export */ add: () => /* binding */ add,
+        /* harmony export */ sub: () => /* binding */ sub
+        /* harmony export */
+      })
+      function add(num1, num2) {
+        return num1 + num2
+      }
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "add": () => (/* binding */ add),
-/* harmony export */   "sub": () => (/* binding */ sub)
-/* harmony export */ });
-function add(num1, num2) {
-  return num1 + num2
-}
+      function sub(num1, num2) {
+        return num1 - num2
+      }
 
-function sub(num1, num2) {
-  return num1 - num2
-}
+      console.log(count)
 
-console.log(count)
+      /***/
+    }
+    /******/
+  ]
+  /************************************************************************/
+  /******/ // The module cache
+  /******/ var __webpack_module_cache__ = {}
+  /******/
+  /******/ // The require function
+  /******/ function __webpack_require__(moduleId) {
+    /******/ // Check if module is in cache
+    /******/ var cachedModule = __webpack_module_cache__[moduleId]
+    /******/ if (cachedModule !== undefined) {
+      /******/ return cachedModule.exports
+      /******/
+    }
+    /******/ // Create a new module (and put it into the cache)
+    /******/ var module = (__webpack_module_cache__[moduleId] = {
+      /******/ // no module.id needed
+      /******/ // no module.loaded needed
+      /******/ exports: {}
+      /******/
+    })
+    /******/
+    /******/ // Execute the module function
+    /******/ __webpack_modules__[moduleId](module, module.exports, __webpack_require__)
+    /******/
+    /******/ // Return the exports of the module
+    /******/ return module.exports
+    /******/
+  }
+  /******/
+  /************************************************************************/
+  /******/ /* webpack/runtime/define property getters */
+  /******/ ;(() => {
+    /******/ // define getter functions for harmony exports
+    /******/ __webpack_require__.d = (exports, definition) => {
+      /******/ for (var key in definition) {
+        /******/ if (
+          __webpack_require__.o(definition, key) &&
+          !__webpack_require__.o(exports, key)
+        ) {
+          /******/ Object.defineProperty(exports, key, { enumerable: true, get: definition[key] })
+          /******/
+        }
+        /******/
+      }
+      /******/
+    }
+    /******/
+  })()
+  /******/
+  /******/ /* webpack/runtime/hasOwnProperty shorthand */
+  /******/ ;(() => {
+    /******/ __webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+    /******/
+  })()
+  /******/
+  /******/ /* webpack/runtime/make namespace object */
+  /******/ ;(() => {
+    /******/ // define __esModule on exports
+    /******/ __webpack_require__.r = exports => {
+      /******/ if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+        /******/ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' })
+        /******/
+      }
+      /******/ Object.defineProperty(exports, '__esModule', { value: true })
+      /******/
+    }
+    /******/
+  })()
+  /******/
+  /************************************************************************/
+  var __webpack_exports__ = {}
+  // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+  ;(() => {
+    __webpack_require__.r(__webpack_exports__)
+    /* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1)
 
+    const msg = 'Hello Frog'
+    console.log(msg)
+    console.log(address)
 
+    const foo = () => {
+      console.log('foo function exec~')
+    }
+    foo()
 
-/***/ })
-/******/ 	]);
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+    console.log((0, _utils_math__WEBPACK_IMPORTED_MODULE_0__.add)(20, 30))
+    console.log((0, _utils_math__WEBPACK_IMPORTED_MODULE_0__.sub)(20, 30))
+  })()
 
-
-const msg = 'Hello Frog'
-console.log(msg)
-console.log(address)
-
-const foo = () => {
-  console.log('foo function exec~')
-}
-foo()
-
-console.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.add)(20, 30))
-console.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.sub)(20, 30))
-
-})();
-
-/******/ })()
-;
+  /******/
+})()
 ```
 
 当 `mode: development,`
@@ -246,93 +265,111 @@ demo-project\02-source-map\build\boundle.js
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/main.js":
-/*!*********************!*\
+/******/ ;(() => {
+  // webpackBootstrap
+  /******/ 'use strict'
+  /******/ var __webpack_modules__ = {
+    /***/ './src/main.js':
+      /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+        eval(
+          "__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/math */ \"./src/utils/math.js\");\n\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\nconsole.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.add)(20, 30))\nconsole.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.sub)(20, 30))\n\n\n//# sourceURL=webpack://02-source-map/./src/main.js?"
+        )
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/math */ \"./src/utils/math.js\");\n\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\nconsole.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.add)(20, 30))\nconsole.log((0,_utils_math__WEBPACK_IMPORTED_MODULE_0__.sub)(20, 30))\n\n\n//# sourceURL=webpack://02-source-map/./src/main.js?");
+        /***/
+      },
 
-/***/ }),
-
-/***/ "./src/utils/math.js":
-/*!***************************!*\
+    /***/ './src/utils/math.js':
+      /*!***************************!*\
   !*** ./src/utils/math.js ***!
   \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+        eval(
+          '__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   "add": () => (/* binding */ add),\n/* harmony export */   "sub": () => (/* binding */ sub)\n/* harmony export */ });\nfunction add(num1, num2) {\n  return num1 + num2\n}\n\nfunction sub(num1, num2) {\n  return num1 - num2\n}\n\nconsole.log(count)\n\n\n\n//# sourceURL=webpack://02-source-map/./src/utils/math.js?'
+        )
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"add\": () => (/* binding */ add),\n/* harmony export */   \"sub\": () => (/* binding */ sub)\n/* harmony export */ });\nfunction add(num1, num2) {\n  return num1 + num2\n}\n\nfunction sub(num1, num2) {\n  return num1 - num2\n}\n\nconsole.log(count)\n\n\n\n//# sourceURL=webpack://02-source-map/./src/utils/math.js?");
+        /***/
+      }
 
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/main.js");
-/******/ 	
-/******/ })()
-;
+    /******/
+  }
+  /************************************************************************/
+  /******/ // The module cache
+  /******/ var __webpack_module_cache__ = {}
+  /******/
+  /******/ // The require function
+  /******/ function __webpack_require__(moduleId) {
+    /******/ // Check if module is in cache
+    /******/ var cachedModule = __webpack_module_cache__[moduleId]
+    /******/ if (cachedModule !== undefined) {
+      /******/ return cachedModule.exports
+      /******/
+    }
+    /******/ // Create a new module (and put it into the cache)
+    /******/ var module = (__webpack_module_cache__[moduleId] = {
+      /******/ // no module.id needed
+      /******/ // no module.loaded needed
+      /******/ exports: {}
+      /******/
+    })
+    /******/
+    /******/ // Execute the module function
+    /******/ __webpack_modules__[moduleId](module, module.exports, __webpack_require__)
+    /******/
+    /******/ // Return the exports of the module
+    /******/ return module.exports
+    /******/
+  }
+  /******/
+  /************************************************************************/
+  /******/ /* webpack/runtime/define property getters */
+  /******/ ;(() => {
+    /******/ // define getter functions for harmony exports
+    /******/ __webpack_require__.d = (exports, definition) => {
+      /******/ for (var key in definition) {
+        /******/ if (
+          __webpack_require__.o(definition, key) &&
+          !__webpack_require__.o(exports, key)
+        ) {
+          /******/ Object.defineProperty(exports, key, { enumerable: true, get: definition[key] })
+          /******/
+        }
+        /******/
+      }
+      /******/
+    }
+    /******/
+  })()
+  /******/
+  /******/ /* webpack/runtime/hasOwnProperty shorthand */
+  /******/ ;(() => {
+    /******/ __webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+    /******/
+  })()
+  /******/
+  /******/ /* webpack/runtime/make namespace object */
+  /******/ ;(() => {
+    /******/ // define __esModule on exports
+    /******/ __webpack_require__.r = exports => {
+      /******/ if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+        /******/ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' })
+        /******/
+      }
+      /******/ Object.defineProperty(exports, '__esModule', { value: true })
+      /******/
+    }
+    /******/
+  })()
+  /******/
+  /************************************************************************/
+  /******/
+  /******/ // startup
+  /******/ // Load entry module and return exports
+  /******/ // This entry module can't be inlined because the eval devtool is used.
+  /******/ var __webpack_exports__ = __webpack_require__('./src/main.js')
+  /******/
+  /******/
+})()
 ```
-

@@ -9,7 +9,7 @@
 
 也就是说，打包后的代码，在浏览器运行报错，需要调试时（debug），是很困难的。
 
-要正确地调试压缩后的代码,需要 source-map 映射文件。它可将压缩的代码，映射到源文件；
+要正确地，调试压缩后的代码，需要 source-map 映射文件。它可将压缩的代码，映射到源文件；
 
 浏览器加载 source-map 映射文件，重构原始源，并在调试器中，显示重建的原始源；
 
@@ -116,7 +116,7 @@ demo-project\02-source-map\index.html
 </html>
 ```
 
-使用 liveServer 打开 `iundex.html` 文件，竟然正确地显示了错误信息出现在哪。
+使用 liveServer 打开 `iundex.html` 文件，显示了错误信息，但位置不准确。
 
 ```
 in.js:5 Uncaught ReferenceError: address is not defined
@@ -352,7 +352,7 @@ demo-project\02-source-map\build\boundle.js
 
 ## 5."cheap-source-map"
 
-会生成 source-map
+会生成 source-map；
 
 不过，会更加高效一些（”cheap“在编程中，意为低开销）；
 
@@ -509,7 +509,8 @@ demo-project\02-source-map\build\boundle.js.map
 
 Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的代码。
 
-- 包括：语法转换、源代码转换、Polyfill 实现目标环境缺少的功能等；
+- 包括：语法转换、源代码转换、
+- Polyfill 实现目标环境缺少的功能等；
 
 Babel 本质上是一个编译器。
 
@@ -544,7 +545,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
 
 安装插件：
 
-1. 安装“箭头函数转换”相关插件，并在命令中使用
+1. 安装“箭头函数转换”相关插件，并在命令中使用；
 
    ```shell
    npm install @babel/plugin-transform-arrow-function -D

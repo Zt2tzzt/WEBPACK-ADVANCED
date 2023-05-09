@@ -1,16 +1,118 @@
-babel 编译 React 的 jsx 代码。
+# babel、webpack server proxy
+
+## 一、React jsx 编译
+
+react 使用的语法是 jsx，可以直接使用 babel 来转换。
+
+使用 babel，对 react jsx 代码进行处理，需要如下的插件：
+
+- @babel/plugin-syntax-jsx
+- @babel/plugin-transform-react-jsx
+- @babel/plugin-transform-react-display-name
+
+同样的，在开发中，不需要一个个去安装这些插件，使用 preset 来配置即可：
+
+安装 *@babel/preset-react*
+
+```shell
+npm install @babel/preset-react -D
+```
+
+demo-project\04_webpack服务器\babel.config.js
+
+```js
+module.exports = {
+  presets: [
+    ["@babel/preset-env"],
+    ["@babel/preset-react"]
+  ]
+}
+```
 
 在项目中，安装 rect、react-dom
 
-编写一个 React 组件 App.jsx
+```shell
+npm install react react-dom
+```
 
-创建一个模板 index.html，将 react 渲染到 div#root 中
+编写一个 React 组件 `App.jsx`
 
-安装 html-webpack-plugin 插件。使用该插件。
+demo-project\04_webpack服务器\src\react\App.jsx
+
+```jsx
+import React, { memo, useState } from 'react'
+
+const App = memo(() => {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <h1>App Count: {count}</h1>
+      <button onClick={e => setCount(count+1)}>+1</button>
+    </div>
+  )
+})
+
+export default App
+```
+
+创建一个模板 `index.html`，将 react 渲染到 `div#root` 中：
+
+demo-project\04_webpack服务器\index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <div id="root"></div>
+</body>
+</html>
+```
+
+demo-project\04_webpack服务器\src\index.js
+
+```js
+import App from "./react/App";
+
+// 5.编写react代码
+const root = ReactDom.createRoot(document.querySelector("#root"));
+root.render(<App />);
+```
+
+对 html 模板文件进行打包处理，并添加到打包目录下，引用打包后的 js 文件。
+
+安装 *html-webpack-plugin* 插件。
+
+```shell
+npm install html-webpack-plugin -D
+```
+
+使用该插件。
+
+demo-project\04_webpack服务器\webpack.config.js
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  plugin: [
+    new HtmlWebpackPlugin({
+      template: './index.html' // 指定模板文件路径。
+    })
+  ]
+}
+```
 
 > js 中也可以写 jsx 代码。
 
-为 babel-loader 支持使用的 react jsx 插件和预设。
+
 
 ---
 

@@ -66,7 +66,7 @@ module.exports = {
 - react
 - TypeScript
 
-> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹。在新版本中的特性，以前没有这个配置，需要通过插件完成。
+> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹。这是新版本中的特性，以前需要插件完成。
 >
 > demo-project\03_babel 核心使用\webpack.config.js
 >
@@ -89,9 +89,9 @@ module.exports = {
 
 ## 3.为什么要使用 babel
 
-webpack 压缩代码后，仅有模块化内容；
+webpack 压缩代码后，仅有**模块化**内容；
 
-babel 添加了代码语法转化的功能。
+babel 添加了代码**语法转化**的功能。
 
 将 webpack 和 babel 结合在一起。才是我们想要的效果。
 
@@ -108,7 +108,7 @@ babel 添加了代码语法转化的功能。
 
 在适配新版本浏览器时，通常不需要转化；在适配旧浏览器时，需要转换。
 
-所以代码是否要做兼容，取决于要适配的浏览器。
+所以，是否要做兼容，取决于要适配的浏览器。
 
 市面上有大量的浏览器：
 
@@ -123,7 +123,7 @@ babel 添加了代码语法转化的功能。
 
 browserslist 工具，用于指定要兼容的浏览器。
 
-在适配工具，用 Browserslist 共享目标浏览器和 Node.js 版本的配置：
+Browserslist 为适配工具提供，共享目标浏览器，和 Node.js 版本的配置：
 
 可适配以下工具：
 
@@ -145,7 +145,7 @@ last 2 versions
 not dead
 ```
 
-_browserslist_ 工具，来获取相关的浏览器信息，以决定是否需要进行兼容性的支持：
+_browserslist_ 工具，用来获取符合条件的浏览器信息，以决定是否需要进行兼容性的支持：其中引用了 caniuse 工具；
 
 _caniuse-lite_ 工具，用于条件查询，数据，来自于 caniuse 的网站上；
 
@@ -166,7 +166,7 @@ browserslist 常用的编写的条件如下：
 `5%`：浏览器市场占有率，与 `>=`、`<`、`<=`...结合使用；
 
 - `5% in US`：美国的市场占有率（接受两个字母的国家/地区代码）。
-- `> 5% in alt-AS`：亚洲地区市场占有率（有关所有区域代码的列表，详见[文档](https://caniuse-lite/data/regions)
+- `> 5% in alt-AS`：亚洲地区市场占有率（有关所有区域代码的列表，详见[文档](https://caniuse-lite/data/regions)）
 - `> 5% in my stats`：使用自定义用法数据。
 - `> 5% in browserslist-config-mycompany stats`：使用自定义情况数据 browserslist-config-mycompany/browserslist-stats.json。
 - `cover 99.5%`：提供覆盖率的最受欢迎的浏览器。
@@ -186,8 +186,8 @@ browserslist 常用的编写的条件如下：
 
 `node 10`、`node 10.4`：选择最新的 Node.js 10.x.x 或 10.4.x 版本。
 
-- current node：Browserslist 现在使用的 Node.js 版本。
-- maintained node versions：所有 Node.js 版本，仍由 Node.js Foundation 维护。
+- `current node：Browserslist`：现在使用的 Node.js 版本。
+- `maintained node versions`：所有 Node.js 版本，仍由 Node.js Foundation 维护。
 
 `iOS 7`：直接使用 iOS 浏览器版本 7。
 
@@ -296,7 +296,7 @@ browserslist.defaults = ['> 0.5%', 'last 2 version', 'Firefox ESR', 'not dead']
 
 ## 1.browserslist
 
-上面介绍的，都是使用了 browserslist 工具进行适配；
+上面介绍的，都是使用了 browserslist 工具，进行统一适配；
 
 事实上，还可以在转化工具中，使用 `target` 属性，进行适配（开发中很少使用）。
 

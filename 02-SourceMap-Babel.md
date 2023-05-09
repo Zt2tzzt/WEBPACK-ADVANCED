@@ -1,18 +1,16 @@
 # 一、source-map 是什么？
 
 前端工程化项目，打包后的代码，运行在浏览器上，是经过压缩的：
-- 比如：在打包过程中，babel 将 ES6 代码转换成 ES5；
-- 比如：代码行号、列号，在经过压缩后，肯定会不一致；
-- 比如：代码进行丑化压缩时，会将变量名称，修改；
-- 比如：TypeScript 编写的代码，经由 babel 最终转换成 JavaScript；
+- 比如：babel 会将 ES6 代码转换成 ES5；
+- 比如：压缩后，代码行号、列号，会不一致；
+- 比如：丑化压缩时，变量名称会改变；
+- 比如：TS 经由 babel 转成 JS；
 
-也就是说，当打包后的代码，在浏览器运行报错，需要调试时（debug），是很困难的。
+也就是说，打包后的代码，在浏览器运行报错，需要调试时（debug），是很困难的。
 
-那么，如果要正确地调试压缩后的代码,就需要 source-map 映射文件。
+要正确地调试压缩后的代码,需要 source-map 映射文件。它可将压缩的代码，映射到源文件；
 
-source-map 映射文件，可将压缩的代码，映射到源文件；
-
-浏览器通过加载 source-map 映射文件，重构原始源，并在调试器中显示重建的原始源；
+浏览器加载 source-map 映射文件，重构原始源，并在调试器中，显示重建的原始源；
 
 :egg: 案例理解1：
 
@@ -23,7 +21,7 @@ demo-project\02-source-map\src\main.js
 ```js
 const msg = 'Hello Frog'
 console.log(msg)
-console.log(address)
+console.log(address) // 会报错的代码
 
 const foo = () => {
   console.log('foo function exec~')
@@ -179,7 +177,7 @@ foo()
 //# sourceMappingURL=boundle.js.map
 ```
 
-在 build 目录下，多出了 `bundle.js.map` 文件。
+在 build 目录下，生成了 `bundle.js.map` 文件。
 
 ```json
 {"version":3,"file":"boundle.js","mappings":";;;;;AAAA,YAAY,WAAW;;AAEvB;AACA;AACA;;AAEA;AACA;AACA;AACA;;AAEA;AACA","sources":["webpack://02-source-map/./src/main.js"],"sourcesContent":["// import { add, sub } from './utils/math';\n\nconst msg = 'Hello Frog'\nconsole.log(msg)\nconsole.log(address)\n\nconst foo = () => {\n  console.log('foo function exec~')\n}\nfoo()\n\n// console.log(add(20, 30))\n// console.log(sub(20, 30))\n"],"names":[],"sourceRoot":""}
@@ -196,11 +194,9 @@ foo()
    //# sourceMappingURL=common.bundle.js.map
    ```
 
-浏览器会根据注释，查找相应的 source-map；
+浏览器会根据注释，查找并加载 source-map；还原源代码，方便进行调试。
 
-再根据 source-map，还原代码，方便进行调试。
-
-在 Chrome 中，默认开启了 source-map 的功能，如果未开启，要先开启。
+> 在 Chrome 中，默认开启了 source-map 的功能，如果未开启，要先开启。
 
 # 三、source-map 分析
 
@@ -211,7 +207,7 @@ foo()
 所以目前，一个 133kb 的文件，最终的 source-map 的大小，大概在 300kb。
 
 目前的 source-map 文件，通常有如下属性：
-- `version`：当前使用的版本，也就是最新的第三版；
+- `version`：当前使用的版本，一般是最新的第三版；
 - `sources`：源文件；
 - `names`：源文件的变量和属性名称（上方案例使用的是 `development` 模式，所以没有保留转换前的名称）；
 - `mappings`：源文件映射的信息（比如位置信息等）；
@@ -465,7 +461,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 # 五、Babel 有什么用？
 
-事实上，在实际开发中，我们很少直接接触 babel；
+在实际开发中，开发者一般很少直接接触 babel；
 
 但是，目前 babel 对于前端开发来说，是不可缺少的一部分： 
 
@@ -509,7 +505,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
 
 安装插件：
 
-1. 安装箭头函数转换相关插件，并在命令中使用
+1. 安装“箭头函数转换”相关插件，并在命令中使用
 
    ```shell
    npm install @babel/plugin-transform-arrow-function -D
@@ -519,7 +515,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
    npx babel src --out-dir dist --plugins=@babel/plugin-transform-arrow-function
    ```
 
-2. 安装快级作用域语法转换插件，并在命令中使用：可将 `const` 关键字转成 `var`；
+2. 安装“块级作用域语法转换”插件，并在命令中使用：可将 `const` 关键字转成 `var`；
 
    ```shell
    npm install @babel/plugin-transform-block-scoping -D

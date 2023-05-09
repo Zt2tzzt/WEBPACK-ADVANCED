@@ -4,6 +4,8 @@
 
 webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包工具
 
+以下是对关键词的解释：
+
 - 打包 bundler：webpack 是一个打包工具；
 - 静态的 static：webpack 将前端工程化项目，打包成静态资源（部署到静态服务器）； 
 - 模块化 module：webpack 默认支持各种模块化开发，比如：ES Module、CommonJS、AMD...； 

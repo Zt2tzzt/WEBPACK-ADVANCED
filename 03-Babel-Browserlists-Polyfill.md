@@ -1,6 +1,6 @@
-# Babel、Browserlists、Polyfill
+# Babel & Browserlists & Polyfill
 
-## 一、Babel 打包工具中使用
+## 一、Babel 在打包工具中使用
 
 Babel 的预设，是根据要适配的浏览器，进行查询的，会用到 `.browserlist`。
 
@@ -21,6 +21,16 @@ npm install @babel/core babel-loader -D
 ```shell
 npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block-scoping -D
 ```
+
+如果一个个去安装插件，意味着要手动管理大量插件;
+
+在 webpack 中，使用 babel 预设（babel preset），来加载对应的插件列表；
+
+常见的 babel 预设，有三个：
+
+- env
+- react
+- TypeScript
 
 ```shell
 npm install @babel/preset-env -D
@@ -58,17 +68,9 @@ module.exports = {
 }
 ```
 
-如果一个个去安装插件，意味着要手动管理大量插件;
-
-在 webpack 中，使用 babel 预设（babel preset），来加载对应的插件列表；
-
-常见的 babel 预设，有三个：
-
-- env
-- react
-- TypeScript
-
-> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹。这是新版本中的特性，以前需要插件完成。
+> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹；
+>
+> 这是新版本中的特性，以前需要插件完成。
 >
 > demo-project\03_babel 核心使用\webpack.config.js
 >
@@ -77,19 +79,20 @@ module.exports = {
 >
 > module.exports = {
 >   mode: 'development',
->  devtool: false,
+>   devtool: false,
 >   entry: './src/index.js',
 >   output: {
->     path: path.resolve(__dirname, './build'),
->     filename: 'bundle.js',
->     // 重新打包时, 先将之前打包的文件夹删除掉
->     clean: true
+>    path: path.resolve(__dirname, './build'),
+>    filename: 'bundle.js',
+>
+>    // 重新打包时, 先将之前打包的文件夹删除掉
+>    clean: true
 >   },
->   ...
+> ...
 > }
 > ```
 
-### 3.为什么要使用 babel
+### 3.babel 有什么用？
 
 webpack 压缩代码后，仅有**模块化**内容；
 
@@ -97,18 +100,18 @@ babel 添加了代码**语法转化**的功能。
 
 将 webpack 和 babel 结合在一起。才是我们想要的效果。
 
-## 二、浏览器兼容性
+## 三、浏览器兼容性
 
 这里指的兼容性，是指浏览器支持的代码特性：
 
-- 比如 css 特性、js 语法的兼容性（HTML 基本不需要兼容）；
+- 比如：兼容 css 特性、js 语法的特性；（HTML 基本不需要兼容）；
 
 前端开发，急需一些工具，帮助做代码兼容。
 
-- CSS，一般用 PostCSS 做转化。
-- JS 一般用 Babel 做转化。
+- CSS，一般用 _postcss_ 做转化。
+- JS 一般用 _babel_ 做转化。
 
-在适配新版本浏览器时，通常不需要转化；在适配旧浏览器时，需要转换。
+适配新版本浏览器时，通常不需要转化；在适配旧浏览器时，需要转换。
 
 所以，是否要做兼容，取决于要适配的浏览器。
 
@@ -117,15 +120,13 @@ babel 添加了代码**语法转化**的功能。
 - 比如 Chrome、Safari、IE、Edge、Chrome for Android、UC Browser、QQ Browser...；
 - 决定是否要兼容它们，通常在脚手架中进行了配置，其中很重要的一点，是浏览器的市场占有率。
 
-浏览器市场占有率
+浏览器市场占有率，通常在 [caniuse](https://caniuse.com/usage-table) 则个网站进行查询；
 
-- 通常在 [caniuse](https://caniuse.com/usage-table) 则个网站进行查询；
-
-## 三、browserslist 工具
+## 四、browserslist
 
 browserslist 工具，用于指定要兼容的浏览器。
 
-Browserslist 为适配工具提供，共享目标浏览器，和 Node.js 版本的配置：
+Browserslist 为（babel、postcss 这样的）适配工具提供，共享目标浏览器，和 Node.js 版本的配置：
 
 可适配以下工具：
 
@@ -137,7 +138,7 @@ Browserslist 为适配工具提供，共享目标浏览器，和 Node.js 版本�
 - postcss-normalize
 - obsolete-webpack-plugin
 
-## 四、浏览器查询流程
+### 1.查询流程
 
 编写类似于这样的配置：
 
@@ -147,7 +148,7 @@ last 2 versions
 not dead
 ```
 
-_browserslist_ 工具，用来获取符合条件的浏览器信息，以决定是否需要进行兼容性的支持：其中引用了 caniuse 工具；
+_browserslist_ 工具，用来获取符合条件的浏览器信息，以决定是否需要进行兼容性的支持：其中引用了 caniuse-lite 工具；
 
 _caniuse-lite_ 工具，用于条件查询，数据，来自于 caniuse 的网站上；
 
@@ -157,9 +158,9 @@ demo-project\03_babel 核心使用\node_modules\browserslist\index.js
 var agents = require('caniuse-lite/dist/unpacker/agents').agents
 ```
 
-## 五、browserslist 编写规则
+### 2.编写规则
 
-### 1.常用
+#### 1.常用
 
 browserslist 常用的编写的条件如下：
 
@@ -184,7 +185,7 @@ browserslist 常用的编写的条件如下：
 - `last 2 Chrome versions`：最近 2 个版本的 Chrome 浏览器。
 - `last 2 major versions`、`last 2 iOS major versions`：最近 2 个主要版本的所有次要/补丁版本。
 
-### 2.不常用
+#### 2.不常用
 
 `node 10`、`node 10.4`：选择最新的 Node.js 10.x.x 或 10.4.x 版本。
 
@@ -215,11 +216,11 @@ browserslist 常用的编写的条件如下：
 
 `not ie <= 8`：排除先前查询选择的浏览器。
 
-## 六、browserslist 命令行使用
+### 3.在命令行使用
 
-安装 Babel 后，自带了 browserslist 工具和 caniuse-lite 工具。
+安装 Babel 后，自带了 _browserslist_ 工具和 _caniuse-lite_ 工具。
 
-运行命令
+运行命令：
 
 ```shell
 npx browserslist ">1%, last 2 version, not dead" # 条件之间是“或”的关系。
@@ -256,7 +257,7 @@ samsung 19.0
 samsung 18.0
 ```
 
-## 七、browserslist 配置
+### 4.配置
 
 配置 browserslist 两种方案：
 
@@ -280,21 +281,19 @@ last 2 versions
 not dead
 ```
 
-## 八、browserslist 默认配置和条件
-
-当编写了多个条件之后，多个条件之间是什么关系呢？
-
-![browserslist条件关系](NodeAssets/browserslist条件关系.jpg)
-
-如果没有配置，browserslist 会应用一个默认配置：
+如没有配置，browserslist 会应用一个默认配置：
 
 ```js
 browserslist.defaults = ['> 0.5%', 'last 2 version', 'Firefox ESR', 'not dead']
 ```
 
+当编写了多个条件之后，多个条件之间是什么关系呢？
+
+![browserslist条件关系](NodeAssets/browserslist条件关系.jpg)
+
 > 【面试】：回答如何做浏览器适配，本质上要介绍工具，postcss，babel，browserslist，caniuse-lite。
 
-## 九、适配目标浏览器
+## 九、浏览器适配方式
 
 ### 1.browserslist
 
@@ -331,7 +330,7 @@ module.exports = {
 
 要了解 Stage-X，要先了解 **TC39** 的组织：
 
-TC39 意为：“指技术委员会（Technical Committee）第 39 号”；它是 ECMA 的一部分；
+TC39 指：“技术委员会（Technical Committee）第 39 号”；它是 ECMA 的一部分；
 
 ECMA 是 “ECMAScript” 规范下的 JavaScript 语言标准化的机构；
 
@@ -359,7 +358,7 @@ module.exports = {
 }
 ```
 
-表达使用 babel-preset-stage-x 预设；
+表达使用 _babel-preset-stage-x_ 预设；
 
 从 babel 7 开始，不建议使用了，取而代之的是 `preset-env`；
 
@@ -377,14 +376,14 @@ module.exports = {
 
 `babel.config.json`（或者 .js，.cjs，.mjs）文件；
 
-- babel7 之后的方案：可以直接作用于 Monorepos 项目的子包，更加推荐；
+- babel7 之后的方案：可以直接作用于 Monorepos 项目的子包（推荐）；
 - 目前很多的项目，都采用了多包管理的方式（babel、element-plus、umi...）；
 
 `.babelrc.json`（或者 .babelrc，.js，.cjs，.mjs）文件；
 
 - 早期使用较多的配置方式，对于配置 Monorepos 项目是比较麻烦的；
 
-> 【补充】：Monorepos 项目（多见于第三方框架的项目）：
+> 【补充】：Monorepos 项目（常见于第三方框架的项目）：
 >
 > 一个项目，很多子包：
 >
@@ -397,7 +396,7 @@ module.exports = {
 
 Polyfill 直译为：一种用于衣物、床具的聚酯填充材料, 使这些物品更加温暖舒适；
 
-在前端中，表示：填充物（垫片），一个补丁，可以帮助我们更好的使用 JavaScript；
+前端开发中，表示：填充物（垫片），一个补丁，可以帮助我们更好的使用 JavaScript；
 
 有什么用？
 
@@ -405,15 +404,15 @@ babel 将高级语法特性，转成向下兼容的语法，但有些 API，没�
 
 当使用了一些 API 特性（例如：Promise, Generator, Symbol、实例方法例如 Array.prototype.includes...）
 
-就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，能够正确的转换代码；
+就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，才能够正确的转换代码；
 
 polyfill 就是把没有的 API，填充进来。
 
 ## 十四、polyfill 的使用
 
-babel7.4.0 之前，可以使用 _@babel/polyfill_ 包，现在已经不推荐使用了：
+babel7.4.0 之前，使用 _@babel/polyfill_ 包，现已不推荐使用：
 
-babel7.4.0 之后，可以通过单独引入 _core-js_ 和 _regenerator-runtime_ 来完成 polyfill 的使用：
+babel7.4.0 之后，单独引入 _core-js_ 和 _regenerator-runtime_ 来使用 polyfill：
 
 ```shell
 npm install core-js regenerator-runtime # 生产环境和开发阶段都需要该依赖。
@@ -440,7 +439,7 @@ module.exports = {
 `corejs`：设置 corejs 的版本，目前使用较多的是 3.x 的版本；
 
 - 另外 corejs 可以设置是否对提议阶段的特性进行支持；
-- 设置 proposals 属性为 true 即可；
+- 设置 proposals 属性为 `true` 即可；
 
 `useBuiltIns`：设置以什么样的方式，来使用 polyfill，常见的有 3 个值；
 

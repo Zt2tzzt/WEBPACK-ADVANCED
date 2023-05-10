@@ -38,20 +38,21 @@ module.exports = {
         test: /\.jsx?$/, // x?: 0或者1个x
         // exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-        //   options: {
-        //     // plugins: [
-        //     //   "@babel/plugin-transform-arrow-functions",
-        //     //   "@babel/plugin-transform-block-scoping"
-        //     // ]
-        //     presets: [
-        //       ["@babel/preset-env", {
-        //         // 在开发中针对babel的浏览器兼容查询使用browserslist工具, 而不是设置target
-        //         // 因为browserslist工具, 可以在多个前端工具之间进行共享浏览器兼容性(postcss/babel)
-        //         // targets: ">5%"
-        //       }]
-        //     ]
-        //   }
+          loader: 'babel-loader'
+          // 将下方配置，放入 babel.config.js 中
+          //   options: {
+          //     // plugins: [
+          //     //   "@babel/plugin-transform-arrow-functions",
+          //     //   "@babel/plugin-transform-block-scoping"
+          //     // ]
+          //     presets: [
+          //       ["@babel/preset-env", {
+          //         // 在开发中针对babel的浏览器兼容查询使用browserslist工具, 而不是设置target
+          //         // 因为browserslist工具, 可以在多个前端工具之间进行共享浏览器兼容性(postcss/babel)
+          //         // targets: ">5%"
+          //       }]
+          //     ]
+          //   }
         }
       },
       {

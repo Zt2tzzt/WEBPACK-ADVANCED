@@ -1,8 +1,6 @@
-# babel | webpack server proxy
+# babel & webpack-server-proxy
 
 ## 一、React jsx 编译
-
-react 使用的语法是 jsx，可以直接使用 babel 来转换。
 
 使用 babel，对 react jsx 代码进行处理，需要如下的插件：
 
@@ -25,6 +23,8 @@ module.exports = {
   presets: [['@babel/preset-env'], ['@babel/preset-react']]
 }
 ```
+
+---
 
 在项目中，安装 rect、react-dom
 
@@ -82,7 +82,7 @@ const root = ReactDom.createRoot(document.querySelector('#root'))
 root.render(<App />)
 ```
 
-对 html 模板文件进行打包处理，并添加到打包目录下，引用打包后的 js 文件。
+对 html 模板文件，进行打包处理，并添加到打包目录下，引用打包后的 js 文件。
 
 安装 _html-webpack-plugin_ 插件。
 
@@ -127,11 +127,11 @@ module.exports = {
 
 ## 二、TypeScript 编译
 
-我们知道，TypeScript 代码，最终需要转换成 JavaScript 代码。
+TypeScript 代码，最终需要转换成 JavaScript 代码。
 
 ### 1.tsc
 
-通过 TypeScript 的 compiler，将 TS 转换成 JS：
+通过 TypeScript 的 compiler（tsc），将 TS 转换成 JS：
 
 安装 tsc
 
@@ -153,7 +153,7 @@ npx tsc
 
 ### 2.ts-loader
 
-webpack 编译 TypeScript 代码。要使用 _ts-loader_
+webpack 编译 TypeScript 代码。使用 _ts-loader_
 
 安装 _ts-loader_
 
@@ -193,7 +193,7 @@ npm run build
 
 - Babel 提供了对 TypeScript 代码转换的支持；
 - 可以使用插件：_@babel/tranform-typescript_；
-- 但是更推荐直接使用 preset：即 _@babel/preset-typescript_；
+- 是更推荐使用预设：即 _@babel/preset-typescript_；
 
 安装 _@babel/preset-typescript_：
 
@@ -225,28 +225,25 @@ module.exports = {
 
 使用 ts-loader（TypeScript Compiler）
 
-- 来直接编译 TypeScript，那么只能将 ts 转换成 js；
-- 如果还希望在这个过程中，添加对应的 polyfill，那么 ts-loader 是无能为力的；
-- 需要借助于 babel 来完成 polyfill 的填充功能；
+- 来直接编译 TypeScript，只能将 ts 转换成 js；
+- 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
 
 使用 babel-loader（Babel）
 
-- 可直接编译 TypeScript，将 ts 转换成 js，并且可以实现 polyfill 的功能；
-- 但是，不会对类型错误进行检测；
+- 可直接编译 TypeScript，将 ts 转换成 js，并且可以添加 polyfill 的功能；
+- 但是，不会对类型进行检测；
 
-那么在开发中，我们如何可以同时保证两个情况都没有问题呢？
+在开发中，同时满足代码转换和 polyfill 添加，需要使用如下最佳实践方案。
 
 ### 5.最佳实践
 
 [TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明：
 
-使用 Babel 来完成代码的转换，使用 tsc 来进行类型的检查。
+既使用 babel 来完成代码的转换；
 
-为了可以使用 tsc 来进行类型的检查呢？
+也使用 tsc 来进行类型的检查。
 
-- 在 "scripts" 中添加了两个脚本，用于类型检查；
-- 执行 npm run type-check 可以对 ts 代码的类型进行检测；
-- 执行 npm run type-check-watch 可以实时的检测类型错误；
+1.在 "scripts" 中添加了两个脚本，用于类型检查；
 
 demo-project\04_webpack 服务器\package.json
 
@@ -262,9 +259,21 @@ demo-project\04_webpack 服务器\package.json
 }
 ```
 
+2.执行如下命令，可以对 ts 的类型进行检测；
+
+```shell
+npm run type-check
+```
+
+3.执行如下命令，可以实时的检测 ts 的类型进行检测；
+
+```shell
+npm run type-check-watch
+```
+
 ## 三、webpack 本地服务器
 
-目前开发的代码，为了运行需要有两个操作：
+webpack 打包的代码，为了运行，需要有两个操作：
 
 操作一：编译相关的代码；
 
@@ -274,9 +283,9 @@ npm run build
 
 操作二：通过 liveServer 或者直接通过浏览器，打开 `index.html` 代码，查看效果；
 
-这个过程效率低，如果当文件发生变化时，可以自动的完成编译和展示就好了；
+这个过程效率低，如果当文件发生变化时，可以自动的完成编译和刷新就好了；
 
-webpack 中 3 种自动编译的方式。
+webpack 中，提供了 3 种自动编译的方式。
 
 - webpack watch mode
 - webpack-dev-server（常用）
@@ -304,13 +313,11 @@ module.exports = {
 }
 ```
 
-watch 模式的缺点：
-
-没有具备 live loading（热加载）的功能，自动重新编译后需要刷新页面才有效果。
+watch 模式的缺点：没有具备 live loading（热加载）的功能，自动重新编译后，需要刷新页面才有效果。
 
 ## 五、webpack-dev-server
 
-webpack devServer 可实现项目文件更新后的自动编译和热加载（live loading）。
+webpack-dev-server 可实现：项目文件更新后，自动编译和热加载（live loading）。
 
 1.安装 webpack-dev-server
 
@@ -333,27 +340,29 @@ demo-project\04_webpack 服务器\package.json
 - webpack3 以前，需要从 webpack-dev-server 启动服务，现在有了 webpack-cli，当发现命令中有 `serve`，会自动启动。
 - webpack-dev-server 会基于 express 框架，搭建一个本地服务。
 - webpack-dev-server 在编译之后，不会输出任何文件，而是将打包后的文件**保留在内存中**。
-  - 事实上 webpack-dev-server 使用了一个库叫 memfs（memory-fs，webpack 自己写的）
+  - 事实上 webpack-dev-server 使用了一个库叫 _memfs_（ _memory-fs_，webpack 自己写的）
 
 ### 1.static
 
-devServer 中的 `contentBase` 已弃用，代替它的是 `static` 属性，有什么用：
+devServer 中的 `contentBase` 已弃用；
+
+代替它的是 `static` 属性。
 
 `devServer` 中 `static`，对于访问打包后的资源，其实并没有太大的作用；
 
 它的主要作用是：指定从哪里来查找，打包后的资源，所依赖的一些资源；
 
-- 比如在 `index.html` 中，需要依赖一个 `abc.js` 文件，这个文件我们存放在 `public` 文件中；
-- 在 `index.html` 中，我们应该如何去引入这个文件呢？
+- 比如在 `index.html` 中，需要依赖一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
+- 在 `index.html` 中，应该如何去引入这个文件呢？
 
   - 比如代码是这样的：`<script src="./public/abc.js"></script>`；
   - 但是这样打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
-  - 所以代码是这样的：`<script src="/abc.js"></script>`;
-  - 但是我们如何让它去查找到这个文件的存在呢？ 设置 `static` 即可；
+  - 所以，代码是这样的：`<script src="/abc.js"></script>`;
+  - 使用 `static` 属性，让它去查找到这个文件的存在
 
-`statci` 属性，可以：
+`static` 属性，可以：
 
-1. 指定一个目录进行访问。（在 _CopyWebpackPlugin_ 插件中要复制的文件，可放在 `static` 指定的目录下；
+1. 指定一个目录进行访问。（在 _CopyWebpackPlugin_ 插件中，要复制的文件，可放在 `static` 指定的目录下；
 
 2. 在开发阶段使用，不轻易的对所有资源打包，提高效率
 
@@ -421,18 +430,18 @@ webpack-dev-server 会创建两个服务：
 - express server 负责直接提供静态资源服务（打包后的资源被浏览器请求和解析）
 - Socket Server
   1. webpack compiler 监听到对应模块发生变化时，生成两个文件：.json（ manifest 文件）和 .js 文件（update chunk）。
-  2. 将这两个文件主动发送给客户端（浏览器）
+  2. 将这两个文件，主动发送给客户端（浏览器）
   3. 浏览器通过 HMR runtime 机制，加载这两个文件，针对修改的模块做更新。
 
 理解原理图
 
 ![HRM原理图](NodeAssets/HRM原理图.jpg)
 
-> 【补充】：理解 Socket 连接和 Http 连接的连接过程。
+> 【补充】：理解 Socket 连接和 Http 连接的过程。
 >
 > Socket 连接：也称“长连接”，用于及时通讯（微信，聊天，直播送礼物，进场）
 >
-> - 经过 3 次或 5 次握手，通过心跳包建立连接通道，客户端和服务器可随时互相发送消息。
+> - 经过 3 次或 5 次握手，通过心跳包建立连接通道，客户端和服务器，可随时互相发送消息。
 >
 > Http 连接，短链接：
 >
@@ -442,9 +451,9 @@ webpack-dev-server 会创建两个服务：
 
 devServer 中使用 host 设置主机地址，可设置两个值：
 
-默认值是 `locahost`：
+`locahost`（默认值）：
 
-- 本质是域名，会被解析为 `127.0.0.1`，它是回环地址（loop back address），意思是主机自己发送的包，被自己接收。
+- 本质是域名，会被解析为 `127.0.0.1`，它是**回环地址（loop back address）**，意思是主机自己发送的包，被自己接收。
 - 正常的数据包，经过**应用层-传输层-网络层-数据链路层-物理层**，在回环地址中，数据包在“网络层”被获取到，不会经过后面 2 层。
 - 比如，监听 `127.0.0.1` 时，在同一个网段下的主机中，通过 ip 地址是不能访问的;
 
@@ -463,13 +472,13 @@ module.exports = {
 }
 ```
 
-### 4.port/open/compress
+### 4.port|open|compress
 
-devServer 中 port，open，compress 等属性的配置；
+devServer 中 `port`，`open`，`compress` 等属性的配置；
 
-- `port`：设置监听的端口，默认是 `8080`；
-- `open`：是否打开浏览器：默认是 `false`，设为 `true`,开启本地废物时，自动打开浏览器。
-- `compress`：是否为静态文件，开启 gzip compression，不会压缩 HTML 文件，浏览器可自动对 gzip 格式解压，
+- `port`：设置开启本地服务的端口，默认是 `8080`；
+- `open`：设置开启本地服务后，是否打开浏览器：默认是 `false`，设为 `true`,开启本地废物时，自动打开浏览器。
+- `compress`：设置开启本地服务后，是否为静态文件，开启 gzip compression（不会压缩 HTML 文件），浏览器可自动对 gzip 格式解压，
 
 demo-project\04_webpack 服务器\webpack.config.js
 
@@ -483,17 +492,82 @@ module.exports = {
 }
 ```
 
-### 5.historyApiFallback
+### 5.proxy（重点）
 
-historyApiFallback 是开发中一个非常常见的属性；
+#### 1.跨域的产生（回顾）
+
+比如一个 api 请求是 `http://localhost:8888` ，但本地启动服务器域名是 `http://localhost:8000`;
+
+这个时候，浏览器发送网络请求，就会出现跨域问题。
+
+跨域问题的解决办法，3 点：
+
+- 将静态资源和 api 服务器部署在一起；
+- 让服务器关闭跨域（开启 CORS）；
+- 使用 nginx 代理访问静态资源和 api。
+
+以上方式，都需要后端参与，那么在前端开发的测试阶段，临时解决跨域问题，需要在 webpack 中设置代理。
+
+#### 2.配置
+
+**重点**，开发中，一般要自己配置；
+
+`devServer` 中 `proxy` 有什么用：
+
+设置代理，来解决跨域的问题。将请求发送到代理服务器，代理服务器和 api 服务器没有跨域问题。
+
+`devServer` 中的 `proxy` 配置：
+
+- `target`：表示的是代理到的目标地址，比如 `/api-hy/moment` 会被代理到 `http://localhost:8888/api-hy/moment`；
+- `pathRewrite`：默认情况下，`/api-hy` 也会被写入到 URL 中，如果希望删除，可以使用 `pathRewrite`；
+- `changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
+
+10_learn_typescript\01-知识补充和邂逅 TypeScript.md
+
+```javascript
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8888', // 代理的目标地址，默认情况下将代理 http://localhost:8888/api 这个路径
+        pathRewrite: {
+          '^/api': '' // 在代理路径中删除掉 /api
+        },
+        secure: false, // 表示在 https 的情况下，仍代理，默认为 true
+        changeOrigin: true // 表示是否更新代理后，请求的 headers 中 host 地址，默认 http://localhost:8000, 会改为 http://localhost:8888
+      }
+    }
+  }
+}
+```
+
+##### 1.changeOrigin
+
+`changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
+
+源码位置：demo-project\04_webpack 服务器\node_modules\http-proxy\lib\http-proxy\common.js
+
+```js
+if (options.changeOrigin) {
+  outgoing.headers.host =
+    required(outgoing.port, options[forward || 'target'].protocol) && !hasPort(outgoing.host)
+      ? outgoing.host + ':' + outgoing.port
+      : outgoing.host
+}
+return outgoing
+```
+
+### 6.historyApiFallback
+
+historyApiFallback 是开发中常见的属性；
 
 主要作用是：解决 SPA 页面，在路由跳转之后，进行页面刷新，返回 404 的错误。
 
-- 比如：将 localhost:8000/about 重定向到 localhost:8000，并使用 html5 的 history 模式，访问 /about
+- 比如：将 `localhost:8000/about` 重定向到 `localhost:8000`；并使用 html5 的 history 模式，访问 /about
 
 可传如下值：
 
-- boolean 值：默认是 `false`
+- boolean 值：默认是 `false`：
 
   - 如果设置为 `true`，那么在刷新时，返回 404 错误时，会自动返回 index.html 的内容；
 
@@ -514,74 +588,11 @@ module.exports = {
 }
 ```
 
-## 六、webpack proxy
-
-### 1.跨域的产生（回顾）
-
-比如一个 api 请求是 `http://localhost:8888` ，但本地启动服务器域名是 `http://localhost:8000`，这个时候浏览器发送网络请求就会出现跨域问题。
-
-跨域问题的解决办法，3 点：
-
-- 将静态资源和 api 服务器部署在一起；
-- 让服务器关闭跨域（开启 CORS）；
-- 使用 nginx 代理访问静态资源和 api。
-
-以上方式都需要后端参与，那么在前端开发的测试阶段，临时解决跨域问题，需要在 webpack 中设置代理。
-
-### 2.proxy
-
-**重点**，开发中，一般要自己配置；
-
-`devServer` 中 `proxy` 有什么用：
-
-设置代理来解决跨域的问题。将请求发送到代理服务器，代理服务器和 api 服务器没有跨域问题。
-
-`devServer` 中的 `proxy` 配置：
-
-- `target`：表示的是代理到的目标地址，比如 `/api-hy/moment` 会被代理到 `http://localhost:8888/api-hy/moment`；
-- `pathRewrite`：默认情况下，我们的 `/api-hy` 也会被写入到 URL 中，如果希望删除，可以使用 pathRewrite；
-- `changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
-
-10_learn_typescript\01-知识补充和邂逅 TypeScript.md
-
-```javascript
-module.exports = {
-  devServer: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8888', // 代理的目标地址，默认情况下将代理 http://localhost:8888/api 这个路径
-        pathRewrite: {
-          '^/api': '' // 在代理路径中删除掉 /api
-        },
-        secure: false, // 在 https 的情况下，仍代理，默认为 true
-        changeOrigin: true // 表示是否更新代理后，请求的 headers 中 host 地址，默认 http://localhost:8000 ,会改为 http://localhost:8888
-      }
-    }
-  }
-}
-```
-
-#### 1.changeOrigin 解析
-
-`changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
-
-源码位置：demo-project\04_webpack 服务器\node_modules\http-proxy\lib\http-proxy\common.js
-
-```js
-if (options.changeOrigin) {
-  outgoing.headers.host =
-    required(outgoing.port, options[forward || 'target'].protocol) && !hasPort(outgoing.host)
-      ? outgoing.host + ':' + outgoing.port
-      : outgoing.host
-}
-return outgoing
-```
-
 ## 七、webpack 性能优化
 
 webpack 作为前端目前使用最广泛的打包工具，在面试中也是经常会被问到的。
 
-比较常见的面试题包括：
+比较常见的【面试】题包括：
 
 - 可以配置哪些属性来进行 webpack 性能优化？
 - 前端有哪些常见的性能优化？（问到前端性能优化时，除了其他常见的，也完全可以从 webpack 来回答）
@@ -592,10 +603,10 @@ webpack 作为前端目前使用最广泛的打包工具，在面试中也是经
 
 webpack 的性能优化较多，我们可以对其进行分类：
 
-- 优化一：**打包后的结果**，上线时的性能优化（比如分包处理、减小包体积、CDN 服务器等）;
-- 优化二：**优化打包速度**（重点），开发或者构建时，优化打包速度（比如 exclude、cache-loader、压缩丑化，tree shaking。等）
+- 优化一：**打包后的结果**，上线时的性能优化（比如分包处理、减小包体积、CDN 服务器、压缩丑化，tree shaking...）;
+- 优化二：**优化打包速度**（重点），开发或者构建时，优化打包速度（比如 exclude、cache-loader、...）
 
-大多数情况下，我们会更加侧重于优化一，这对于线上的产品影响更大。
+大多数情况下，会更侧重于优化一，这对于线上的产品影响更大。
 
 在大多数情况下 webpack 都帮我们做好了该有的性能优化：
 

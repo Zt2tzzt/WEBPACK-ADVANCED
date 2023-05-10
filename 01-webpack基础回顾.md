@@ -1,4 +1,6 @@
-# 一、webpack 是什么？
+# webpack 基础回顾
+
+## 一、webpack 是什么？
 
 官方的解释：“webpack is a static module bundler for modern JavaScript applications.”
 
@@ -13,18 +15,23 @@ webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包
 
 回顾：前端项目开发模式，发展的三个阶段：
 
-- 后端渲染；
-  - jsp，asp
-- 前后端分离
-  - ajax + jQuery；本质上还是后端渲染。
-- 前端渲染（现代的 JS 应用程序）
-  - Vue / React 项目开发，对应脚手架分别是 Vue CLI / create-react-app，它们都基于 webpack 的。
+后端渲染；
 
-# 二、webpack 打包基础
+- jsp，asp
+
+前后端分离
+
+- ajax + jQuery；本质上还是后端渲染。
+
+前端渲染（现代的 JS 应用程序）
+
+- Vue / React 项目开发，对应脚手架分别是 Vue CLI / create-react-app，它们都基于 webpack 的。
+
+## 二、webpack 打包基础
 
 [回顾 webpack 打包基础的相关知识](https://github.com/Zt2tzzt/FRONT-END-ENGINEERING/blob/master/02-webpack%E5%9F%BA%E7%A1%80/01-Node%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97path-webpack%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8.md#%E4%BA%8Cwebpack-%E6%89%93%E5%8C%85%E5%9F%BA%E7%A1%80)
 
-# 三、webpack 项目创建
+## 三、webpack 项目创建
 
 创建 02-source-map 项目；
 
@@ -108,7 +115,7 @@ demo-project\02-source-map\build\boundle.js
 })()
 ```
 
-# 四、Mode 配置
+## 四、Mode 配置
 
 `mode` 配置选项：用于告知 webpack 使用响应模式的内置优化：
 
@@ -122,7 +129,7 @@ demo-project\02-source-map\build\boundle.js
 | `production`  | 会将 `DefinePlugin` 中 `process.env.NODE_ENV` 的值设置为 `production`。为模块和 chunk 启用确定性的混淆名称，`FlagDependencyUsagePlugin`，`FlagIncludedChunksPlugin`，`ModuleConcatenationPlugin`，`NoEmitOnErrorsPlugin` 和 `TerserPlugin`。 |
 | `none`        | 不使用任何默认优化选项                                                                                                                                                                                                                       |
 
-<img src="NodeAssets/Mode配置代表更多.jpg" alt="Mode配置代表更多" style="zoom:150%;" />
+![Mode配置代表更多](NodeAssets/Mode配置代表更多.jpg)
 
 配置文件的 mode 配置。
 

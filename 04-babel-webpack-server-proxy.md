@@ -285,7 +285,7 @@ webpack 打包的代码，为了运行，需要有两个操作：
 npm run build
 ```
 
-操作二：通过 liveServer 或者直接通过浏览器，打开 `index.html` 代码，查看效果；
+操作二：通过 liveServer，或者直接使用浏览器，打开 `index.html` 代码，查看效果；
 
 这个过程效率低，如果当文件发生变化时，可以自动的完成编译和刷新就好了；
 
@@ -344,7 +344,7 @@ demo-project\04_webpack 服务器\package.json
 - webpack3 以前，需要从 webpack-dev-server 启动服务，现在有了 webpack-cli，当发现命令中有 `serve`，会自动启动。
 - webpack-dev-server 会基于 express 框架，搭建一个本地服务。
 - webpack-dev-server 在编译之后，不会输出任何文件，而是将打包后的文件**保留在内存中**。
-  - 事实上 webpack-dev-server 使用了一个库叫 _memfs_（ _memory-fs_，webpack 自己写的）
+  - 事实上 webpack-dev-server 使用了一个库叫 _memfs_（_memory-fs_，webpack 自己写的）
 
 ### 1.static
 
@@ -383,7 +383,7 @@ module.exports = {
 
 ### 2.hot（HMR）
 
-HMR 全称是 Hot Module Replacement，译为模块热替换；
+HMR 全称是 Hot Module Replacement，译为“模块热替换”；
 
 指的是，在应用程序运行中，替换，添加，删除模块，而无需刷新整个页面（模块通常指文件）。
 
@@ -420,16 +420,16 @@ HMR 的好处，2 点：
 
 #### 1.HMR 原理
 
-在实际开发项目时，是否需要经常手动写 `module.hot.accept` 代码呢？2 个例子：
+在实际开发项目时，不需要经常手动写 `module.hot.accept` 代码；2 个例子：
 
-- vue 开发中，vue-loader 支持 vue 组件的 HMR，提供开箱即用的体验。
-- react 开发中，react-refresh（React Hot Loader 已弃用）实时调整 react 组件。
+- vue 开发中，*vue-loader* 支持 vue 组件的 HMR，提供开箱即用的体验。
+- react 开发中，*react-refresh*（*React Hot Loader* 已弃用）实时调整 react 组件。
 
 HMR 原理的理解，2 方面，。
 
 webpack-dev-server 会创建两个服务：
 
-- express server 负责直接提供静态资源服务（打包后的资源被浏览器请求和解析）
+- express server 负责直接提供静态资源服务（打包后的资源，被浏览器请求和解析）
 - Socket Server
   1. webpack compiler 监听到对应模块发生变化时，生成两个文件：.json（ manifest 文件）和 .js 文件（update chunk）。
   2. 将这两个文件，主动发送给客户端（浏览器）
@@ -479,7 +479,7 @@ module.exports = {
 devServer 中 `port`，`open`，`compress` 等属性的配置；
 
 - `port`：设置开启本地服务的端口，默认是 `8080`；
-- `open`：设置开启本地服务后，是否打开浏览器：默认是 `false`，设为 `true`,开启本地废物时，自动打开浏览器。
+- `open`：设置开启本地服务后，是否打开浏览器：默认是 `false`，设为 `true`，开启本地废物时，自动打开浏览器。
 - `compress`：设置开启本地服务后，是否为静态文件，开启 gzip compression（不会压缩 HTML 文件），浏览器可自动对 gzip 格式解压，
 
 demo-project\04_webpack 服务器\webpack.config.js
@@ -508,7 +508,9 @@ module.exports = {
 - 让服务器关闭跨域（开启 CORS）；
 - 使用 nginx 代理访问静态资源和 api。
 
-以上方式，都需要后端参与，那么在前端开发的测试阶段，临时解决跨域问题，需要在 webpack 中设置代理。
+以上方式，都需要后端参与；
+
+那么在前端开发的测试阶段，临时解决跨域问题，需要在 webpack 中设置代理。
 
 #### 2.配置
 

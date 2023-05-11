@@ -8,7 +8,9 @@
 - @babel/plugin-transform-react-jsx
 - @babel/plugin-transform-react-display-name
 
-同样的，在开发中，不需要一个个去安装这些插件，使用 preset 来配置即可：
+同样的，在开发中，不需要一个个去安装这些插件；
+
+使用 preset 来配置即可：
 
 安装 _@babel/preset-react_
 
@@ -53,7 +55,7 @@ const App = memo(() => {
 export default App
 ```
 
-创建一个模板 `index.html`，将 react 渲染到 `div#root` 中：
+创建一个模板 `index.html`；
 
 demo-project\04_webpack 服务器\index.html
 
@@ -71,6 +73,8 @@ demo-project\04_webpack 服务器\index.html
   </body>
 </html>
 ```
+
+将 react 渲染到 `div#root` 中：
 
 demo-project\04_webpack 服务器\src\index.js
 
@@ -193,7 +197,7 @@ npm run build
 
 - Babel 提供了对 TypeScript 代码转换的支持；
 - 可以使用插件：_@babel/tranform-typescript_；
-- 是更推荐使用预设：即 _@babel/preset-typescript_；
+- 更推荐使用预设：即 _@babel/preset-typescript_；
 
 安装 _@babel/preset-typescript_：
 
@@ -353,12 +357,10 @@ devServer 中的 `contentBase` 已弃用；
 它的主要作用是：指定从哪里来查找，打包后的资源，所依赖的一些资源；
 
 - 比如在 `index.html` 中，需要依赖一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
-- 在 `index.html` 中，应该如何去引入这个文件呢？
+- 在 `index.html` 中，要去引入这个文件？
 
-  - 比如代码是这样的：`<script src="./public/abc.js"></script>`；
-  - 但是这样打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
-  - 所以，代码是这样的：`<script src="/abc.js"></script>`;
-  - 使用 `static` 属性，让它去查找到这个文件的存在
+  - 这样引入：`<script src="./public/abc.js"></script>`；打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
+  - 所以，应该这样引入：`<script src="/abc.js"></script>`；再使用 `static` 属性，让 `index.html` 去查找到这个文件的存在
 
 `static` 属性，可以：
 

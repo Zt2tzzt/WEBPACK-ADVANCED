@@ -422,14 +422,15 @@ HMR 的好处，2 点：
 
 在实际开发项目时，不需要经常手动写 `module.hot.accept` 代码；2 个例子：
 
-- vue 开发中，*vue-loader* 支持 vue 组件的 HMR，提供开箱即用的体验。
-- react 开发中，*react-refresh*（*React Hot Loader* 已弃用）实时调整 react 组件。
+- vue 开发中，_vue-loader_ 支持 vue 组件的 HMR，提供开箱即用的体验。
+- react 开发中，_react-refresh_（_React Hot Loader_ 已弃用）实时调整 react 组件。
 
 HMR 原理的理解，2 方面，。
 
 webpack-dev-server 会创建两个服务：
 
-- express server 负责直接提供静态资源服务（打包后的资源，被浏览器请求和解析）
+- express server
+  1. 负责直接提供静态资源服务（打包后的资源，被浏览器请求和解析）
 - Socket Server
   1. webpack compiler 监听到对应模块发生变化时，生成两个文件：.json（ manifest 文件）和 .js 文件（update chunk）。
   2. 将这两个文件，主动发送给客户端（浏览器）
@@ -573,10 +574,10 @@ historyApiFallback 是开发中常见的属性；
 
 - boolean 值：默认是 `false`：
 
-  - 如果设置为 `true`，那么在刷新时，返回 404 错误时，会自动返回 index.html 的内容；
+  - 如果设置为 `true`，那么在刷新时，返回 404 错误时，会自动返回 `index.html` 的内容；
 
 - object 类型的值，可以配置 `rewrites` 属性：
-  - 可以配置 `from` 来匹配路径，决定要跳转到哪一个页面；
+  - 可以配置 `from`，来匹配路径，决定要跳转到哪一个页面；
 
 事实上 webpack 的 devServer 中，实现 historyApiFallback 功能，是通过 [connect-history-api-fallback 库](https://github.com/bripkens/connect-history-api-fallback)的：
 

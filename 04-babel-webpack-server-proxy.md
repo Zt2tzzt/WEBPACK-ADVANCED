@@ -241,7 +241,7 @@ module.exports = {
 
 ### 5.最佳实践
 
-[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明：
+（事实上，[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明：）
 
 既使用 babel 来完成代码的转换；
 
@@ -301,7 +301,7 @@ webpack 提供了 `watch` 模式；
 
 在该模式下，webpack 依赖图中的所有文件，只要有一个发生了更新，那么代码将被重新编译。
 
-开启 watch 模式：在 `webpack.config.json` 中进行配置
+开启 watch 模式：在 `webpack.config.json` 中进行配置。
 
 ```javascript
 module.exports = {
@@ -360,7 +360,7 @@ devServer 中的 `contentBase` 已弃用；
 - 在 `index.html` 中，要去引入这个文件？
 
   - 这样引入：`<script src="./public/abc.js"></script>`；打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
-  - 所以，应该这样引入：`<script src="/abc.js"></script>`；再使用 `static` 属性，让 `index.html` 去查找到这个文件的存在
+  - 所以，应该这样引入：`<script src="/abc.js"></script>`；再使用 `static` 属性，让 `index.html` 去查找到这个文件的存在。
 
 `static` 属性，可以：
 
@@ -432,11 +432,13 @@ webpack-dev-server 会创建两个服务：
 - express server
   1. 负责直接提供静态资源服务（打包后的资源，被浏览器请求和解析）
 - Socket Server
-  1. webpack compiler 监听到对应模块发生变化时，生成两个文件：.json（ manifest 文件）和 .js 文件（update chunk）。
+  1. webpack compiler 监听到对应模块发生变化时，生成两个文件：
+     - .json（manifest 文件）
+     - .js 文件（update chunk）。
   2. 将这两个文件，主动发送给客户端（浏览器）
   3. 浏览器通过 HMR runtime 机制，加载这两个文件，针对修改的模块做更新。
 
-理解原理图
+理解原理图：
 
 ![HRM原理图](NodeAssets/HRM原理图.jpg)
 
@@ -480,7 +482,7 @@ module.exports = {
 devServer 中 `port`，`open`，`compress` 等属性的配置；
 
 - `port`：设置开启本地服务的端口，默认是 `8080`；
-- `open`：设置开启本地服务后，是否打开浏览器：默认是 `false`，设为 `true`，开启本地废物时，自动打开浏览器。
+- `open`：设置开启本地服务后，是否打开浏览器：默认是 `false`，设为 `true`；
 - `compress`：设置开启本地服务后，是否为静态文件，开启 gzip compression（不会压缩 HTML 文件），浏览器可自动对 gzip 格式解压，
 
 demo-project\04_webpack 服务器\webpack.config.js
@@ -523,8 +525,8 @@ module.exports = {
 
 `devServer` 中的 `proxy` 配置：
 
-- `target`：表示的是代理到的目标地址，比如 `/api-hy/moment` 会被代理到 `http://localhost:8888/api-hy/moment`；
-- `pathRewrite`：默认情况下，`/api-hy` 也会被写入到 URL 中，如果希望删除，可以使用 `pathRewrite`；
+- `target`：表示的是代理到的目标地址，比如 `/api/moment` 会被代理到 `http://localhost:8888/api/moment`；
+- `pathRewrite`：默认情况下，`/api` 也会被写入到 URL 中，如果希望删除，可以使用 `pathRewrite`；
 - `changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
 
 10_learn_typescript\01-知识补充和邂逅 TypeScript.md
@@ -574,7 +576,7 @@ historyApiFallback 是开发中常见的属性；
 
 - boolean 值：默认是 `false`：
 
-  - 如果设置为 `true`，那么在刷新时，返回 404 错误时，会自动返回 `index.html` 的内容；
+  - 如果设置为 `true`，那么在刷新后，返回 404 错误时，会自动返回 `index.html` 的内容；
 
 - object 类型的值，可以配置 `rewrites` 属性：
   - 可以配置 `from`，来匹配路径，决定要跳转到哪一个页面；
@@ -595,12 +597,10 @@ module.exports = {
 
 ## 七、webpack 性能优化
 
-webpack 作为前端目前使用最广泛的打包工具，在面试中也是经常会被问到的。
-
-比较常见的【面试】题包括：
+目前，webpack 作为前端使用最广泛的打包工具，常见的【面试】题有：
 
 - 可以配置哪些属性来进行 webpack 性能优化？
-- 前端有哪些常见的性能优化？（问到前端性能优化时，除了其他常见的，也完全可以从 webpack 来回答）
+- 前端有哪些常见的性能优化？（除了其他常见的，也完全可以从 webpack 来回答）
 
 > 【回顾】：防抖，节流，精灵图，回流，重绘...
 >
@@ -608,12 +608,14 @@ webpack 作为前端目前使用最广泛的打包工具，在面试中也是经
 
 webpack 的性能优化较多，我们可以对其进行分类：
 
-- 优化一：**打包后的结果**，上线时的性能优化（比如分包处理、减小包体积、CDN 服务器、压缩丑化，tree shaking...）;
-- 优化二：**优化打包速度**（重点），开发或者构建时，优化打包速度（比如 exclude、cache-loader、...）
+- 优化一：**打包后的结果**（重点），上线时的性能优化；
+  - 比如：分包处理、减小包体积、CDN 服务器、压缩丑化，tree shaking...
+- 优化二：**优化打包速度**，开发或者构建时，优化打包速度；
+  - 比如：exclude、cache-loader...
 
 大多数情况下，会更侧重于优化一，这对于线上的产品影响更大。
 
 在大多数情况下 webpack 都帮我们做好了该有的性能优化：
 
 - 比如配置 `mode` 为 `production` 或者 `development` 时，默认 webpack 的配置信息；
-- 但是我们也可以针对性的进行自己的项目优化；
+- 但是，我们也可以针对性的，进行自己的项目优化；

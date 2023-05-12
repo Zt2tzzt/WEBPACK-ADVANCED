@@ -595,7 +595,7 @@ module.exports = {
 }
 ```
 
-## 七、webpack 性能优化
+## 六、webpack 性能优化
 
 目前，webpack 作为前端使用最广泛的打包工具，常见的【面试】题有：
 

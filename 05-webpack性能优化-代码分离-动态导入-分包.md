@@ -69,11 +69,11 @@ webpack 默认从一个入口开始打包，形成一个依赖图。
 
 创建另一个入口 `mian.js`：
 
-demo-project\05_webpack分包-入口起点\src\main.js
+demo-project\05_webpack 分包-入口起点\src\main.js
 
 ```js
 // index.js作为入口
-const message = "Hello Main"
+const message = 'Hello Main'
 console.log(message)
 
 function bar() {
@@ -87,7 +87,7 @@ bar()
 - 配置 `entry` 为对象。
 - 配置 `output.filename`，使用 placeholder
 
-demo-project\05_webpack分包-入口起点\webpack.config.js
+demo-project\05_webpack 分包-入口起点\webpack.config.js
 
 ```js
 module.exports = {
@@ -96,30 +96,30 @@ module.exports = {
   // entry: './src/index.js',
   entry: {
     index: './src/index.js',
-    main: './src/main.js',
+    main: './src/main.js'
   },
   output: {
     path: path.resolve(__dirname, './build'),
     // placeholder
     filename: '[name]-bundle.js',
     clean: true
-  },
+  }
 }
 ```
 
 > 回顾：\<script defer\>、output.filename 的占位符；
 
-缺点：都依赖相同的库（如 *axios*），那么这个库会被打包多次。
+缺点：都依赖相同的库（如 _axios_），那么这个库会被打包多次。
 
 ### 1.入口依赖
 
-如果 `index.js` 和 `main.js`，都依赖这两个库：*axios*
+如果 `index.js` 和 `main.js`，都依赖这两个库：_axios_
 
-那么默认情况下，打包后的两个 bunlde.js，都包含了 *lodash* 和 *dayjs*；
+那么默认情况下，打包后的两个 bunlde.js，都包含了 _lodash_ 和 _dayjs_；
 
 事实上，可以配置共享，避免重复打包；在 `entry` 中，配置 `shared`。
 
-demo-project\05_webpack分包-入口起点\webpack.config.js
+demo-project\05_webpack 分包-入口起点\webpack.config.js
 
 ```js
 module.exports = {
@@ -136,7 +136,7 @@ module.exports = {
       dependOn: 'shared'
     },
     shared: ['axios']
-  },
+  }
 }
 ```
 
@@ -162,13 +162,13 @@ webpack 提供了两种实现动态导入的方式：
 
 创建 `router/about.js`，`router/categoryu.js`
 
-demo-project\06_webpack分包-动态导入\src\router\about.js
+demo-project\06_webpack 分包-动态导入\src\router\about.js
 
-demo-project\06_webpack分包-动态导入\src\router\category.js
+demo-project\06_webpack 分包-动态导入\src\router\category.js
 
 使用 `import` 函数（es6 语法），动态导入模块。
 
-demo-project\06_webpack分包-动态导入\src\main.js
+demo-project\06_webpack 分包-动态导入\src\main.js
 
 ```js
 const btn1 = document.createElement('button')
@@ -178,15 +178,15 @@ btn2.textContent = '分类'
 document.body.append(btn1)
 document.body.append(btn2)
 
-btn1.onclick = function() {
-  import(/* webpackChunkName: "about" */'./router/about').then(res => {
+btn1.onclick = function () {
+  import(/* webpackChunkName: "about" */ './router/about').then(res => {
     res.about()
     res.default()
   })
 }
 
-btn2.onclick = function() {
-  import(/* webpackChunkName: "category" */'./router/category')
+btn2.onclick = function () {
+  import(/* webpackChunkName: "category" */ './router/category')
 }
 ```
 
@@ -199,7 +199,7 @@ btn2.onclick = function() {
 - 默认情况下，placeholder 的 [name] 和 [id] 名称是一致的；
 - 如果要修改 name 的值，要通过上面 magic comments（魔法注释）的方式；
 
-demo-project\06_webpack分包-动态导入\webpack.config.js
+demo-project\06_webpack 分包-动态导入\webpack.config.js
 
 ```js
 module.exports = {
@@ -214,7 +214,7 @@ module.exports = {
     filename: '[name]-bundle.js',
     // 单独针对分包的文件，进行命名
     chunkFilename: '[name]_chunk.js'
-  },
+  }
 }
 ```
 
@@ -222,7 +222,7 @@ module.exports = {
 
 另外一种分包的模式是 splitChunk，相比起动态导入，不需要 使用 `import` 函数，可自定义分包。
 
-底层是使用 *SplitChunksPlugin* 来实现的：
+底层是使用 _SplitChunksPlugin_ 来实现的：
 
 该插件 webpack5 已内置，并提供了默认配置。
 
@@ -232,7 +232,7 @@ axios，react 等依赖的库，默认会打包在主包中；如果希望将他
 
 手动配置 `splitChunks`；
 
-demo-project\07_webpack分包-自定义分包\webpack.config.js
+demo-project\07_webpack 分包-自定义分包\webpack.config.js
 
 ```js
 module.exports = {
@@ -240,7 +240,7 @@ module.exports = {
   optimization: {
     // 分包插件: SplitChunksPlugin
     splitChunks: {
-      chunks: "all"
+      chunks: 'all'
     }
   }
 }
@@ -264,21 +264,21 @@ module.exports = {
 
 `cacheGroups`：
 
-- 用于对拆分的包就行分组，比如一个 *lodash* 在拆分之后，并不会立即打包，而是会等到有没有其他符合规则的包一起来打包；
+- 用于对拆分的包就行分组，比如一个 _lodash_ 在拆分之后，并不会立即打包，而是会等到有没有其他符合规则的包一起来打包；
 - `test` 属性：匹配符合规则的包；
 - `name` 属性：拆分包的 name 属性；
 - `filename` 属性：拆分包的名称，可以使用 placeholder 属性；
 
 cacheGroups 匹配 utils 目录下的包；匹配 node_module 目录下的包，匹配 `\/`。
 
-demo-project\07_webpack分包-自定义分包\webpack.config.js
+demo-project\07_webpack 分包-自定义分包\webpack.config.js
 
 ```js
 module.exports = {
   optimization: {
     // 分包插件: SplitChunksPlugin
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
       // 当一个包大于指定的大小时, 继续进行拆包
       // maxSize: 20000,
       // // 将包拆分成不小于minSize的包
@@ -289,18 +289,18 @@ module.exports = {
       cacheGroups: {
         utils: {
           test: /utils/,
-          filename: "[id]_utils.js"
+          filename: '[id]_utils.js'
         },
         vendors: {
           // /node_modules/
           // window上面 /\
           // mac上面 /
           test: /[\\/]node_modules[\\/]/,
-          filename: "[id]_vendors.js"
+          filename: '[id]_vendors.js'
         }
       }
-    },
-  },
+    }
+  }
 }
 ```
 
@@ -350,11 +350,11 @@ placeholder 的 `[id]` 打包名称不同。
 - 开发过程中，推荐使用 `named`；
 - 打包过程中，推荐使用 `deterministic`；
 
-demo-project\07_webpack分包-自定义分包\webpack.config.js
+demo-project\07_webpack 分包-自定义分包\webpack.config.js
 
 ```js
 module.exports = {
-    // 优化配置
+  // 优化配置
   optimization: {
     // 设置生成的 chunkId 的算法
     // development: named
@@ -363,7 +363,7 @@ module.exports = {
     chunkIds: 'deterministic',
     // 分包插件: SplitChunksPlugin
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
       // 当一个包大于指定的大小时, 继续进行拆包
       // maxSize: 20000,
       // // 将包拆分成不小于 minSize 的包
@@ -374,17 +374,17 @@ module.exports = {
       cacheGroups: {
         utils: {
           test: /utils/,
-          filename: "[id]_utils.js"
+          filename: '[id]_utils.js'
         },
         vendors: {
           // /node_modules/
           // window上面 /\
           // mac上面 /
           test: /[\\/]node_modules[\\/]/,
-          filename: "[id]_vendors.js"
+          filename: '[id]_vendors.js'
         }
       }
-    },
-  },
+    }
+  }
 }
 ```

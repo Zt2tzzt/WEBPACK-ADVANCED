@@ -68,7 +68,7 @@ module.exports = {
 }
 ```
 
-> 【补充】：在 output 中，配置 `clear`，每次打包，清空 build 文件夹；
+> 【补充】：在 `output` 中，配置 `clear`，每次打包，清空 build 文件夹；
 >
 > 这是新版本中的特性，以前需要插件完成。
 >
@@ -78,17 +78,17 @@ module.exports = {
 > const path = require('path')
 >
 > module.exports = {
->   mode: 'development',
->   devtool: false,
->   entry: './src/index.js',
->   output: {
->    path: path.resolve(__dirname, './build'),
->    filename: 'bundle.js',
+>     mode: 'development',
+>     devtool: false,
+>     entry: './src/index.js',
+>     output: {
+>      path: path.resolve(__dirname, './build'),
+>      filename: 'bundle.js',
 >
->    // 重新打包时, 先将之前打包的文件夹删除掉
->    clean: true
->   },
-> ...
+>      // 重新打包时, 先将之前打包的文件夹删除掉
+>      clean: true
+>     },
+>   ...
 > }
 > ```
 
@@ -126,7 +126,7 @@ babel 添加了代码**语法转化**的功能。
 
 browserslist 工具，用于指定要兼容的浏览器。
 
-Browserslist 为（babel、postcss 这样的）适配工具提供，共享目标浏览器，和 Node.js 版本的配置：
+Browserslist 为（babel、postcss 这样的）适配工具提供，用于共享目标浏览器，和 Node.js 版本的配置：
 
 可适配以下工具：
 
@@ -299,7 +299,7 @@ browserslist.defaults = ['> 0.5%', 'last 2 version', 'Firefox ESR', 'not dead']
 
 上面介绍的，都是使用了 browserslist 工具，进行统一适配；
 
-事实上，还可以在转化工具中，使用 `target` 属性，进行适配（开发中很少使用）。
+事实上，还可以在转化工具中，使用 `targets` 属性，进行适配（开发中很少使用）。
 
 ### 2.targets
 
@@ -341,7 +341,7 @@ TC39 遵循的原则是：分阶段加入不同的语言特性，新流程涉及
 - Stage 0：strawman（稻草人），任何尚未提交作为正式提案的讨论、想法变更或者补充，都被认为是第 0 阶段的"稻草人"；
 - Stage 1：proposal（提议），提案已经被正式化，并期望解决此问题，还需要观察与其他提案的相互影响；
 - Stage 2：draft（草稿），Stage 2 的提案应提供规范初稿、草稿；
-  - 此时，语言的实现者开始观察 runtime 的具体实现是否 合理；
+  - 此时，语言的实现者开始观察 runtime 的具体实现是否合理；
 - Stage 3：candidate（候补），建议的候选提案。在这个高级阶段，规范的编辑人员和评审人员必须在最终规范上签字;
   - 该阶段的提案，不会有太大的改变，在对外发布之前只是修正一些问题；
 - Stage 4：finished（完成），进入 Stage 4 的提案将包含在 ECMAScript 的下一个修订版中；
@@ -370,7 +370,7 @@ module.exports = {
 }
 ```
 
-## 十二、babel 配置文件
+## 十二、babel 两种配置文件
 
 将 babel 的配置信息，放到一个独立的文件中，有两种配置文件的编写方式：
 
@@ -402,7 +402,7 @@ Polyfill 直译为：一种用于衣物、床具的聚酯填充材料, 使这些
 
 babel 将高级语法特性，转成向下兼容的语法，但有些 API，没法转换；
 
-当使用了一些 API 特性（例如：Promise, Generator, Symbol、实例方法例如 Array.prototype.includes...）
+当使用了一些 **API 特性**（例如：Promise, Generator, Symbol、实例方法例如 Array.prototype.includes...）
 
 就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，才能够正确的转换代码；
 
@@ -438,8 +438,7 @@ module.exports = {
 
 `corejs`：设置 corejs 的版本，目前使用较多的是 3.x 的版本；
 
-- 另外 corejs 可以设置是否对提议阶段的特性进行支持；
-- 设置 proposals 属性为 `true` 即可；
+- 另外 corejs 可以设置是否对”提议（proposal）“阶段的特性进行支持；设置 proposals 属性为 `true` 即可；
 
 `useBuiltIns`：设置以什么样的方式，来使用 polyfill，常见的有 3 个值；
 
@@ -450,7 +449,7 @@ module.exports = {
 
 - `usage`（推荐使用）
 
-  - 根据源代码中出现的语言特性，自动检测所需要的 `polyfill`；
+  - 根据源代码中，出现的语言特性，自动检测所需要的 `polyfill`；
   - 确保，最终打包里的 polyfill 数量最小化；
 
 - `entry`

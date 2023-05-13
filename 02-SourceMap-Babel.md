@@ -186,7 +186,7 @@ demo-project\02-source-map\build\boundle.js
 //# sourceMappingURL=boundle.js.map
 ```
 
-在 build 目录下，生成了 `bundle.js.map` 文件。
+在 build 目录下，生成了 source-map 文件，即 `bundle.js.map` 文件。
 
 ```json
 {
@@ -245,9 +245,9 @@ demo-project\02-source-map\build\boundle.js
 
 详见[官方文档](https://webpack.docschina.org/configuration/devtool/)；
 
-选择不同的值，生成的 source-map 会稍微有差异，打包的过程也会有性能的差异，可以根据不同的情况进行选择；
+选择不同的值，生成的 source-map 会有差异，打包的过程也会有性能的差异，可以根据不同的情况进行选择；
 
-`devtool` 选项，设值下面几个值，不会生成 source-map：
+`devtool` 选项，设值下面几个值，不会生成 source-map 文件：
 
 - `false`：不使用 source-map，也就是没有任何和 source-map 相关的内容。
 - `none`：`production` 模式下的默认值（什么值都不写） ，不生成 source-map。
@@ -408,9 +408,9 @@ demo-project\02-source-map\build\boundle.js.map
 
 ### 6."cheap-module-source-map"
 
-会生成 sourcemap；
+会生成 source-map；
 
-类似于 “cheap-source-map”，但是对源自 loader 的 sourcemap 处理会更好。
+类似于 “cheap-source-map”，但是对源自 loader（如 babel-loader）的 sourcemap 处理会更好。
 
 如果 loader 对源码进行了特殊的处理，那么使用该值，
 
@@ -418,7 +418,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 ### 7.“hidden-source-map”
 
-会生成 sourcemap；
+会生成 source-map；
 
 不过，在 `boundle.js` 文件中，不会对 source-map 文件进行引用；
 
@@ -426,7 +426,7 @@ demo-project\02-source-map\build\boundle.js.map
 // 被删除掉的 //# sourceMappingURL=bundle.js.map
 ```
 
-如果手动添加，那么 sourcemap 就会生效了。
+如果手动添加，那么 source-map 就会生效了。
 
 ### 8.“nosources-source-map”
 
@@ -509,9 +509,9 @@ demo-project\02-source-map\build\boundle.js.map
 
 但是，目前 babel 对于前端开发来说，是不可缺少的一部分：
 
-- 比如，开发中，使用 ES6+ 语法、TypeScript、Vue/React 项目开发...，都离不开 Babel；
+- 比如，开发中，使用 ES6+ 语法、TypeScript、Vue/React 项目的开发...，都离不开 Babel；
 
-Babel 是一个工具链，最早用于在旧浏览器，或环境中将 ES6+ 代码，转成向后兼容的代码。
+Babel 是一个工具链，最早用于在旧浏览器，或环境中，将 ES6+ 代码，转成向后兼容的代码。
 
 - 包括：语法转换、源代码转换、
 - Polyfill 实现目标环境缺少的功能等；

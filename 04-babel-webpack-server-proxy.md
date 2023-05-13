@@ -8,7 +8,7 @@
 - @babel/plugin-transform-react-jsx
 - @babel/plugin-transform-react-display-name
 
-同样的，在开发中，不需要一个个去安装这些插件；
+在开发中，不需要一个个去安装这些插件；
 
 使用 preset 来配置即可：
 
@@ -86,7 +86,7 @@ const root = ReactDom.createRoot(document.querySelector('#root'))
 root.render(<App />)
 ```
 
-对 html 模板文件，进行打包处理，并添加到打包目录下，引用打包后的 js 文件。
+对 html 模板文件，进行打包处理，要将它添加到打包目录下，引用打包后的 js 文件。
 
 安装 _html-webpack-plugin_ 插件。
 
@@ -110,13 +110,13 @@ module.exports = {
 }
 ```
 
-> js 中也可以写 jsx 代码。
+> 事实上，在 js 文件中也可以写 jsx 语法的代码。
 
 ### 1.resolve extensions
 
-webpack 中 [resolve extensions 配置](https://webpack.docschina.org/configuration/resolve/#resolveextensions)，有三个默认值。
+webpack 中 [resolve extensions 配置](https://webpack.docschina.org/configuration/resolve/#resolveextensions)，用于在打包时，解析添加的后缀名
 
-打包时，解析添加的后缀名
+有三个默认值：`'.js', '.json', '.wasm'`
 
 demo-project\04_webpack 服务器\webpack.config.js
 
@@ -189,7 +189,7 @@ module.exports = {
 npm run build
 ```
 
-> 安装 _ts-loader_ 时，会自动安装 _typescript_。本质上还是在用 tsc 编译代码。
+> 安装 _ts-loader_ 时，会自动安装 _typescript_；本质上还是在用 tsc 编译代码。
 
 ### 3.babel-loader
 
@@ -227,7 +227,7 @@ module.exports = {
 
 ### 4.总结
 
-使用 ts-loader（TypeScript Compiler）
+使用 ts-loader（TypeScript Compiler）：
 
 - 来直接编译 TypeScript，只能将 ts 转换成 js；
 - 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
@@ -237,15 +237,13 @@ module.exports = {
 - 可直接编译 TypeScript，将 ts 转换成 js，并且可以添加 polyfill 的功能；
 - 但是，不会对类型进行检测；
 
-在开发中，同时满足代码转换和 polyfill 添加，需要使用如下最佳实践方案。
+在开发中，同时满足：代码转换、polyfill 添加，需要使用如下最佳实践方案。
 
 ### 5.最佳实践
 
-（事实上，[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明：）
+（事实上，[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明）
 
-既使用 babel 来完成代码的转换；
-
-也使用 tsc 来进行类型的检查。
+既使用 babel 来完成代码的转换，也使用 tsc 来进行类型的检查。
 
 1.在 "scripts" 中添加了两个脚本，用于类型检查；
 
@@ -269,7 +267,7 @@ demo-project\04_webpack 服务器\package.json
 npm run type-check
 ```
 
-3.执行如下命令，可以实时的检测 ts 的类型进行检测；
+3.执行如下命令，可以实时的检测 ts 的类型；
 
 ```shell
 npm run type-check-watch
@@ -277,7 +275,7 @@ npm run type-check-watch
 
 ## 三、webpack 本地服务器
 
-webpack 打包的代码，为了运行，需要有两个操作：
+上面的案例中，使用 webpack 打包的代码，为了运行，需要有两个操作：
 
 操作一：编译相关的代码；
 
@@ -354,10 +352,10 @@ devServer 中的 `contentBase` 已弃用；
 
 `devServer` 中 `static`，对于访问打包后的资源，其实并没有太大的作用；
 
-它的主要作用是：指定从哪里来查找，打包后的资源，所依赖的一些资源；
+它的主要作用是：指定从哪里来查找，打包后的资源所依赖的一些资源；
 
 - 比如在 `index.html` 中，需要依赖一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
-- 在 `index.html` 中，要去引入这个文件？
+- 怎么在 `index.html` 中，去引入这个文件？
 
   - 这样引入：`<script src="./public/abc.js"></script>`；打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
   - 所以，应该这样引入：`<script src="/abc.js"></script>`；再使用 `static` 属性，让 `index.html` 去查找到这个文件的存在。
@@ -566,11 +564,12 @@ return outgoing
 
 ### 6.historyApiFallback
 
-historyApiFallback 是开发中常见的属性；
+`historyApiFallback` 是开发中，常见的用于配置的属性；
 
 主要作用是：解决 SPA 页面，在路由跳转之后，进行页面刷新，返回 404 的错误。
 
-- 比如：将 `localhost:8000/about` 重定向到 `localhost:8000`；并使用 html5 的 history 模式，访问 /about
+- 比如：将 `localhost:8000/about` 重定向到 `localhost:8000`；
+- 并使用 html5 的 history 模式，访问 `/about`。
 
 可传如下值：
 

@@ -4,25 +4,25 @@
 
 目前，webpack 作为前端使用最广泛的打包工具，常见的【面试】题有：
 
-- 可以配置哪些属性来进行 webpack 性能优化？
+- 可以配置哪些属性，来进行 webpack 性能优化？
 - 前端有哪些常见的性能优化？（除了其他常见的，也完全可以从 webpack 来回答）
 
-> 【回顾】：防抖，节流，精灵图，回流，重绘...
+> 【回顾】：防抖，节流，精灵图，回流，重绘...；
 >
 > react 中，mome，高阶组件...
 
-webpack 的性能优化较多，我们可以对其进行分类：
+webpack 的性能优化较多，主要有两种分类：
 
 - 优化一：**打包后的结果**（重点），上线时的性能优化；
   - 比如：分包处理、减小包体积、CDN 服务器、压缩丑化，tree shaking...
 - 优化二：**优化打包速度**，开发或者构建时，优化打包速度；
   - 比如：exclude、cache-loader...
 
-大多数情况下，会更侧重于优化一，这对于线上的产品影响更大。
+大多数情况下，会更侧重于**优化一**，因为这对于线上的产品影响更大。
 
-在大多数情况下 webpack 都帮我们做好了该有的性能优化：
+事实上，在大多数情况下，webpack 默认做好了该有的性能优化：
 
-- 比如配置 `mode` 为 `production` 或者 `development` 时，默认 webpack 的配置信息；
+- 比如：配置 `mode` 为 `production` 或者 `development` 时，默认 webpack 的配置信息；
 - 但是，我们也可以针对性的，进行自己的项目优化；
 
 ## 二、代码分离
@@ -51,9 +51,7 @@ Webpack 中常用的代码分离有三种方式：
 - prefetch、preload；
 - SSR（1.加快首屏渲染速度；2.增加 SEO 优化）。
 
-## 三、多入口
-
-了解，用的少。
+## 三、多入口（了解）
 
 webpack 默认从一个入口开始打包，形成一个依赖图。
 
@@ -105,76 +103,284 @@ module.exports = {
 
 缺点：都依赖相同的库，那么这个库会被打包多次。
 
+### 1.入口依赖
 
+如果 `index.js` 和 `main.js` 都依赖两个库：*lodash*、*dayjs*
 
-入口依赖
+默认情况下，入口分离，打包后的两个 bunlde，都打包了 *lodash* 和 *dayjs*；
 
-在 entry 中，配置 share。
+事实上，可以配置共享，避免重复打包；在 `entry` 中，配置 `shared`。
 
----
+demo-project\05_webpack分包-入口起点\webpack.config.js
 
-webpack 动态导入 掌握
+```js
+module.exports = {
+  mode: 'development',
+  devtool: false,
+  // entry: './src/index.js',
+  entry: {
+    index: {
+      import: './src/index.js',
+      dependOn: 'shared'
+    },
+    main: {
+      import: './src/main.js',
+      dependOn: 'shared'
+    },
+    shared: ['axios']
+  },
+}
+```
 
-懒加载的概念，vue/react 都有，分包打包。
+## 四、动态导入（掌握）
 
+动态导入，也可对代码打包，进行拆分；
 
+webpack 提供了两种实现动态导入的方式：
+
+- 第一种，使用 ECMAScript 中的 `import()` 语法，来完成，也是目前推荐的方式；
+- 第二种，使用 webpack 遗留的 `require.ensure`，已经不推荐使用（Vue2 中遗留的方式）；
+
+比如有一个模块 bar.js：
+
+- 该模块我们希望在代码运行过程中来加载它（比如判断一个条件成立时加载）；
+- 因为并不确定这个模块中的代码一定会用到，所以，打包时，最好将该模块，拆分成一个独立的 js 文件；
+- 没用到该内容时，浏览器不需要加载该模块；
+- 这个时候我们就可以使用动态导入；
+
+注意：使用动态导入 bar.js：
+
+- 在 webpack 中，通过动态导入，获取到一个对象；
+- 真正导出的内容，在该对象的 default 属性中，所以我们需要做一个简单的解构；
 
 模拟路由。代码懒加载。
 
-创建 router/about.js，router/categoryu.js
+创建 `router/about.js`，`router/categoryu.js`
 
-回顾 es6 语法，import 函数。
+demo-project\06_webpack分包-动态导入\src\router\about.js
 
+demo-project\06_webpack分包-动态导入\src\router\category.js
 
+使用 `import` 函数（es6 语法），动态导入模块。
 
-为打包的文件名，命名。
+demo-project\06_webpack分包-动态导入\src\main.js
 
-- 使用 chunkfilename；
-- 使用魔法注释。会在 chunkname 中的 [name] 中，生效。
+```js
+const btn1 = document.createElement('button')
+const btn2 = document.createElement('button')
+btn1.textContent = '关于'
+btn2.textContent = '分类'
+document.body.append(btn1)
+document.body.append(btn2)
 
----
+btn1.onclick = function() {
+  import(/* webpackChunkName: "about" */'./router/about').then(res => {
+    res.about()
+    res.default()
+  })
+}
 
-splitChunkPlugin
+btn2.onclick = function() {
+  import(/* webpackChunkName: "category" */'./router/category')
+}
+```
 
-webpack 内置的插件，以前没有，现在内置了
+> vue/react 都有配置懒加载的概念，分包打包。
 
-相比起动态导入，不需要 import 才能分包，可自定义分包。
+在 `webpack.config.js` 中，为动态导入的模块，打包的文件命名：
 
+- 因为动态导入，一定会打包成独立的文件，所以并不会在 `cacheGroups` 中进行配置；
+- 命名打包后的文件，通常在 `output` 中，通过 `chunkFilename` 属性来配置；
+- 默认情况下，placeholder 的 [name] 和 [id] 名称是一致的；
+- 如果要修改 name 的值，要通过上面 magic comments（魔法注释）的方式；
 
+demo-project\06_webpack分包-动态导入\webpack.config.js
+
+```js
+module.exports = {
+  mode: 'development',
+  devtool: false,
+  // entry: './src/index.js',
+  entry: './src/main.js',
+  output: {
+    clean: true,
+    path: path.resolve(__dirname, './build'),
+    // placeholder
+    filename: '[name]-bundle.js',
+    // 单独针对分包的文件，进行命名
+    chunkFilename: '[name]_chunk.js'
+  },
+}
+```
+
+## 五、splitChunk
+
+另外一种分包的模式是 splitChunk，相比起动态导入，不需要 使用 import 函数，可自定义分包。
+
+它底层是使用 SplitChunksPlugin 来实现的：
+
+该插件 webpack5 已内置，并提供了默认配置。
+
+- 比如默认配置中，chunks 仅仅针对于异步（async）请求
 
 axios，react 等依赖的库，默认会打包在主包中；
 
 如果希望将他们和主包分开，使用自定义分包。
 
+手动配置 SplitChunks，我们也可以设置为 `all`；
 
+demo-project\07_webpack分包-自定义分包\webpack.config.js
 
-cacheGroups 匹配 node_module 时，\/ 匹配。
+```js
+module.exports = {
+  // 优化配置
+  optimization: {
+    // 分包插件: SplitChunksPlugin
+    splitChunks: {
+      chunks: "all"
+    }
+  }
+}
+```
 
-默认 minSize: 20kb，只有大于这个数，才会拆包。
+### 1.自定义配置解析
 
+Chunks:
 
+- async 默认值
+- all 表示对同步和异步代码都进行处理
 
-splitchunks 自定义配置名称。
+minSize：
 
-当模式改为 production，打包时加了注释。使用 terserPOlugin 插件。
+- 拆分包的大小, 至少为 minSize，默认 20kb；
+- 只有大于这个数，才会拆包。
 
+maxSize：
 
+- 将大于 maxSize 的包，拆分为不小于 minSize 的包；
+- 有时不一定小于 maxSize，因为如果一个函数大于最大值，是没法再拆分的。
 
-production，development 模式下，打包名称不同。
+cacheGroups：
 
-chunkIds 配置。
+- 用于对拆分的包就行分组，比如一个 lodash 在拆分之后，并不会立即打包，而是会等到有没有其他符合规则的包一起来打包；
+- test 属性：匹配符合规则的包；
+- name 属性：拆分包的 name 属性；
+- filename 属性：拆分包的名称，可以自己使用 placeholder 属性；
 
----
+cacheGroups 匹配 node_module 时，匹配 `\/`。
 
-prefetch 和 preload
+demo-project\07_webpack分包-自定义分包\webpack.config.js
 
-通过魔法注释，做预获取或预加载。
+```js
+module.exports = {
+  optimization: {
+    // 分包插件: SplitChunksPlugin
+    splitChunks: {
+      chunks: "all",
+      // 当一个包大于指定的大小时, 继续进行拆包
+      // maxSize: 20000,
+      // // 将包拆分成不小于minSize的包
+      // minSize: 10000,
+      minSize: 10,
 
----
+      // 自己对需要进行拆包的内容进行分包
+      cacheGroups: {
+        utils: {
+          test: /utils/,
+          filename: "[id]_utils.js"
+        },
+        vendors: {
+          // /node_modules/
+          // window上面 /\
+          // mac上面 /
+          test: /[\\/]node_modules[\\/]/,
+          filename: "[id]_vendors.js"
+        }
+      }
+    },
+  },
+}
+```
 
-CDN 加速服务器配置。
+## 六、minimizer
 
----
+### 1.TerserPlugin 插件
 
-CSS 单独抽取
+webpack 打包时，当模式为 `production`，有对包中的注释进行单独提取。
 
+使用 TerserPOlugin 插件进行配置。
+
+```js
+const TerserPlugin = require('terser-webpack-plugin')
+
+module.exports = {
+  optimization: {
+    // 代码优化: TerserPlugin => 让代码更加简单 => Terser
+    minimizer: [
+      // JS 代码简化
+      new TerserPlugin({
+        extractComments: false
+      })
+    ]
+  }
+}
+```
+
+## 七、chunkIds
+
+在 webpack 打包时，production，development 模式下，placeholder 的 `[id]` 打包名称不同。
+
+`optimization.chunkIds` 配置用于告知 webpack 模块的 id，采用什么算法生成。
+
+有三个比较常见的值：
+
+- `natural`：按照数字的顺序使用id；
+- `named`：development 下的默认值，一个可读的名称的 id；
+  - 打包时会消耗性能，不利于浏览器缓存。
+- `deterministic`：确定性的，在不同的编译中不变的短数字id
+  - webpack4 中，没有这个值；
+  - 那个时候如果使用 natural，那么在一些编译发生变化时，就会有问题；
+
+最佳实践：
+
+- 开发过程中，推荐使用 `named`；
+- 打包过程中，推荐使用 `deterministic`；
+
+demo-project\07_webpack分包-自定义分包\webpack.config.js
+
+```js
+module.exports = {
+    // 优化配置
+  optimization: {
+    // 设置生成的 chunkId 的算法
+    // development: named
+    // production: deterministic( 确定性)
+    // webpack4 中使用: natural
+    chunkIds: 'deterministic',
+    // 分包插件: SplitChunksPlugin
+    splitChunks: {
+      chunks: "all",
+      // 当一个包大于指定的大小时, 继续进行拆包
+      // maxSize: 20000,
+      // // 将包拆分成不小于minSize的包
+      // minSize: 10000,
+      minSize: 10,
+
+      // 自己对需要进行拆包的内容进行分包
+      cacheGroups: {
+        utils: {
+          test: /utils/,
+          filename: "[id]_utils.js"
+        },
+        vendors: {
+          // /node_modules/
+          // window上面 /\
+          // mac上面 /
+          test: /[\\/]node_modules[\\/]/,
+          filename: "[id]_vendors.js"
+        }
+      }
+    },
+  },
+}
+```

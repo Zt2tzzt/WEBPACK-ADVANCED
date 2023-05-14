@@ -9,7 +9,7 @@
 
 > 【回顾】：防抖，节流，精灵图，回流，重绘...；
 >
-> react 中，mome，高阶组件...
+> react 中，memo，高阶组件...
 
 webpack 的性能优化较多，主要有两种分类：
 
@@ -30,7 +30,7 @@ webpack 的性能优化较多，主要有两种分类：
 
 **代码分离（Code Splitting）**，是 webpack 一个非常重要的特性：
 
-主要目的是，将代码分离到不同的 bundle.js 中；
+主要目的是，将代码分离到不同的 bundle.js（打包文件）中；
 
 浏览器可按需加载，或并行加载这些文件；
 
@@ -50,9 +50,13 @@ webpack 的性能优化较多，主要有两种分类：
 
 Webpack 中常用的代码分离有三种方式：
 
-- 防止重复：使用 Entry Dependencies 或者 SplitChunksPlugin 去重和分离代码；
-- 动态导入：通过模块的内联函数调用，来分离代码；
 - 多入口：使用 `entry` 配置手动分离代码；
+
+- 防止重复：使用 Entry Dependencies 或者 SplitChunksPlugin 去重和分离代码；
+
+- 动态导入：通过模块的内联函数（`import`）调用，来分离代码；
+
+- 自定义分包：使用 splitChunk 配置，打包第三方依赖。
 
 除此之外，还有如下方式：
 
@@ -65,7 +69,7 @@ webpack 默认从一个入口开始打包，形成一个依赖图。
 
 如果需要有多入口，每个入口分别有自己的代码逻辑，可在 webpack 配置多入口。
 
-- 比如分别配置一个 `index.js` 和 `main.js` 的入口；
+- 比如：分别配置一个 `index.js` 和 `main.js` 的入口；
 
 创建另一个入口 `mian.js`：
 
@@ -85,7 +89,7 @@ bar()
 在 `webpack.config.js` 文件中，配置多入口。
 
 - 配置 `entry` 为对象。
-- 配置 `output.filename`，使用 placeholder
+- 配置 `output.filename`，使用 placeholder 语法。
 
 demo-project\05_webpack 分包-入口起点\webpack.config.js
 
@@ -109,13 +113,13 @@ module.exports = {
 
 > 回顾：\<script defer\>、output.filename 的占位符；
 
-缺点：都依赖相同的库（如 _axios_），那么这个库会被打包多次。
+缺点：如果，两个入口，都依赖相同的库（如 _axios_），那么这个库会被打包两次。
 
-### 1.入口依赖
+### 1.防止重复，入口依赖
 
-如果 `index.js` 和 `main.js`，都依赖这两个库：_axios_
+如果 `index.js` 和 `main.js`，都依赖这一个库：_axios_
 
-那么默认情况下，打包后的两个 bunlde.js，都包含了 _lodash_ 和 _dayjs_；
+那么默认情况下，打包后的两个 bunlde.js，都包含了 _axios_；
 
 事实上，可以配置共享，避免重复打包；在 `entry` 中，配置 `shared`。
 
@@ -151,7 +155,7 @@ webpack 提供了两种实现动态导入的方式：
 
 比如有一个模块 bar.js：
 
-- 如果在代码运行过程中，加载该模块（比如判断一个条件成立时加载）；
+- 如果在代码运行过程中，加载该模块（在 if 代码块中，判断一个条件成立时加载）；
 - 因不确定这个模块中的代码，一定会被加载，所以，打包时，最好将该模块拆分成一个独立的 js 文件；
 - 没用到该内容时，浏览器不需要加载该模块；
 - 这时，就可使用“动态导入“；
@@ -196,7 +200,7 @@ btn2.onclick = function () {
 
 - 因为动态导入，一定会打包成独立的文件，所以并不会在 `cacheGroups` 中进行配置；
 - 命名打包后的文件，通常在 `output` 中，通过 `chunkFilename` 属性来配置；
-- 默认情况下，placeholder 的 [name] 和 [id] 名称是一致的；
+- 默认情况下，placeholder 的 `[name]` 和 `[id]` 名称是一致的；
 - 如果要修改 name 的值，要通过上面 magic comments（魔法注释）的方式；
 
 demo-project\06_webpack 分包-动态导入\webpack.config.js
@@ -218,17 +222,19 @@ module.exports = {
 }
 ```
 
-## 五、splitChunk
+## 五、自定义分包
+
+在 `optimization` 中，配置 `splitChunk`；
 
 另外一种分包的模式是 splitChunk，相比起动态导入，不需要 使用 `import` 函数，可自定义分包。
 
-底层是使用 _SplitChunksPlugin_ 来实现的：
+底层使用 _SplitChunksPlugin_ 来实现：
 
 该插件 webpack5 已内置，并提供了默认配置。
 
 - 比如默认配置中，chunks 仅仅针对于异步（async）请求，如 `import` 函数；
 
-axios，react 等依赖的库，默认会打包在主包中；如果希望将他们和主包分开，使用自定义分包。
+_axios_，_react_ 等依赖的库，默认会打包在主包中；如果希望将他们和主包分开，使用自定义分包。
 
 手动配置 `splitChunks`；
 
@@ -246,7 +252,7 @@ module.exports = {
 }
 ```
 
-### 1.自定义配置解析
+### 1.配置解析
 
 `Chunks`:
 
@@ -260,11 +266,11 @@ module.exports = {
 `maxSize`：
 
 - 将大于 maxSize 的包，拆分为不小于 minSize 的包；
-- 有时不一定小于 maxSize，因为如果一个函数的代码，大于该最大值，是没法再拆分的。
+- 有时，拆分的包，可能还是会大于 maxSize，因为如果一个函数的代码大小，大于该最大值，是没法再拆分的。
 
 `cacheGroups`：
 
-- 用于对拆分的包就行分组，比如一个 _lodash_ 在拆分之后，并不会立即打包，而是会等到有没有其他符合规则的包一起来打包；
+- 用于对拆分的包，就行分组，比如一个 _lodash_ 在拆分之后，并不会立即打包，而是会等到有没有其他符合规则的包一起来打包；
 - `test` 属性：匹配符合规则的包；
 - `name` 属性：拆分包的 name 属性；
 - `filename` 属性：拆分包的名称，可以使用 placeholder 属性；
@@ -304,7 +310,9 @@ module.exports = {
 }
 ```
 
-## 六、minimizer
+## 六、消除注释
+
+在 `minimizer` 中，配置 `TerserPOlugin` 插件。
 
 ### 1.TerserPlugin 插件
 
@@ -328,20 +336,20 @@ module.exports = {
 }
 ```
 
-## 七、chunkIds
+## 七、[id]占位符
 
-在 webpack 打包时，`mode: production` 和 `mode: development`；时；
+在 `optimization` 中，配置 `chunkIds`；
 
-placeholder 的 `[id]` 打包名称不同。
+在 webpack 打包时，`mode: production` 和 `mode: development`；时；placeholder 的 `[id]` 打包名称不同。
 
-`optimization.chunkIds` 配置用于告知 webpack 模块的 id，采用什么算法生成。
+`optimization.chunkIds` 配置，用于告知 webpack 模块的 id，采用什么算法生成。
 
 有三个比较常见的值：
 
-- `natural`：id 时顺序排列的数字；（1, 2, 3, ...）
+- `natural`：id 时顺序排列的数字，如 1, 2, 3, ...
   - 打包时会消耗性能，不利于浏览器缓存。
-- `named`：`mode: development` 下的默认值，id 是一个可读的名称；
-- `deterministic`：确定性的，id 是在不同的编译模式中，不变的短数字
+- `named`：`mode: development` 下的默认值，id 是一个可读的名称，如文件的路径，组成的名称；
+- `deterministic`：确定性的，id 在不同的编译模式中，是不变的短数字
   - webpack4 中，没有这个值；
   - 那个时候如果使用 `natural`，那么在一些编译发生变化时，就会有问题；
 

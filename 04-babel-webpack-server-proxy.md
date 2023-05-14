@@ -34,7 +34,7 @@ module.exports = {
 npm install react react-dom
 ```
 
-编写一个 React 组件 `App.jsx`
+编写一个 React 组件 `App.jsx`。
 
 demo-project\04_webpack 服务器\src\react\App.jsx
 
@@ -193,7 +193,7 @@ npm run build
 
 ### 3.babel-loader
 
-开发中，通常不使用 tsc / ts-loader，编译 TS 代码，而是 babel-loader。
+开发中，通常不使用 tsc/ts-loader，编译 TS 代码，而是 babel-loader。
 
 - Babel 提供了对 TypeScript 代码转换的支持；
 - 可以使用插件：_@babel/tranform-typescript_；
@@ -289,8 +289,8 @@ npm run build
 
 webpack 中，提供了 3 种自动编译的方式。
 
-- webpack watch mode
-- webpack-dev-server（常用）
+- webpack watch mode（自动编译）
+- webpack-dev-server（自动编译和刷新，常用）
 - webpack-dev-middleware（中间件）（不常用）
 
 ## 四、webpack watch
@@ -548,7 +548,7 @@ module.exports = {
 
 ##### 1.changeOrigin
 
-`changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
+`changeOrigin`：它表示：是否更新代理后请求的 `headers` 中 `host` 地址；
 
 源码位置：demo-project\04_webpack 服务器\node_modules\http-proxy\lib\http-proxy\common.js
 

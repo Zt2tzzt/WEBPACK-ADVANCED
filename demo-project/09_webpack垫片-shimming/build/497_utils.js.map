@@ -1,0 +1,1 @@
+{"version":3,"file":"497_utils.js","mappings":";;;;;;;;;;;;;AAAO,SAASA,GAAG,GAAG;EACpBC,OAAO,CAACC,GAAG,CAAC,oBAAoB,CAAC;AACnC;;AAEA","sources":["webpack://babel_core_demo/./src/utils/foo.js"],"sourcesContent":["export function foo() {\r\n  console.log('foo function exec~')\r\n}\r\n\r\n// 代码很多, 大于20kb\r\n"],"names":["foo","console","log"],"sourceRoot":""}

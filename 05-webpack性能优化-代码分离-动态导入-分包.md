@@ -334,6 +334,12 @@ module.exports = {
 }
 ```
 
+> 使用 pnpmn 时，找不到 terser-webpack-plugin 包，重新安装一下。
+>
+> ```shell
+> pnpm add terser-webpack-plugin -D
+> ```
+
 ## 七、[id]占位符
 
 在 `optimization` 中，配置 `chunkIds`；

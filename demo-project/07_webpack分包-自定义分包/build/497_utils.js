@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbabel_core_demo=self.webpackChunkbabel_core_demo||[]).push([[497],{497:function(e,o,n){function c(){console.log("foo function exec~")}n.d(o,{R:function(){return c}})}}]);

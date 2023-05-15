@@ -71,3 +71,27 @@ pnpm add webpack-merge -D
 在 comm.config.js 中，使用
 
 在 comm.config.js 中，动态的加载 MiniCssExtractPlugin.loader
+
+---
+
+tree shaking
+
+usedExports 在 production 模式下，自动开启
+
+usedExports 会使用注释标识可删除的代码，结合 Terser 可删除掉。
+
+usedExports 没办法做到，删除整个没有使用的模块，
+
+要自行配置。需要使用 sideEffects 配置，告诉 webpack 整个项目中所有模块，都没有副作用。
+
+```js
+window.lyriuc = '哈哈哈' // 副作用代码。
+```
+
+推荐，在平时编写模块化代码时，尽量使用纯模块。
+
+配置 css 文件，不要被 tree shaking
+
+
+
+Webpack中tree shaking的设置，最佳方案。

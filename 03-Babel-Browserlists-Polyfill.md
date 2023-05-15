@@ -14,13 +14,13 @@ Babel 的预设，是根据要适配的浏览器，进行查询的，会用到 `
 npm install @babel/core babel-loader -D
 ```
 
-### 2.babel-preset
-
-1.安装对应的插件，预设：
+2.安装对应的插件，预设：
 
 ```shell
 npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block-scoping -D
 ```
+
+### 2.babel-preset
 
 如果一个个去安装插件，意味着要手动管理大量插件;
 
@@ -78,17 +78,17 @@ module.exports = {
 > const path = require('path')
 >
 > module.exports = {
->     mode: 'development',
->     devtool: false,
->     entry: './src/index.js',
->     output: {
+>      mode: 'development',
+>      devtool: false,
+>      entry: './src/index.js',
+>      output: {
 >      path: path.resolve(__dirname, './build'),
 >      filename: 'bundle.js',
 >
 >      // 重新打包时, 先将之前打包的文件夹删除掉
 >      clean: true
->     },
->   ...
+>      },
+>     ...
 > }
 > ```
 
@@ -104,7 +104,7 @@ babel 添加了代码**语法转化**的功能。
 
 这里指的兼容性，是指浏览器支持的代码特性：
 
-- 比如：兼容 css 特性、js 语法的特性；（HTML 基本不需要兼容）；
+- 比如：兼容 css 特性、js 语法的特性（HTML 基本不需要兼容）；
 
 前端开发，急需一些工具，帮助做代码兼容。
 
@@ -150,7 +150,7 @@ not dead
 
 _browserslist_ 工具，用来获取符合条件的浏览器信息，以决定是否需要进行兼容性的支持：其中引用了 caniuse-lite 工具；
 
-_caniuse-lite_ 工具，用于条件查询，数据，来自于 caniuse 的网站上；
+_caniuse-lite_ 工具，用于条件查询数据，来自于 caniuse 的网站上；
 
 demo-project\03_babel 核心使用\node_modules\browserslist\index.js
 
@@ -314,7 +314,7 @@ module.exports = {
       '@babel/preset-env',
       {
         // 在开发中针对 babel 的浏览器兼容查询，使用 browserslist 工具, 而不是设置 target
-        // 因为 browserslist 工具, 可以在多个前端工具之间进行共享浏览器兼容性(postcss/babel)
+        // 因为 browserslist 工具, 可以在多个工具(postcss/babel)之间进行共享浏览器兼容性的配置。
         targets: '>5%'
       }
     ]
@@ -402,7 +402,7 @@ Polyfill 直译为：一种用于衣物、床具的聚酯填充材料, 使这些
 
 babel 将高级语法特性，转成向下兼容的语法，但有些 API，没法转换；
 
-当使用了一些 **API 特性**（例如：Promise, Generator, Symbol、实例方法例如 Array.prototype.includes...）
+当使用了一些 **API 特性**（例如：`Promise`, `Generator`, `Symbol`、实例方法例如 `Array.prototype.includes`...）
 
 就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，才能够正确的转换代码；
 
@@ -447,7 +447,7 @@ module.exports = {
   - 打包后的文件，不使用 polyfill 来进行适配；
   - 并且这时，不需要设置 `corejs` 属性的；
 
-- `usage`（推荐使用）
+- `usage`（推荐）
 
   - 根据源代码中，出现的语言特性，自动检测所需要的 `polyfill`；
   - 确保，最终打包里的 polyfill 数量最小化；
@@ -456,7 +456,7 @@ module.exports = {
 
   - 如果依赖的某一个库，本身使用了某些 polyfill 的特性，这时使用 `usage`，用户浏览器可能会报错；
 
-  - 如果你担心出现这种情况，可以使用 `entry`；
+  - 为避免出现这种情况，使用 `entry`；
 
   - 并且需要在入口文件中添加
 

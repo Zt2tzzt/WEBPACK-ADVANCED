@@ -43,7 +43,7 @@ webpack 的性能优化较多，主要有两种分类：
 
 代码分离，主要作用是：
 
-- 分出更小的 bundle；
+- 拆分出更小的 bundle；
 - 控制资源加载优先级，
 
 以此提高浏览器加载代码的性能；
@@ -113,11 +113,11 @@ module.exports = {
 
 > 回顾：\<script defer\>、output.filename 的占位符；
 
-缺点：如果，两个入口，都依赖相同的库（如 _axios_），那么这个库会被打包两次。
+缺点：两个入口，都依赖相同的库（如 _axios_），这个库会被打包两次。
 
-### 1.防止重复，入口依赖
+### 1.防止重复打包
 
-如果 `index.js` 和 `main.js`，都依赖这一个库：_axios_
+如果 `index.js` 和 `main.js`，都依赖这一个库：_axios_；
 
 那么默认情况下，打包后的两个 bunlde.js，都包含了 _axios_；
 
@@ -201,7 +201,7 @@ btn2.onclick = function () {
 - 因为动态导入，一定会打包成独立的文件，所以并不会在 `cacheGroups` 中进行配置；
 - 命名打包后的文件，通常在 `output` 中，通过 `chunkFilename` 属性来配置；
 - 默认情况下，placeholder 的 `[name]` 和 `[id]` 名称是一致的；
-- 如果要修改 name 的值，要通过上面 magic comments（魔法注释）的方式；
+- 如果要修改 `[name]` 的值，要通过上面 magic comments（魔法注释）的方式；
 
 demo-project\06_webpack 分包-动态导入\webpack.config.js
 
@@ -228,9 +228,7 @@ module.exports = {
 
 另外一种分包的模式是 splitChunk，相比起动态导入，不需要 使用 `import` 函数，可自定义分包。
 
-底层使用 _SplitChunksPlugin_ 来实现：
-
-该插件 webpack5 已内置，并提供了默认配置。
+底层使用 _SplitChunksPlugin_ 来实现：该插件 webpack5 已内置，并提供了默认配置。
 
 - 比如默认配置中，chunks 仅仅针对于异步（async）请求，如 `import` 函数；
 
@@ -254,10 +252,10 @@ module.exports = {
 
 ### 1.配置解析
 
-`Chunks`:
+`chunks`:
 
-- `async` 默认值
-- `all` 表示对同步和异步代码都进行处理
+- `async` 默认值。
+- `all` 表示对同步和异步代码都进行处理。
 
 `minSize`：
 
@@ -312,7 +310,7 @@ module.exports = {
 
 ## 六、消除注释
 
-在 `minimizer` 中，配置 `TerserPOlugin` 插件。
+在 `minimizer` 中，配置 `TerserPlugin` 插件。
 
 ### 1.TerserPlugin 插件
 
@@ -340,7 +338,9 @@ module.exports = {
 
 在 `optimization` 中，配置 `chunkIds`；
 
-在 webpack 打包时，`mode: production` 和 `mode: development`；时；placeholder 的 `[id]` 打包名称不同。
+在 webpack 打包时，`mode: production` 和 `mode: development`；两种模式；
+
+placeholder 的 `[id]` 打包名称不同。
 
 `optimization.chunkIds` 配置，用于告知 webpack 模块的 id，采用什么算法生成。
 

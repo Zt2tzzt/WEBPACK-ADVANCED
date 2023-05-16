@@ -4,7 +4,7 @@
 
 在 `webpack.config.js` 中，配置 `optimization` 的 `runtimeChunk`。
 
-runtime 相关的代码，是否抽取到一个单独的 chunk 中：
+表示 runtime 相关的代码，是否要抽取到一个单独的 chunk 中：
 
 runtime 相关的代码，指的是在运行环境中，对模块进行解析、加载、模块信息的代码；
 
@@ -50,9 +50,9 @@ prefetch 与 preload 指令有何不同？
 - preload chunk 具有中等优先级，会立即下载；prefetch chunk 在浏览器闲置时下载。
 - preload chunk 用于当前的时刻；prefetch chunk 用于未来的某个时刻。
 
-开发时，推荐 prefetch
+开发时，推荐使用 prefetch。
 
-在代码中，配置 about，category 加载时，使用 prefetch。
+在代码中，配置 about，category 模块动态加导入时，使用 prefetch。
 
 demo-project\07_webpack 分包-自定义分包\src\main.js
 
@@ -125,7 +125,7 @@ module.exports = {
 }
 ```
 
-打包后的 index.html 文件中：
+打包后的 `index.html` 文件中：
 
 demo-project\08_webpack 分包-CDN 服务器\build\index.html
 
@@ -215,6 +215,7 @@ demo-project\09_webpack垫片-shimming\src\abc.js
 // import axios from 'axios'
 // import dayjs from 'dayjs'
 
+// 使用了 axios、dayjs 但并未引入。
 axios.get('http://123.207.32.32:8000/home/multidata').then(res => {
   console.log(res)
 })
@@ -289,16 +290,16 @@ module.exports = {
 
 上面的配置中，给打包的文件命名时，通常会使用 placeholder；
 
-placeholder 中，有几个 hash 相关的占位符，比较相似，分别是：**hash**、**chunkhash**、**contenthash**
+placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**chunkhash**、**contenthash**
 
-hash 是通过，MD4 的散列函数处理，生成一个 128 位的 hash 值（32个十六进制）；
+- hash 表示通过，MD4 的散列函数处理，生成一个 128 位的 hash 值（32个十六进制）；
 
-**hash** 值的生成和整个项目有关系（不利于浏览器做缓存）：
+**hash** 值的生成和整个项目的代码都有关系（不利于浏览器做缓存）：
 
-- 比如：项目打包有两个入口 `index.js` 和 `main.js`；它们分别打包到不同的 bundle 文件中，并且在文件名称中我们有使用 hash；
+- 比如：项目打包有两个入口 `index.js` 和 `main.js`；它们分别打包到不同的 bundle 文件中，并且在文件名称中，我们有使用 hash；
 - 这时，如果修改了 `index.js` 文件中的内容，那么所有的打包文件的 hash，都会发生变化；
 
-**chunkhash** 可以解决上面的问题，它会根据**不同的入口**，进行解析，来生成 hash 值：
+**chunkhash** 可以解决上面的问题，它会根据**不同的打包入口**，进行解析，来生成 hash 值：
 
 - 比如：修改了 `index.js`，那么 `main.js` 的 chunkhash 是不会发生改变的；
 

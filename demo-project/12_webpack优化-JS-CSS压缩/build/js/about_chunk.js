@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbabel_core_demo=self.webpackChunkbabel_core_demo||[]).push([[443],{748:function(e,t,o){o.r(t),o.d(t,{about:function(){return about}});var n=document.createElement("h1");function about(){console.log("about function exec~")}n.textContent="About Page",document.body.append(n);t.default="ABOUT"}}]);

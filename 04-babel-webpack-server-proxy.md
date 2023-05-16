@@ -110,7 +110,7 @@ module.exports = {
 }
 ```
 
-> 事实上，在 js 文件中也可以写 jsx 语法的代码。
+> 事实上，在 js 文件中，也可以写 jsx 语法的代码。
 
 ### 1.resolve extensions
 
@@ -143,7 +143,7 @@ TypeScript 代码，最终需要转换成 JavaScript 代码。
 npm install typescript -D
 ```
 
-TypeScript 会根据 `tsconfig.json` 文件，进行编译，初始化该配置文件：
+TS 代码会根据 `tsconfig.json` 文件，进行编译，初始化该配置文件，否则无法使用 tsc 编译 TS 代码：
 
 ```shell
 tsc --init
@@ -157,7 +157,7 @@ npx tsc
 
 ### 2.ts-loader
 
-webpack 编译 TypeScript 代码。使用 _ts-loader_
+webpack 编译 TS 代码。使用 _ts-loader_
 
 安装 _ts-loader_
 
@@ -189,15 +189,17 @@ module.exports = {
 npm run build
 ```
 
-> 安装 _ts-loader_ 时，会自动安装 _typescript_；本质上还是在用 tsc 编译代码。
+> 安装 _ts-loader_ 时，会自动安装 _typescript_；
+>
+> ts-loader 本质上还是在用 tsc 编译代码。
 
 ### 3.babel-loader
 
-开发中，通常不使用 tsc/ts-loader，编译 TS 代码，而是 babel-loader。
+开发中，通常不使用 tsc 或 ts-loader，编译 TS 代码，而是 babel-loader。
 
-- Babel 提供了对 TypeScript 代码转换的支持；
+- Babel 提供了对 TS 代码转 JS 代码的支持；
 - 可以使用插件：_@babel/tranform-typescript_；
-- 更推荐使用预设：即 _@babel/preset-typescript_；
+- 推荐使用预设：_@babel/preset-typescript_；
 
 安装 _@babel/preset-typescript_：
 
@@ -205,7 +207,7 @@ npm run build
 npm install @babel/preset-typescript -D
 ```
 
-配置 babel-loader
+配置 `babel.config.js` 文件，用于 `webpack.config.js` 中配置的 babel-loader。
 
 demo-project\04_webpack 服务器\babel.config.js
 
@@ -227,14 +229,14 @@ module.exports = {
 
 ### 4.总结
 
-使用 ts-loader（TypeScript Compiler）：
+使用 ts-loader（本质上用 TypeScript Compiler 编译）：
 
-- 来直接编译 TypeScript，只能将 ts 转换成 js；
+- 来直接编译 TypeScript，只能将 ts 代码转换成 js代码；
 - 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
 
-使用 babel-loader（Babel）
+使用 babel-loader（用 Babel 编译）
 
-- 可直接编译 TypeScript，将 ts 转换成 js，并且可以添加 polyfill 的功能；
+- 可直接编译 ts 代码，转成 js 代码，并且可以添加 polyfill 的功能；
 - 但是，不会对类型进行检测；
 
 在开发中，同时满足：代码转换、polyfill 添加，需要使用如下最佳实践方案。
@@ -364,7 +366,7 @@ devServer 中的 `contentBase` 已弃用；
 
 1. 指定一个目录进行访问。（在 _CopyWebpackPlugin_ 插件中，要复制的文件，可放在 `static` 指定的目录下；
 
-2. 在开发阶段使用，不轻易的对所有资源打包，提高效率
+2. 在开发阶段使用，不轻易的对所有资源打包，提高效率：
 
 配置 `devServer` 中的 `static`：
 

@@ -28,18 +28,19 @@ webpack 的性能优化较多，主要有两种分类：
 
 ## 二、代码分离是什么？
 
+默认情况下，所有的 JavaScript 代码，都被打包到了一个 bundle.js 文件中，如：
+- 模块化的业务代码；
+- 第三方依赖；
+- 暂时没有用到的模块；
+- ...
+
+此时，浏览器在加载首页时，会一次性加载所有代码，就会影响首页渲染速度，用户长时间看到的是空白页面。
+
 **代码分离（Code Splitting）**，是 webpack 一个非常重要的特性：
 
 主要目的是，将代码分离到不同的 bundle.js（打包文件）中；
 
 浏览器可按需加载，或并行加载这些文件；
-
-- 比如默认情况下，所有的 JavaScript 代码，都被打包到了一个 bundle.js 文件中，如：
-  - 模块化的业务代码；
-  - 第三方依赖；
-  - 暂时没有用到的模块；
-  - ...
-- 此时，浏览器在加载首页时，会一次性加载所有代码，就会影响首页渲染速度，用户长时间看到的是空白页面。
 
 代码分离，主要作用是：
 
@@ -111,6 +112,28 @@ module.exports = {
 }
 ```
 
+打包后的 Index.html 文件：
+
+demo-project\05_webpack分包-入口起点\build\index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script defer src="index-bundle.js"></script>
+    <script defer src="main-bundle.js"></script>
+    <script defer src="shared-bundle.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
 > 回顾：\<script defer\>、output.filename 的占位符；
 
 缺点：两个入口，都依赖相同的库（如 _axios_），这个库会被打包两次。
@@ -121,7 +144,7 @@ module.exports = {
 
 那么默认情况下，打包后的两个 bunlde.js，都包含了 _axios_；
 
-事实上，可以配置共享，避免重复打包；在 `entry` 中，配置 `shared`。
+配置共享，避免重复打包；在 `entry` 中，配置 `shared`。
 
 demo-project\05_webpack 分包-入口起点\webpack.config.js
 
@@ -224,9 +247,7 @@ module.exports = {
 
 ## 五、自定义分包
 
-在 `optimization` 中，配置 `splitChunk`；
-
-另外一种分包的模式是 splitChunk，相比起动态导入，不需要 使用 `import` 函数，可自定义分包。
+在 `webpack.config.js` 中，配置 `optimization.splitChunk`；
 
 底层使用 _SplitChunksPlugin_ 来实现：该插件 webpack5 已内置，并提供了默认配置。
 
@@ -297,8 +318,8 @@ module.exports = {
         },
         vendors: {
           // /node_modules/
-          // window上面 /\
-          // mac上面 /
+          // window 上面 /\
+          // mac 上面 /
           test: /[\\/]node_modules[\\/]/,
           filename: '[id]_vendors.js'
         }
@@ -316,7 +337,7 @@ module.exports = {
 
 webpack 打包时，当 `mode: production`，有对包中的注释进行单独提取。
 
-使用 TerserPOlugin 插件进行配置。
+取消注释的提取，使用 TerserPOlugin 插件进行配置。
 
 ```js
 const TerserPlugin = require('terser-webpack-plugin')
@@ -354,9 +375,9 @@ placeholder 的 `[id]` 打包名称不同。
 
 - `natural`：id 时顺序排列的数字，如 1, 2, 3, ...
   - 打包时会消耗性能，不利于浏览器缓存。
-- `named`：`mode: development` 下的默认值，id 是一个可读的名称，如文件的路径，组成的名称；
+- `named`：`mode: development` 下的默认值，id 是一个可读的名称（如文件的路径，组成的名称）；
 - `deterministic`：确定性的，id 在不同的编译模式中，是不变的短数字
-  - webpack4 中，没有这个值；
+  - webpack 4 中，没有这个值；
   - 那个时候如果使用 `natural`，那么在一些编译发生变化时，就会有问题；
 
 最佳实践：

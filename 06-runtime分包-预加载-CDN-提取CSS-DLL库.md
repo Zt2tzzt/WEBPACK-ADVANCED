@@ -19,7 +19,7 @@ runtime 相关的代码，指的是：在运行环境中，解析、加载、模
 
 - `true`/`multiple`：针对每个入口，打包一个 runtime 文件；
 - `single`：打包一个 runtime 文件；
-- 对象：`name` 属性决定 runtimeChunk 的名称；
+- 对象：其中 `name` 属性，决定 runtimeChunk 的名称；
 
 ```js
 module.exports = {
@@ -46,7 +46,7 @@ webpack v4.6.0+，增加了对预获取、预加载的支持。
 
 prefetch 与 preload 指令有何不同？
 
-- preload chunk 会在父 chunk 加载时，以**并行**方式加载；prefetch chunk 会在父 chunk 加载结束后开始加载。
+- preload chunk 会在父 chunk 加载时，以**并行**方式加载；prefetch chunk 会在父 chunk 加载结束后加载。
 - preload chunk 具有中等优先级，会立即下载；prefetch chunk 在浏览器闲置时下载。
 - preload chunk 用于当前的时刻；prefetch chunk 用于未来的某个时刻。
 
@@ -96,7 +96,7 @@ CDN 称之为**内容分发网络 Content Delivery Network** 或 **Content Distr
 
 在开发中，使用 CDN 主要是两种方式：
 
-### 1.方式一
+### 1.所有打包文件放在 CDN
 
 打包的所有静态资源，放到 CDN 服务器；
 
@@ -135,7 +135,7 @@ demo-project\08_webpack 分包-CDN 服务器\build\index.html
 ...
 ```
 
-### 2.方式二
+### 2.第三方库引用 CDN
 
 通常比较知名的开源框架，会将打包后的源码，放到比较知名的，免费的 CDN 服务器上：
 
@@ -309,7 +309,7 @@ placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**c
 - 这个 css 文件在命名时，如果使用的是 `chunkhash`；那么当 `index.js` 文件的内容发生变化时，css 文件的命名也会发生变化；
 - 这时，使用 contenthash；打包文件名不会改变。
 
-contentHash 和 chunkHash 的区别，在于非多入口的代码分包，名称会有所不同
+`contentHash` 和 `chunkHash` 的区别，在于非多入口的代码分包，名称会有所不同
 
 - 比如 动态导入，自定义分包...
 
@@ -347,7 +347,7 @@ DLL 全称是：**动态链接库（Dynamic Link Library**），是为软件在 
 
 webpack 中，也有内置 DLL 的功能，可将能够共享，并且不经常改变的代码，抽取成一个共享的库；
 
-- 这个库在之后编译的过程中，会被引入到其他项目的代码中；
+- 这个库，在之后编译的过程中，会被引入到其他项目的代码中；
 
 DLL 库的使用分为两步:
 

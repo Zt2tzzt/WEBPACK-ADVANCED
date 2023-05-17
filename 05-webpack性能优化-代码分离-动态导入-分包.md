@@ -53,7 +53,7 @@ Webpack 中常用的代码分离有三种方式：
 
 - 多入口：使用 `entry` 配置手动分离代码；
 
-- 防止重复：使用 Entry Dependencies 或者 SplitChunksPlugin 去重和分离代码；
+  - 防止重复：使用 Entry Dependencies 或者 SplitChunksPlugin 去重和分离代码；
 
 - 动态导入：通过模块的内联函数（`import`）调用，来分离代码；
 
@@ -173,13 +173,13 @@ module.exports = {
 
 webpack 提供了两种实现动态导入的方式：
 
-- 第一种，使用 ECMAScript 中的 `import()` 语法，是目前推荐的方式；
+- 第一种，使用 ECMAScript 中的 `import` 函数，是目前推荐的方式；
 - 第二种，使用 webpack 遗留的 `require.ensure`，已经不推荐使用（也是 Vue2 中遗留的方式）；
 
 比如有一个模块 bar.js：
 
 - 如果在代码运行过程中，加载该模块（在 if 代码块中，判断一个条件成立时加载）；
-- 因不确定这个模块中的代码，一定会被加载，所以，打包时，最好将该模块拆分成一个独立的 js 文件；
+- 因不确定这个模块中的代码，一定会被加载，所以，打包时，最好将该模块，拆分成一个独立的 js 文件；
 - 没用到该内容时，浏览器不需要加载该模块；
 - 这时，就可使用“动态导入“；
 
@@ -222,7 +222,7 @@ btn2.onclick = function () {
 在 `webpack.config.js` 中，为动态导入的模块，打包的文件命名：
 
 - 因为动态导入，一定会打包成独立的文件，所以并不会在 `cacheGroups` 中进行配置；
-- 命名打包后的文件，通常在 `output` 中，通过 `chunkFilename` 属性来配置；
+- 命名动态导入打包后的文件，通常在 `output` 中，通过 `chunkFilename` 属性来配置；
 - 默认情况下，placeholder 的 `[name]` 和 `[id]` 名称是一致的；
 - 如果要修改 `[name]` 的值，要通过上面 magic comments（魔法注释）的方式；
 
@@ -365,11 +365,9 @@ module.exports = {
 
 在 `optimization` 中，配置 `chunkIds`；
 
-在 webpack 打包时，`mode: production` 和 `mode: development`；两种模式；
+在 webpack 打包时，`mode: production` 和 `mode: development`；两种模式；placeholder 的 `[id]` 打包名称不同。
 
-placeholder 的 `[id]` 打包名称不同。
-
-`optimization.chunkIds` 配置，用于告知 webpack 模块的 id，采用什么算法生成。
+配置 `optimization.chunkIds`，用于告知 webpack 模块的 id，采用什么算法生成。
 
 有三个比较常见的值：
 

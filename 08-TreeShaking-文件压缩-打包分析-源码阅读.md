@@ -2,15 +2,15 @@
 
 ## 一、CSS tree shaking
 
-CSS 也可以进行 Tree Shaking。需要借助一些插件；
+CSS 也可以进行 Tree Shaking。需要借助插件；
 
 > CSS 中的标签选择器，一般不做 tree shaking
 
-在早期，使用 *PurifyCss* 插件，来完成 CSS 的 tree shaking，目前该库已经不再维护了（最新更新在4年前）；
+在早期，使用 *PurifyCss* 插件（已不再维护），来完成 CSS 的 tree shaking；
 
-目前使用 *PurgeCSS* 库，可删除未使用的 CSS；
+目前使用 *PurgeCSS* 插件，可删除未使用的 CSS；
 
-安装 PurgeCss 的 webpack插件：
+安装 PurgeCss 的 webpack 插件：
 
 ```shell
 npm install purgecss-webpack-plugin -D
@@ -18,7 +18,8 @@ npm install purgecss-webpack-plugin -D
 
 在生产环境的配置文件中，配置 *PurgeCss*。
 
-- `paths`：表示要检测哪些目录下的内容，可使用 `glob`（如果没有该模块，安装一下）；
+- `paths`：表示要检测哪些目录下的内容；
+  - 使用 Node 的 `glob`（如果没有该模块，安装一下）；
   - `{ nodir: true }`: 表示分析不是文件夹的内容。
 - `safelist`：表示分析时排除某些标签。
 
@@ -28,6 +29,7 @@ demo-project\14_webpack优化-TreeShaking\config\prod.config.js
 
 ```js
 const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
+const glob = require('glob')
 
 module.exports = {
   plugins: [
@@ -46,9 +48,9 @@ module.exports = {
 
 ## 二、Scope Hoisting
 
-Scope Hoisting 是从 webpack 3 开始，增加的一个新功能；
+Scope Hoisting 是从 webpack 3 开始，增加的功能；
 
-对 webpack 打包后的代码，对作用域进行提升，使得代码体积更小、运行更快；
+对 webpack 打包后的代码的作用域进行提升，使得代码体积更小、运行更快；
 
 默认情况下，webpack 打包后的代码，会有很多的函数作用域.
 
@@ -108,13 +110,13 @@ demo-project\15_webpack优化-ScopeHoisting\build\js\main-bundle.js
 
 ## 三、HTTP 压缩
 
-HTTP 压缩，指的是：对 http 协议传输内容的压缩；是一种内置在服务器、客户端之间的，以改进传输速度和带宽利用率的方式；
+HTTP 压缩，指的是：对 http 协议传输的内容，进行压缩；是一种内置在服务器、客户端之间，改进传输速度和带宽利用率的方式；
 
 HTTP 压缩的流程：
 
-- 第一步：HTTP 数据在服务器发送前就已经被压缩了（在 webpack 中完成）；
-- 第二步：浏览器向服务器发送请求时，会告知服务器，支持哪些压缩格式；
-- 第三步：服务器返回对应格式的压缩文件，并且在响应头中告知浏览器；
+1. 要压缩的静态资源，在服务器返回结果前，就已经被压缩了（在 webpack 中完成）；
+2. 浏览器向服务器发送请求时，会告知服务器，支持哪些压缩格式；
+3. 服务器返回对应格式的压缩文件，并且在响应头中告知浏览器；
 
 常见的压缩格式。
 
@@ -125,7 +127,7 @@ HTTP 压缩的流程：
 
 ### 1.webpack 对文件压缩
 
-webpack 可实现 HTTP 压缩的第一步操作，使用 C`ompressionPlugin`。
+webpack 可实现 HTTP 压缩的第一步操作，使用 `CompressionPlugin`。
 
 1.安装 compression-webpack-plugin：
 
@@ -157,7 +159,6 @@ module.exports = {
 
 ```txt
 │-index.html
-│
 ├─css
 │   main.css
 │   main.css.gz
@@ -175,7 +176,7 @@ module.exports = {
 该插件还有一些其他的配置，如下：
 
 - `inject`：设置打包的资源插入的位置
-  - true、 false 、body、head
+  - `true`、 `false `、`"body"`、`"head"`
 
 - `cache`：默认值为 `true`，只有当文件改变时；才会生成新的文件；
 
@@ -302,3 +303,4 @@ module.exports = {
 
 - 比如有一个包是通过一个 Vue 组件打包的，但是非常的大，那么我们可以考虑是否可以拆分出多个组件，并且对其进行懒加载；
 - 比如一个图片或者字体文件特别大，是否可以对其进行压缩或者其他的优化处理；
+

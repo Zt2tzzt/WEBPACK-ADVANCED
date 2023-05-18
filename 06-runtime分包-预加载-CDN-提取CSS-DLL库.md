@@ -2,13 +2,13 @@
 
 ## 一、runtime 分包
 
-在 `webpack.config.js` 中，配置 `optimization` 的 `runtimeChunk`。
+在 `webpack.config.js` 中，配置 `optimization.runtimeChunk`。
 
 表示 runtime 相关的代码，是否要抽取到一个单独的 chunk 中：
 
 runtime 相关的代码，指的是：在运行环境中，解析、加载、模块信息的代码；
 
-- 比如 component、bar 两个模块，通过 `import` 函数加载，就是通过 runtime 代码完成的；
+- 比如 component、bar 两个模块，通过 `import` 函数动态导入，就是通过 runtime 代码完成的；
 
 将 runtime 代码抽离出来后，有利于浏览器缓存策略：
 
@@ -39,7 +39,7 @@ module.exports = {
 
 webpack v4.6.0+，增加了对预获取、预加载的支持。
 
-在使用 `import` 函数动态导入时，使用下面这些内置指令，来告知浏览器：
+在使用 `import` 函数动态导入时，使用如下内置指令，来告知浏览器：
 
 - prefetch(预获取)：未来某些导航下可能需要的资源
 - preload(预加载)：当前导航下可能需要资源
@@ -52,7 +52,7 @@ prefetch 与 preload 指令有何不同？
 
 开发时，推荐使用 prefetch。
 
-在代码中，配置 about，category 模块动态加导入时，使用 prefetch。
+在代码中，配置 about，category 模块动态加导入时，使用 prefetch，使用魔法注释。
 
 demo-project\07_webpack 分包-自定义分包\src\main.js
 
@@ -201,13 +201,14 @@ shimming 是一个概念，是某一类功能的统称，用于**预置全局变
 shimming 直译为：垫片；表示给代码填充一些垫片来处理一些问题；
 
 - 比如：项目依赖一个第三方的库，该库本身又依赖 lodash，但没有对 lodash 进行导入（认为全局存在 lodash），
-- 那么就要通过 `ProvidePlugin` 来实现 shimming 的效果（key，value 与上面 CDN 的 `externals` 意义相反）；
+- 那么就要通过 `ProvidePlugin` 来实现 shimming 的效果；
+  - key，value 与上面 CDN 的 `externals` 意义相反；
 
-配置 ProvidePlugin，在每个模块中，通过一个变量来获取一个 package；
+配置 `ProvidePlugin`，在每个模块中，通过一个变量来获取一个 package；
 
-- webpack 会在最终的 bundle 中，引入这个模块；
+webpack 会在最终的 bundle 中，引入这个模块；
 
-ProvidePlugin 是 webpack 默认的一个插件，不需要专门安装；
+`ProvidePlugin` 是 webpack 默认的一个插件，不需要专门安装；
 
 demo-project\09_webpack垫片-shimming\src\abc.js
 
@@ -292,7 +293,7 @@ module.exports = {
 
 placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**chunkhash**、**contenthash**
 
-- hash 表示通过，MD4 的散列函数处理，生成一个 128 位的 hash 值（32个十六进制）；
+- hash 表示通过，MD4 的散列函数处理，生成一个 128 位的 hash 值（32 个十六进制）；
 
 **hash** 值的生成和整个项目的代码都有关系（不利于浏览器做缓存）：
 
@@ -345,7 +346,7 @@ module.exports = {
 
 DLL 全称是：**动态链接库（Dynamic Link Library**），是为软件在 Windows 中，共享函数库的一种实现方式；
 
-webpack 中，也有内置 DLL 的功能，可将能够共享，并且不经常改变的代码，抽取成一个共享的库；
+webpack 中，也有内置 DLL 的功能，把能够共享，并且不经常改变的代码，抽取成一个共享的库；
 
 - 这个库，在之后编译的过程中，会被引入到其他项目的代码中；
 

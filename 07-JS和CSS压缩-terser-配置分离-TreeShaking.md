@@ -1,4 +1,4 @@
-# JS 和 CSS 压缩 & terser & 配置分离 & TreeShaking
+# JS/CSS 压缩 & terser & 配置分离 & TreeShaking
 
 ## 一、Terser
 
@@ -8,9 +8,9 @@ webpack 默认打包的 bumdle，没有进行压缩。
 
 Terser 工具，可用于压缩、丑化代码，让 bundle 变得更小。
 
-早期使用 uglify-js 来压缩、丑化 JS 代码，该库不支持 ES6+ 的语法，目前也已不再维护；
+uglify-js 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
 
-Terser 是从 uglify-es 库 fork 过来的，并且保留它原来的大部分 API 并适配 uglify-es、uglify-js@3 等；
+Terser 从 uglify-es 库 fork 过来，并且保留它原来的大部分 API 并适配 uglify-es、uglify-js@3 等；
 
 Terser 是一个独立的工具，可以单独安装：
 
@@ -152,7 +152,7 @@ module.exports = {
 
 webpack 配置文件抽取，分生产、开发环境，抽取配置文件。
 
-在 `package.json` 中的 `"build"`，`"serve"` 命令后，加上 `--env` 命令。
+在 `package.json` 中 `"build"`，`"serve"` 命令后，加上 `--env` 命令。
 
 demo-project\13_webpack 优化-配置的分离\package.json
 
@@ -434,6 +434,9 @@ module.exports = {
   devtool: false,
   // 优化配置
   optimization: {
+    // minimize: true,
+    // minimizer: {...}
+    
     // 导入模块时, 分析模块中的哪些函数有被使用, 哪些函数没有被使用.
     usedExports: true
   }
@@ -462,7 +465,7 @@ function mul(num1, num2) [
 
 所以，`usedExports` 实现 Tree Shaking 是结合 _Terser_ 来完成的。
 
-然而，`usedExports` 没办法做到，删除整个没有使用的模块，因为考虑到，引用的模块，可能存在**副作用**，如下：
+然而，`usedExports` 没办法做到，删除整个没有使用的模块，因为考虑到，引用的模块，可能存在**副作用**，比如下方代码：
 
 demo-project\14_webpack 优化-TreeShaking\src\demo\parse-lyric.js
 
@@ -493,7 +496,7 @@ demo-project\14_webpack 优化-TreeShaking\package.json
 }
 ```
 
-通常，在项目入口，引入 css 代码，默认也会当作吗没欸使用的代码，被 tree shaking 掉。
+通常，在项目入口，引入 css 代码，默认也会当作没被使用的代码，被 tree shaking 掉。
 
 配置项目中的 css 文件，不要被 tree shaking；
 

@@ -158,7 +158,7 @@ module.exports = {
 打包后的目录结构如下：
 
 ```txt
-│-index.html
+├─index.html
 ├─css
 │   main.css
 │   main.css.gz
@@ -268,15 +268,15 @@ module.exports = function(env) {
 npm run build
 ```
 
-将该文件放到[该站点](http://webpack.github.com/analyse)，进行分析；
+将该文件放到[该站点](http://webpack.github.com/analyse)，进行分析（该站点已不维护）；
 
-或下载[该项目](https://github.com/webpack/analyse)，运行，上传文件进行分析，分析结果如下图，可点击查看详情。
+或下载[该项目](https://github.com/webpack/analyse)，运行，上传 `stats.json` 文件，进行分析，分析结果如下图，可点击查看详情。
 
 ![webpack analysis](NodeAssets/analysis.jpg)
 
 ### 2.方案二
 
-使用 *webpack-bundle-analyzer* 工具
+使用 *webpack-bundle-analyzer* 工具：
 
 1.安装该工具：
 
@@ -299,7 +299,7 @@ module.exports = {
 }
 ```
 
-3.打包后，会在 `8888` 端口上提供服务，可以直接的看到每个包的大小。
+3.打包后，会在 `8888` 端口上，提供服务，可以直接的看到每个包的大小。
 
 - 比如有一个包是通过一个 Vue 组件打包的，但是非常的大，那么我们可以考虑是否可以拆分出多个组件，并且对其进行懒加载；
 - 比如一个图片或者字体文件特别大，是否可以对其进行压缩或者其他的优化处理；

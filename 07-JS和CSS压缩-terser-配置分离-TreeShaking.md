@@ -71,7 +71,7 @@ toplevel=true, keep_classnames=true, keep_fnames=true
   - 不希望保留注释时，可设置为 `false`；
 - `parallel`：
   - 使用多进程并发运行提高构建的速度，默认值是 `true`
-  - 并发运行的默认数量：os.cpus().length - 1；也可自行设置，通常使用默认值即可；
+  - 并发运行的默认数量：`os.cpus().length - 1`；也可自行设置，通常使用默认值即可；
 - `terserOptions`：设置 terser 工具相关的配置。
   - `compress`：设置压缩相关的选项；
   - `mangle`：设置丑化相关的选项，可直接设置为 `true`；
@@ -114,7 +114,7 @@ webpack 中的 `TerserPlugin`，底层用的就是 _Terser_ 工具。
 
 （掌握），webpack 默认没有配置 css 压缩，通常要自行配置。
 
-CSS 压缩，通常是去除，无用的空白（空格，换行）；很难修改选择器、属性的名称、值等；
+CSS 压缩，通常是去除无用的空白（空格，换行）；很难修改选择器、属性的名称、值等；
 
 要使用一个插件：_css-minimizer-webpack-plugin_；底层使用 cssnano 工具来优化、压缩 CSS（该工具也可以单独使用）；
 

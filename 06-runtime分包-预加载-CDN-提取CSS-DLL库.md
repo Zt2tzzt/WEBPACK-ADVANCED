@@ -21,6 +21,8 @@ runtime 相关的代码，指的是：在运行环境中，解析、加载、模
 - `single`：打包一个 runtime 文件；
 - 对象：其中 `name` 属性，决定 runtimeChunk 的名称；
 
+demo-project\07_webpack分包-自定义分包\webpack.config.js
+
 ```js
 module.exports = {
   // 优化配置
@@ -41,8 +43,8 @@ webpack v4.6.0+，增加了对预获取、预加载的支持。
 
 在使用 `import` 函数动态导入时，使用如下内置指令，来告知浏览器：
 
-- prefetch(预获取)：未来某些导航下可能需要的资源
-- preload(预加载)：当前导航下可能需要资源
+- prefetch (预获取)：未来某些导航下可能需要的资源
+- preload (预加载)：当前导航下可能需要资源
 
 prefetch 与 preload 指令有何不同？
 
@@ -200,7 +202,7 @@ shimming 是一个概念，是某一类功能的统称，用于**预置全局变
 
 shimming 直译为：垫片；表示给代码填充一些垫片来处理一些问题；
 
-- 比如：项目依赖一个第三方的库，该库本身又依赖 lodash，但没有对 lodash 进行导入（认为全局存在 lodash），
+- 比如：项目依赖一个第三方的库，该库本身又依赖 *lodash*，但没有对 *lodash* 进行导入（认为全局存在 lodash），
 - 那么就要通过 `ProvidePlugin` 来实现 shimming 的效果；
   - key，value 与上面 CDN 的 `externals` 意义相反；
 
@@ -247,7 +249,7 @@ Webpack 的理念，是使前端开发更加模块化，不推荐随意的使用
 
 ## 五、css 提取（掌握）
 
-MiniCssExtractPlugin 可将打包后的 css，提取到一个独立的 css 文件中；
+`MiniCssExtractPlugin` 可将打包后的 css，提取到一个独立的 css 文件中；
 
 在 webpack 4+ 中，才可以使用该插件。
 
@@ -285,7 +287,9 @@ module.exports = {
 }
 ```
 
-一般在生产环境下，使用该插件；使用后，就不需要使用 styled-loader（一般在开发环境中使用）；
+一般在生产环境下，使用该插件；使用后，就不需要使用 *styled-loader*；
+
+一般在开发环境中使用 *styled-loader*；
 
 ## 六、placeholder hash
 
@@ -307,7 +311,7 @@ placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**c
 **contenthash**（推荐使用）表示生成的文件 hash 名称，只和内容有关系：
 
 - 比如：`index.js`，引入了一个 `style.css`，打包时，该文件要被抽取到一个独立的 css 文件中；
-- 这个 css 文件在命名时，如果使用的是 `chunkhash`；那么当 `index.js` 文件的内容发生变化时，css 文件的命名也会发生变化；
+- 这个 css 文件在命名时，如果使用的是 `chunkhash`；那么当 `index.js` 文件的内容发生变化时，css 文件的命名，也会发生变化；
 - 这时，使用 contenthash；打包文件名不会改变。
 
 `contentHash` 和 `chunkHash` 的区别，在于非多入口的代码分包，名称会有所不同

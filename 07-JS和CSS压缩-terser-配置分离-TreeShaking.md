@@ -64,13 +64,13 @@ toplevel=true, keep_classnames=true, keep_fnames=true
 
 - 表示对代码进行压缩（默认 `production` 模式下，已经打开了）
 
-然后，在 `minimizer` 创建一个 `TerserPlugin`：
+然后，在 `minimizer` 创建一个 `TerserPlugin`，有如下属性可配置：
 
 - `extractComments`：
   - 默认值为 `true`，表示会将注释抽取到一个单独的文件中；
   - 不希望保留注释时，可设置为 `false`；
 - `parallel`：
-  - 使用多进程并发运行提高构建的速度，默认值是 `true`
+  - 使用多进程并发运行提高构建的速度，默认值是 `true`；
   - 并发运行的默认数量：`os.cpus().length - 1`；也可自行设置，通常使用默认值即可；
 - `terserOptions`：设置 terser 工具相关的配置。
   - `compress`：设置压缩相关的选项；
@@ -379,7 +379,7 @@ JavaScript 的 Tree Shaking：
 - 依赖于 ES Module 的静态语法分析（静态分析模块的依赖关系）；
 - webpack 2 正式内置支持了 ES2015 模块，和检测未使用模块的能力；
 - webpack 4 正式扩展了这个能力，可通过 `package.json` 的 `sideEffects` 属性作为标记，告知 webpack 在编译时，哪些文件可以安全的删除掉；
-- webpack 5 中，也提供了对部分 CommonJS 模块化方案的 tree shaking 的支持；详见[更新日志](https://github.com/webpack/changelog-v5#commonjs-tree-shaking)。
+- webpack 5 中，也提供了对部分 CommonJS 模块化方案的 tree shaking 支持；详见[更新日志](https://github.com/webpack/changelog-v5#commonjs-tree-shaking)。
 
 ### 1.webpack 中使用
 
@@ -416,13 +416,11 @@ console.log(sum(20, 30))
 
 `mode: production` 模式下：
 
-- 自动开启了 `usedExports`；
-- 并在 `minimize`、`minimize` 上，做了很多优化
+- 自动开启了 `usedExports`；并在 `minimize`、`minimize` 上，做了很多优化
 
 为清晰地看到 `usedExports` 的效果，
 
-- 配置 `mode: development`；
-- 注释 `minimize`、`minimizer` 配置；
+- 配置 `mode: development`；注释 `minimize`、`minimizer` 配置；
 
 配置 `usedExports: true`：
 
@@ -444,8 +442,6 @@ module.exports = {
 ```
 
 `usedExports` 会使用注释，在打包后的文件，标识可删除的代码，
-
-再结合 Terser 可删除掉。
 
 demo-project\14_webpack优化-TreeShaking\build\js\main-bundle.js
 

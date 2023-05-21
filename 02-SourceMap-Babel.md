@@ -188,6 +188,8 @@ demo-project\02-source-map\build\boundle.js
 
 在 build 目录下，生成了 source-map 文件，即 `bundle.js.map` 文件。
 
+demo-project\02-source-map\build\boundle.js.map
+
 ```json
 {
   "version": 3,

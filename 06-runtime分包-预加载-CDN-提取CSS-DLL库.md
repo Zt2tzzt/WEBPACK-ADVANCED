@@ -167,9 +167,9 @@ demo-project\08_webpack 分包-CDN 服务器\webpack.config.js
 ```js
 module.exports = {
   externals: {
-    react: 'React',
     // key 属性名: 排除的框架的名称
     // value 值: 从 CDN 地址请求下来的 js 中，提供的名称
+    react: 'React',
     axios: 'axios'
   }
 }
@@ -314,7 +314,7 @@ placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**c
 - 这个 css 文件在命名时，如果使用的是 `chunkhash`；那么当 `index.js` 文件的内容发生变化时，css 文件的命名，也会发生变化；
 - 这时，使用 contenthash；打包文件名不会改变。
 
-`contentHash` 和 `chunkHash` 的区别，在于非多入口的代码分包，名称会有所不同
+`contentHash` 和 `chunkHash` 的区别，在于**非多入口**的代码分包，名称会有所不同
 
 - 比如 动态导入，自定义分包...
 

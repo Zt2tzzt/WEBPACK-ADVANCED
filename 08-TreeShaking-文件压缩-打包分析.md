@@ -19,7 +19,7 @@ npm install purgecss-webpack-plugin -D
 在生产环境的配置文件中，配置 *PurgeCss*。
 
 - `paths`：表示要检测哪些目录下的内容；
-  - 使用 Node 的 `glob`模块（如果没有该模块，安装一下）；
+  - 使用 Node 的 `glob` 模块（如果没有该模块，安装一下）；
   - `{ nodir: true }`: 表示分析不是文件夹的内容。
 - `safelist`：表示分析时排除某些标签。
 
@@ -32,6 +32,7 @@ const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
 const glob = require('glob')
 
 module.exports = {
+  
   plugins: [
     // 对CSS进行TreeShaking
     new PurgeCSSPlugin({
@@ -160,6 +161,8 @@ module.exports = {
 ```
 
 打包后的目录结构如下：
+
+多出了 .gz 文件。
 
 ```txt
 ├─index.html
@@ -307,3 +310,4 @@ module.exports = {
 
 - 比如有一个包是通过一个 Vue 组件打包的，但是非常的大，那么我们可以考虑是否可以拆分出多个组件，并且对其进行懒加载；
 - 比如一个图片或者字体文件特别大，是否可以对其进行压缩或者其他的优化处理；
+

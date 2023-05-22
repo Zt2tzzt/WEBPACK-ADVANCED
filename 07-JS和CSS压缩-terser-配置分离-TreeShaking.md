@@ -2,15 +2,15 @@
 
 ## 一、Terser
 
-Terser 是一个用于 JavaScript Parser（解析）、Mangler（绞肉机），Compressor（压缩机）的工具集；
+*Terser* 是一个用于 JavaScript Parser（解析）、Mangler（绞肉机），Compressor（压缩机）的工具集；
 
 webpack 默认打包的 bumdle，没有进行压缩。
 
-Terser 工具，可用于压缩、丑化代码，让 bundle 变得更小。
+*Terser* 工具，可用于压缩、丑化代码，让 bundle 变得更小。
 
-uglify-js 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
+*uglify-js* 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
 
-Terser 从 uglify-es 库 fork 过来，并且保留它原来的大部分 API 并适配 uglify-es、uglify-js@3 等；
+*Terser* 从 *uglify-es* 库 fork 过来，并且保留它原来的大部分 API 并适配 *uglify-es*、*uglify-js@3* 等；
 
 Terser 是一个独立的工具，可以单独安装：
 
@@ -70,7 +70,7 @@ toplevel=true, keep_classnames=true, keep_fnames=true
   - 默认值为 `true`，表示会将注释抽取到一个单独的文件中；
   - 不希望保留注释时，可设置为 `false`；
 - `parallel`：
-  - 使用多进程并发运行提高构建的速度，默认值是 `true`；
+  - 使用多进程，并发运行，提高构建的速度，默认值是 `true`；
   - 并发运行的默认数量：`os.cpus().length - 1`；也可自行设置，通常使用默认值即可；
 - `terserOptions`：设置 terser 工具相关的配置。
   - `compress`：设置压缩相关的选项；
@@ -454,12 +454,10 @@ function mul(num1, num2) [
 
 这段注释的意义是，告知 _Terser_ 在优化时，可以删除掉这段代码；
 
-这个时候，配置 `minimize: true`：
-
 - 若配置 `usedExports: false`，mul 函数没有被 Tersr 移除掉；
 - 若配置 `usedExports: true`，mul 函数才被 Terser 移除掉；
 
-所以，`usedExports` 实现 Tree Shaking 是结合 _Terser_ 来完成的。
+所以，`usedExports` 实现 Tree Shaking，是结合 _Terser_ 来完成的。
 
 然而，`usedExports` 没办法做到，删除整个没有使用的模块，因为考虑到，引用的模块，可能存在**副作用**，比如下方代码：
 
@@ -482,7 +480,9 @@ window.lyric = '哈哈哈哈哈'
 - 副作用在这里，可理解为：代码有执行一些特殊的任务，不能仅仅通过 export 来判断这段代码的意义；
 - React、JS 的纯函数中，都涉及副作用的概念。
 
-在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中没有使用副作用的代码，可以安全的删除，所有未用到 `exports`（没有副作用代码）；
+在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；
+
+可以安全的删除，所有未用到 `exports`（没有副作用代码）；
 
 demo-project\14_webpack 优化-TreeShaking\package.json
 
@@ -508,7 +508,8 @@ demo-project\14_webpack 优化-TreeShaking\package.json
 
 ### 4.最佳实践
 
-对项目中 JS 代码，进行 Tree Shaking（生成环境）：
+对项目中 JS 代码，进行 Tree Shaking（生产环境）：
 
 - 在 `webpack.config.js` 中，配置 `optimization.usedExports = true`，来帮助 Terser 进行优化；
 - 在 `package.json` 中，配置 `sideEffects`，对打包进行优化；
+

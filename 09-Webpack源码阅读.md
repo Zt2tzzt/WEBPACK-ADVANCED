@@ -1,10 +1,12 @@
-webpack 源码
+# webpack 源码
 
 在 webpack 源码目录中，创建 zzt 文件夹，用于测试。
 
 在 src 目录下，编写源码；
 
 创建 build.js 用于打包；
+
+zzt\build.js
 
 ```js
 const webpack = require("../lib/webpack");
@@ -27,11 +29,36 @@ compiler.run((err, stats) => {
 
 > 开源吗不是为了面试，而是学习思想；
 
-
-
-webpack 创建过程，和 hooks 的作用
-
 webpack 源码非常优秀，但存在大量的回调地狱；
+
+## 1.创建 Compiler
+
+其中 hooks 的作用：
+
+SyncHook、SyncBailHook...等等，源自于 tapable 库。
+
+lib\Compiler.js
+
+```js
+class Compiler {
+	/**
+	 * @param {string} context the compilation path
+	 * @param {WebpackOptions} options options
+	 */
+	constructor(context, options = /** @type {WebpackOptions} */ ({})) {
+		// 这个 hook 非常重要！
+		this.hooks = Object.freeze({
+			/** @type {SyncHook<[]>} */
+			initialize: new SyncHook([]),
+
+			/** @type {SyncBailHook<[Compilation], boolean>} */
+			shouldEmit: new SyncBailHook(["compilation"]),
+			/** @type {AsyncSeriesHook<[Stats]>} */
+			done: new AsyncSeriesHook(["stats"]),
+			/** @type {SyncHook<[Stats]>} */
+			afterDone: new SyncHook(["stats"]),
+//...
+```
 
 webpack 官方提供了一个库 tapable
 
@@ -59,23 +86,69 @@ this.hooks.run.callAsync('abc', () => {
 })
 ```
 
-
-
-注册 plugins
+## 2.注册 plugins
 
 注册插件可传函数、对象。
 
-对象中必须要有 apply 方法
+对象中必须要有 `apply` 方法
 
-lib\webpack.js G69
+lib\webpack.js
 
+```js
+/**
+ * @param {WebpackOptions} rawOptions options object
+ * @returns {Compiler} a compiler
+ */
+const createCompiler = rawOptions => {
+	const options = getNormalizedWebpackOptions(rawOptions);
+	applyWebpackOptionsBaseDefaults(options);
+	// 创建 compiler
+	const compiler = new Compiler(options.context, options);
+	new NodeEnvironmentPlugin({
+		infrastructureLogging: options.infrastructureLogging
+	}).apply(compiler);
+	if (Array.isArray(options.plugins)) {
+		for (const plugin of options.plugins) {
+			if (typeof plugin === "function") {
+				plugin.call(compiler, compiler);
+			} else {
+				plugin.apply(compiler);
+			}
+		}
+	}
+//...  
+```
 
+可自行编写 plugin
+
+```js
+class ZTBeforeCompilerPlugin {
+  apply(compiler) {
+    compiler.hooks.beforeRun.tapAsync('aaa', (xxx) => {
+      // 执行的回调函数
+    })
+  }
+}
+```
 
 webpack 传入的选项，也会被转为插件。
 
 lib\webpack.js G82
 
+```js
+/**
+ * @param {WebpackOptions} rawOptions options object
+ * @returns {Compiler} a compiler
+ */
+const createCompiler = rawOptions => {
+  //...
+	// 配置选项转插件。
+	new WebpackOptionsApply().process(options, compiler);
+  //...
+};
+```
 
+## 3.打包声明周期
 
 compiler 贯穿打包全流程
 
@@ -85,11 +158,11 @@ compiler 贯穿打包全流程
 
 再把结果交给 compiler；
 
-再由 compiler 将结果输出出去。
+再由 compiler 将结果输出。
 
+![webpack整个执行流程解析](NodeAssets/webpack整个执行流程解析.png)
 
-
-run 方法
+## 4.run 方法
 
 lib\Compiler.js
 
@@ -112,65 +185,275 @@ const run = () => {
 };
 ```
 
-可自行编写 plugin
+## 5.创建 compilation
+
+lib\Compiler.js
 
 ```js
-class ZTBeforeCompilerPlugin {
-  apply(compiler) {
-    compiler.hooks.beforeRun.tapAsync('aaa', (xxx) => {
-      // 执行的回调函数
-    })
-  }
-}
+/**
+	 * @param {Callback<Compilation>} callback signals when the compilation finishes
+	 * @returns {void}
+	 */
+	compile(callback) {
+		const params = this.newCompilationParams();
+		// beforeRun => run => compile
+		// beforeCompile => compile => make => finishMake => afterCompile => done => callback
+		this.hooks.beforeCompile.callAsync(params, err => {
+			if (err) return callback(err);
+
+			this.hooks.compile.call(params);
+
+			// 创建 compilation
+			const compilation = this.newCompilation(params);
+//...
 ```
 
+## 6.make 方法
 
+在调用 make 方法前：
 
-注册 EntryPlugin 的时候，调用了 apply 方法。其中注册了 EntryPlugin 事件
+lib\Compiler.js
 
-compilation 使用的地方，开始编译模块。
+```js
+compile(callback) {
+  const params = this.newCompilationParams();
+  // beforeRun => run => compile
+  // beforeCompile => compile => make => finishMake => afterCompile => done => callback
+  this.hooks.beforeCompile.callAsync(params, err => {
+    if (err) return callback(err);
+
+    this.hooks.compile.call(params);
+
+    // 创建 compilation
+    const compilation = this.newCompilation(params);
+
+    const logger = compilation.getLogger("webpack.Compiler");
+
+    logger.time("make hook");
+    // 真正开始编译
+    this.hooks.make.callAsync(compilation, err => {
+//...
+```
+
+注册 `EntryPlugin` 的时候，调用了 `apply` 方法。其中注册了 `EntryPlugin` 事件
+
+这里是 compilation 使用的地方，开始编译模块。
 
 lib\EntryPlugin.js G50
 
+```js
+class EntryPlugin {
+	/**
+	 * An entry plugin which will handle
+	 * creation of the EntryDependency
+	 *
+	 * @param {string} context context path
+	 * @param {string} entry entry path
+	 * @param {EntryOptions | string=} options entry options (passing a string is deprecated)
+	 */
+	constructor(context, entry, options) {
+		this.context = context;
+		this.entry = entry;
+		this.options = options || "";
+	}
 
+	/**
+	 * Apply the plugin
+	 * @param {Compiler} compiler the compiler instance
+	 * @returns {void}
+	 */
+	apply(compiler) {
+		compiler.hooks.compilation.tap(
+			"EntryPlugin",
+			(compilation, { normalModuleFactory }) => {
+				compilation.dependencyFactories.set(
+					EntryDependency,
+					normalModuleFactory
+				);
+			}
+		);
 
-在 _addEntryItem 方法中，
+		const { entry, options, context } = this;
+		const dep = EntryPlugin.createDependency(entry, options);
 
+		// compilation 使用的地方
+		compiler.hooks.make.tapAsync("EntryPlugin", (compilation, callback) => {
+			// 开始对模块进行编译
+			compilation.addEntry(context, dep, options, err => {
+				callback(err);
+			});
+		});
+	}
+//...  
+```
 
+在 `_addEntryItem` 方法中，的 `this.addModuleTree` 方法中，将入口添加到模块中。
 
-在 this.addModuleTree 方法中，将入口添加到模块中。
+lib\Compilation.js
 
+```js
+_addEntryItem(context, entry, target, options, callback) {
+  //...
+  // 将入口添加到模块中。
+  this.addModuleTree(
+    {
+      context,
+      dependency: entry,
+      contextInfo: entryData.options.layer
+        ? { issuerLayer: entryData.options.layer }
+        : undefined
+    },
+    (err, module) => {
+      if (err) {
+        this.hooks.failedEntry.call(entry, options, err);
+        return callback(err);
+      }
+      this.hooks.succeedEntry.call(entry, options, module);
+      return callback(null, module);
+    }
+  );
+  //...
+}
+```
 
-
-在 this.handleModuleCreation 方法中，处理入口模块。
+在 `this.handleModuleCreation` 方法中，处理入口模块。
 
 lib\Compilation.js G2080
 
+```js
+// 处理入口模块
+this.handleModuleCreation(
+  {
+    factory: moduleFactory,
+    dependencies: [dependency],
+    originModule: null,
+    contextInfo,
+    context
+  },
+  (err, result) => {
+    if (err && this.bail) {
+      callback(err);
+      this.buildQueue.stop();
+      this.rebuildQueue.stop();
+      this.processDependenciesQueue.stop();
+      this.factorizeQueue.stop();
+    } else if (!err && result) {
+      callback(null, result);
+    } else {
+      callback();
+    }
+  }
+);
+```
 
-
-在 this.factorizeModule 中，因式分解，对入口 mian.js 中，引入的模块，进行分解；
+在 `this.factorizeModule` 中，因式分解，对入口 `mian.js` 中，引入的模块，进行分解；
 
 lib\Compilation.js G1771
 
+```js
+/**
+ * @param {HandleModuleCreationOptions} options options object
+ * @param {ModuleCallback} callback callback
+ * @returns {void}
+ */
+handleModuleCreation(
+  {
+    factory,
+    dependencies,
+    originModule,
+    contextInfo,
+    context,
+    recursive = true,
+    connectOrigin = recursive
+  },
+  callback
+) {
+  const moduleGraph = this.moduleGraph;
 
+  const currentProfile = this.profile ? new ModuleProfile() : undefined;
 
-this.buildModule 开始构建模块
+  // 因式分解，对入口 mian.js 中，引入的模块，进行分解；
+  this.factorizeModule(
+    {
+      currentProfile,
+      factory,
+      dependencies,
+      factoryResult: true,
+      originModule,
+      contextInfo,
+      context
+    },
+    (err, factoryResult) => {
+//...      
+```
+
+在 `this.buildModule` 开始构建模块
 
 lib\Compilation.js G1928
 
+```js
+this.buildModule(module, err => {
+  if (creatingModuleDuringBuildSet !== undefined) {
+    creatingModuleDuringBuildSet.delete(module);
+  }
+  if (err) {
+    if (!err.module) {
+      err.module = module;
+    }
+    this.errors.push(err);
 
+    return callback(err);
+  }
+
+  if (!recursive) {
+    this.processModuleDependenciesNonRecursive(module);
+    callback(null, module);
+    return;
+  }
+
+  // This avoids deadlocks for circular dependencies
+  if (this.processDependenciesQueue.isProcessing(module)) {
+    return callback(null, module);
+  }
+
+  this.processModuleDependencies(module, err => {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, module);
+  });
+});
+```
 
 发现会将构建的模块，加入到队列中。
 
 lib\Compilation.js G1339
 
+```js
+/**
+ * Schedules a build of the module object
+ *
+ * @param {Module} module module to be built
+ * @param {ModuleCallback} callback the callback
+ * @returns {void}
+ */
+buildModule(module, callback) {
+  this.buildQueue.add(module, callback);
+}
+```
 
-
-队列的结构，将要构建的模块，加入到队列中，会执行 this._buildModule
+队列的结构，将要构建的模块，加入到队列中，会执行 `this._buildModule`
 
 lib\Compilation.js G948
 
-
+```js
+/** @type {AsyncQueue<Module, Module, Module>} */
+this.buildQueue = new AsyncQueue({
+  name: "build",
+  parent: this.factorizeQueue,
+  processor: this._buildModule.bind(this)
+});
+```
 
 在 module.needBuild 方法中，判断哪些模块需要构建
 
@@ -224,7 +507,7 @@ lib\Compiler.js G1188
 
 
 
-其中 compilation.sealseal 方法，用于封存构建的模块，
+其中 compilation.seal 方法，用于封存构建的模块，
 
 将打包的模块保存到 chunk 中。
 

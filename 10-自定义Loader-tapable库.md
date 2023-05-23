@@ -1,23 +1,72 @@
-创建 18-自定义loader项目
+# 自定义 Loader & tapable 库
 
----
+## 一、loader 是什么？
 
-loader 是什么？
+Loader 用于对模块的源代码，进行转换（处理）；
 
----
+我们已用过很多 Loader，比如 *css-loader*、*style-loader*、*babel-load*er 等。
 
-创建 zt_loader01.js，在其中导出一个函数。
+Loader 本质上是一个，导出为函数的 JavaScript 模块；
 
-在 webpack.config.js 中，直接使用该 loader，回去 node_moudule 下查找，找不到。
+webpack 里，使用的 loader-runner 库，会调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
 
-- 要写成 "./zt_loaders/zt_loader02.js"
-- 或配置 resolveLoader: { modules: ["node_modules", "/zt-loaders"] }
+### 1.编写一个 loader
 
-回顾 content 配置的作用。
+编写一个 loader 模块，其中导出的函数，会接收三个参数：
 
----
+- `content`：资源文件的内容；
+- `map`：sourcemap 相关的数据；
+- `meta`：一些元数据；
 
-loader 的执行顺序。
+demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader01.js
+
+```js
+module.exports = function(content, map, meta) {
+  console.log("zt_loader01:", content)
+  return content
+}
+```
+
+在 `webpack.config.js` 中，直接使用该 loader，默认会去 node_module 下查找，
+
+- 要写成 `"./zt_loaders/zt_loader02.js"`
+- 或配置 `resolveLoader: { modules: ["node_modules", "/zt-loaders"] }`
+
+demo-project\18_webpack-自定义Loader\webpack.config.js
+
+```js
+const path = require('path')
+
+module.exports = {
+  mode: "development",
+  entry: "./src/main.js",
+  output: {
+    path: path.resolve(__dirname, './build'),
+    filename: "bundle.js"
+  },
+  resolveLoader: {
+    modules: ["node_modules", "./zt-loaders"]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          "zt_loader01",
+        ]
+      },
+    ]
+  }
+}
+
+
+```
+
+> 【回顾】：`content` 配置的作用。
+
+## 二、loader 执行顺序
+
+多个 loader 的执行顺序，是从后向前、从右向左的。
 
 
 
@@ -126,3 +175,13 @@ LoopHook 的使用。
 
 
 waterfall 的使用
+
+---
+
+异步 hook
+
+parallel 并行 hook 的使用；
+
+
+
+serial 串行 hook 的使用；使用 callback

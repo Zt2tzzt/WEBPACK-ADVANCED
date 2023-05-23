@@ -2,7 +2,7 @@
 
 ## 一、Babel 在打包工具中使用
 
-Babel 的预设，是根据要适配的浏览器，进行查询的，会用到 `.browserlist`。
+Babel 的预设，会根据要适配的浏览器，进行查询，要用到 `.browserlist`。
 
 在 webpack 中，使用 Babel。
 
@@ -82,11 +82,11 @@ module.exports = {
 >      devtool: false,
 >      entry: './src/index.js',
 >      output: {
->      path: path.resolve(__dirname, './build'),
->      filename: 'bundle.js',
+>        path: path.resolve(__dirname, './build'),
+>        filename: 'bundle.js',
 >
->      // 重新打包时, 先将之前打包的文件夹删除掉
->      clean: true
+>        // 重新打包时, 先将之前打包的文件夹删除掉
+>        clean: true
 >      },
 >     ...
 > }
@@ -96,7 +96,7 @@ module.exports = {
 
 webpack 压缩代码后，仅有**模块化**内容；
 
-babel 添加了代码**语法转化**的功能。
+babel 添加了为代码进行**语法转化**的功能。
 
 将 webpack 和 babel 结合在一起。才是我们想要的效果。
 
@@ -404,7 +404,7 @@ babel 将高级语法特性，转成向下兼容的语法，但有些 API，没�
 
 当使用了一些 **API 特性**（例如：`Promise`, `Generator`, `Symbol`、实例方法例如 `Array.prototype.includes`...）
 
-就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，才能够正确的转换代码；
+就需要使用 polyfill，来填充，或者说打一个补丁，使得浏览器，能够正确的转换代码；
 
 polyfill 就是把没有的 API，填充进来。
 
@@ -454,7 +454,7 @@ module.exports = {
 
 - `entry`
 
-  - 如果依赖的某一个库，本身使用了某些 polyfill 的特性，这时使用 `usage`，用户浏览器可能会报错；
+  - 如果依赖的某一个第三方库，本身使用了某些 polyfill 的特性，这时使用 `usage`，用户浏览器可能会报错；
 
   - 为避免出现这种情况，使用 `entry`；
 

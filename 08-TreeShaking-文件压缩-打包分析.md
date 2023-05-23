@@ -34,7 +34,7 @@ const glob = require('glob')
 module.exports = {
   
   plugins: [
-    // 对CSS进行TreeShaking
+    // 对 CSS 进行 TreeShaking
     new PurgeCSSPlugin({
       paths: glob.sync(`${path.resolve(__dirname, '../src')}/**/*`, { nodir: true }),
       safelist: function() {
@@ -47,7 +47,7 @@ module.exports = {
 }
 ```
 
-> 记录开发时遇到的问题，glob 库 8.0.3 版本，在 Windows 机器上有问题，获取的路径为空数组；
+> 记录开发时遇到的问题：glob 库 8.0.3 版本，在 Windows 机器上有问题，获取的路径为空数组；
 >
 > 把版本降低到 7.* 可解决。
 
@@ -226,7 +226,7 @@ const getCommonConfig = function(isProdution) {
 
 ## 五、打包时间分析
 
-如果希望看到每个 loader、每个 Plugin 在打包时消耗的时间，可借助于一个插件：*speed-measure-webpack-plugin*
+如果希望看到每个 loader、每个 Plugin 在打包时，消耗的时间，可借助于一个插件：*speed-measure-webpack-plugin*
 
 1.安装 speed-measure-webpack-plugin 插件
 

@@ -25,13 +25,13 @@ compiler.run((err, stats) => {
 
 像 Vue / React 的脚手架，都是直接调用 `webpack` 函数，没有使用 webpack-cli
 
-> 读源码不是为了面试，而是学习思想；
+> 读源码，不是为了面试，而是学习思想；
 
 webpack 源码非常优秀，但存在大量的回调地狱；
 
 ## 1.创建 Compiler
 
-其中 hooks 的作用：
+其中 hooks 的作用非常关键：
 
 SyncHook、SyncBailHook...等等，源自于 *tapable* 库。
 
@@ -233,7 +233,7 @@ compile(callback) {
 //...
 ```
 
-注册 `EntryPlugin` 的时候，调用了 `apply` 方法。其中注册了 `EntryPlugin` 事件
+注册 `EntryPlugin` 的时候，调用了 `apply` 方法。其中注册了 `EntryPlugin` 事件。
 
 这里是 compilation 使用的地方，开始编译模块。
 
@@ -446,7 +446,9 @@ buildModule(module, callback) {
 }
 ```
 
-队列的结构，将要构建的模块，加入到队列中，会执行 `this._buildModule`
+队列的结构如下：
+
+将要构建的模块，加入到队列中，会执行 `this._buildModule`。
 
 lib\Compilation.js G948
 

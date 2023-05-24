@@ -19,7 +19,7 @@ module.exports = {
           "zt_loader02",
           "zt_loader03",
 
-          // 给loader传递参数
+          // 给 loader 传递参数
           {
             loader: "zt_loader04",
             options: {

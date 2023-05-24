@@ -8,7 +8,7 @@ Loader 用于对模块的源代码，进行转换（处理）；
 
 Loader 本质上是一个，导出为函数的 JavaScript 模块；
 
-webpack 里，使用的 loader-runner 库，会调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
+webpack 里，使用的 *loader-runner* 库，会调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
 
 ### 1.编写一个 loader
 
@@ -27,10 +27,10 @@ module.exports = function(content, map, meta) {
 }
 ```
 
-在 `webpack.config.js` 中，直接使用该 loader，默认会去 node_module 下查找，
+在 `webpack.config.js` 中，直接使用该 loader，默认会去 node_modules 下查找，找不到，会报错，
 
-- 要写成 `"./zt_loaders/zt_loader02.js"`
-- 或配置 `resolveLoader: { modules: ["node_modules", "/zt-loaders"] }`
+- 要写成 `"./zt_loaders/zt_loader01.js"`；
+- 或者，配置 `resolveLoader: { modules: ["node_modules", "/zt-loaders"] }`；
 
 demo-project\18_webpack-自定义Loader\webpack.config.js
 
@@ -58,15 +58,13 @@ module.exports = {
     ]
   }
 }
-
-
 ```
 
 > 【回顾】：`content` 配置的作用。
 
 ## 二、loader 执行顺序
 
-多个 loader 的执行顺序，是从后向前、从右向左的。
+多个 loader 的执行顺序，是“从后向前、从右向左”的。
 
 ### 1.pitch
 
@@ -80,7 +78,6 @@ module.exports = function(content, map, meta) {
   return content
 }
 
-
 module.exports.pitch = function() {
   console.log("loader pitch 01")
 }
@@ -89,12 +86,11 @@ module.exports.pitch = function() {
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader02.js
 
 ```js
-/** 同步loader */
+/** 同步 loader */
 module.exports = function(content) {
   console.log("hy_loader02:", content)
   return content + "bbbb"
 }
-
 
 module.exports.pitch = function() {
   console.log("loader pitch 02")
@@ -104,12 +100,11 @@ module.exports.pitch = function() {
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader03.js
 
 ```js
-/** 同步的loader */
+/** 同步的 loader */
 module.exports = function(content) {
   console.log("hy_loader03:", content)
   return content + "aaaa"
 }
-
 
 module.exports.pitch = function() {
   console.log("loader pitch 03")
@@ -172,20 +167,17 @@ console.log(message)
 aaaabbbb
 ```
 
-由此可知，loader 模块上的 pitch 函数，会被自动执行；
-
-执行顺序与 normal lopader 函数相反，即正序。
+由此可知，loader 模块上的 pitch 函数，会被自动执行；它的执行顺序，与 normal loader 函数相反，是正序执行的。
 
 ### 2.执行顺序和 enforce
 
-loader 的执行顺序是相反的：
+webpack 中的 loader-runner 库，会优先执行 PitchLoader，并进行 `loaderIndex++`；
 
-- loader-runner 优先执行 PitchLoader，并进行 loaderIndex++；
-- 之后会执行 NormalLoader，并进行 loaderIndex--；
+之后会执行 NormalLoader，并进行 `loaderIndex--`；
 
-如果要改变它们的执行顺序呢，在 `webpack.config.js` 文件中，进行配置；
+如果要改变它们的执行顺序，要在 `webpack.config.js` 文件中，进行配置；
 
-拆分成多个 `rule` 对象，通过配置 `enforce` 来改变它们的顺序；
+拆分成多个 `rule` 对象，通过配置 `enforce`，来改变它们的顺序；
 
 `enforce` 一共有四种方式：
 
@@ -239,7 +231,7 @@ module.exports = {
 
 这个 Loader，必须通过 `return` 或者 `this.callback` 来返回结果，交给下一个 loader 来处理；
 
-通常在有错误要处理的情况下，会使用 `this.callback`，用法如下：
+通常，直接使用 `return` 即可，在有错误要处理的情况下，会使用 `this.callback`，用法如下：
 
 - 第一个参数，必须是 Error 或者 null；
 - 第二个参数，是一个 string 或者 Buffer；
@@ -253,7 +245,7 @@ module.exports = function(content) {
 
   // callback进行调用:
   // 参数一: 错误信息
-  // 参数二: 传递给下一个loader的内容
+  // 参数二: 传递给下一个 loader 的内容
   callback(null, "哈哈哈哈")
 }
 
@@ -270,7 +262,7 @@ module.exports.pitch = function() {
 
 我们希望，在异步操作完成后，再返回这个 loader 处理的结果；
 
-这个时候，就要使用异步的 Loader；
+这时，要使用异步的 Loader；
 
 异步 loader 与同步 loader 区分，在于 `this.async()` 调用。
 
@@ -300,7 +292,7 @@ loader-runner 库，已经在执行 loader 时给我们提供了方法，让 loa
 npm install loader-utils -D
 ```
 
-目前, 已经可以直接通过 `this.getOptions()` 直接获取到参数
+目前, 已经可以直接通过 `this.getOptions()` 直接获取到参数；
 
 在 `webpack.config.js` 中，进行配置：
 
@@ -443,8 +435,6 @@ module.exports = function(content) {
       callback(null, result.code)
     }
   })
-
-  // return content
 }
 ```
 
@@ -524,14 +514,14 @@ const { marked } = require('marked')
 const hljs = require('highlight.js')
 
 module.exports = function(content) {
-  // 让marked库解析语法的时候将代码高亮内容标识出来
+  // 让 marked 库解析语法的时候将代码高亮内容标识出来
   marked.setOptions({
     highlight: function(code, lang) {
       return hljs.highlight(lang, code).value
     }
   })
 
-  // 将md语法转化成html元素结构
+  // 将 md 语法转化成 html 元素结构
   const htmlContent = marked(content)
   // console.log(htmlContent)
 
@@ -549,7 +539,7 @@ module.exports = function(content) {
 pnpm add html-webpack-plugin -D
 ```
 
-对样式进行优化，安装 *css-loader*、*style-loader*
+对样式进行优化，安装 *css-loader*、*style-loader*；
 
 ```shell
 pnpm add css-loader style-loader -D
@@ -637,11 +627,11 @@ document.body.innerHTML = code
 
 ## 八、webpack 和 tapable 库
 
-webpack 有两个非常重要的类：Compiler 和 Compilation
+webpack 有两个非常重要的类：`Compiler` 和 `Compilation`；
 
 它们通过注入插件的方式，来监听 webpack 的所有生命周期；
 
-插件的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 Tapable 库；
+插件的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 *Tapable* 库；
 
 所以，想要编写自定义插件，最好先了解一个库：Tapable
 
@@ -654,11 +644,11 @@ Tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插�
 同步和异步的：
 
 - 以“`sync`”开头的，是同步的 Hook；
-- 以”`async`“开头的，两个事件处理回调，不会等待上一次处理回调结束后再执行下一次回调；
+- 以”`async`“开头的，是异步的 Hook；两个事件处理回调，不会等待上一次处理回调结束后再执行下一次回调；
 
 其他的类别：
 
-- `bail`：当有返回值时，就不会执行后续的事件触发了；
+- `Bail`：当有返回值时，就不会执行后续的事件触发了；
 - `Loop`：当返回值为 `true`，就会反复执行该事件，当返回值为 `undefined` 或者不返回内容，就退出事件；
 - `Waterfall`：当返回值不为 `undefined` 时，会将这次返回的结果，作为下次事件的第一个参数；
 - `Parallel`：并行，会同时执行事件，并处理回调结束，再执行下一次事件处理回调；
@@ -686,7 +676,6 @@ demo-project\20_webpack-tapable库使用\hooks\01_sync_基本使用.js
 const { SyncHook } = require('tapable')
 
 class ZtCompiler {
-  
   constructor() {
     this.hooks = {
       // 1.创建 hooks
@@ -769,7 +758,6 @@ class ZtCompiler {
       // 1.创建 hooks
       loopHook: new SyncLoopHook(["name", "age"])
     }
-
 
     // 2.用 hooks 监听事件(自定义plugin)
     this.hooks.loopHook.tap("event1", (name, age) => {

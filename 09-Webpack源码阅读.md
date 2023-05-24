@@ -185,7 +185,7 @@ const run = () => {
 
 ## 5.创建 compilation
 
-lib\Compiler.js
+lib\Compiler.js G1175
 
 ```js
 /**

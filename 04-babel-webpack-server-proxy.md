@@ -195,7 +195,7 @@ npm run build
 
 ### 3.babel-loader
 
-开发中，通常不使用 tsc 或 ts-loader，编译 TS 代码，而是 babel-loader。
+在 webpack 中，通常不使用 tsc 或 ts-loader，编译 TS 代码，而是 babel-loader。
 
 - Babel 提供了对 TS 代码转 JS 代码的支持；
 - 可以使用插件：_@babel/tranform-typescript_；
@@ -231,7 +231,7 @@ module.exports = {
 
 使用 ts-loader（本质上用 TypeScript Compiler 编译）：
 
-- 来直接编译 TypeScript，只能将 ts 代码转换成 js代码；
+- 来直接编译 TypeScript，只能将 ts 代码转换成 js 代码；
 - 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
 
 使用 babel-loader（用 Babel 编译）
@@ -239,7 +239,7 @@ module.exports = {
 - 可直接编译 ts 代码，转成 js 代码，并且可以添加 polyfill 的功能；
 - 但是，不会对类型进行检测；
 
-在开发中，同时满足：代码转换、polyfill 添加，需要使用如下最佳实践方案。
+在开发中，如果要同时满足：代码转换、polyfill 添加，则需要使用如下最佳实践方案。
 
 ### 5.最佳实践
 
@@ -269,7 +269,7 @@ demo-project\04_webpack 服务器\package.json
 npm run type-check
 ```
 
-3.执行如下命令，可以实时的检测 ts 的类型；
+3.执行如下命令，可以实时地检测 ts 的类型；
 
 ```shell
 npm run type-check-watch
@@ -341,7 +341,7 @@ demo-project\04_webpack 服务器\package.json
 
 使用 webpack-dev-server 的注意事项：
 
-- webpack3 以前，需要从 webpack-dev-server 启动服务，现在有了 webpack-cli，当发现命令中有 `serve`，会自动启动。
+- webpack 3 以前，需要从 webpack-dev-server 启动服务，现在有了 webpack-cli，当发现命令中有 `serve`，会自动启动。
 - webpack-dev-server 会基于 express 框架，搭建一个本地服务。
 - webpack-dev-server 在编译之后，不会输出任何文件，而是将打包后的文件**保留在内存中**。
   - 事实上 webpack-dev-server 使用了一个库叫 _memfs_（_memory-fs_，webpack 自己写的）
@@ -507,7 +507,7 @@ module.exports = {
 
 跨域问题的解决办法，3 点：
 
-- 将静态资源和 api 服务器部署在一起；
+- 将静态资源和 api 服务器部署在一起（同源）；
 - 让服务器关闭跨域（开启 CORS）；
 - 使用 nginx 代理访问静态资源和 api。
 
@@ -519,9 +519,7 @@ module.exports = {
 
 **重点**，开发中，一般要自己配置；
 
-`devServer` 中 `proxy` 有什么用：
-
-设置代理，来解决跨域的问题。将请求发送到代理服务器，代理服务器和 api 服务器没有跨域问题。
+`devServer` 中 `proxy` 可设置代理，来解决跨域的问题。将请求发送到代理服务器，代理服务器和 api 服务器没有跨域问题。
 
 `devServer` 中的 `proxy` 配置：
 

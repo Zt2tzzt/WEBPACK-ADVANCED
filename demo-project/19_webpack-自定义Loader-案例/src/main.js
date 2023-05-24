@@ -12,7 +12,7 @@ const foo = () => {
 foo()
 
 // 1.对code进行打印
-// console.log(code)
+console.log(code)
 
 // 2.将它显示到页面中
 document.body.innerHTML = code

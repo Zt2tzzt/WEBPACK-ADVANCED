@@ -18,12 +18,12 @@ module.exports = function(content) {
 
 
 /** 同步的loader */
-// module.exports = function(content) {
-//   console.log("hy_loader03:", content)
-//   return content + "aaaa"
-// }
+module.exports = function(content) {
+  console.log("hy_loader03:", content)
+  return content + "aaaa"
+}
 
 
-// module.exports.pitch = function() {
-//   console.log("loader pitch 03")
-// }
+module.exports.pitch = function() {
+  console.log("loader pitch 03")
+}

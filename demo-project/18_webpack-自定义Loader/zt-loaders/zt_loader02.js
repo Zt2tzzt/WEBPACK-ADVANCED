@@ -7,12 +7,12 @@ module.exports = function(content) {
 }
 
 /** 同步loader */
-// module.exports = function(content) {
-//   console.log("hy_loader02:", content)
-//   return content + "bbbb"
-// }
+module.exports = function(content) {
+  console.log("hy_loader02:", content)
+  return content + "bbbb"
+}
 
 
-// module.exports.pitch = function() {
-//   console.log("loader pitch 02")
-// }
+module.exports.pitch = function() {
+  console.log("loader pitch 02")
+}

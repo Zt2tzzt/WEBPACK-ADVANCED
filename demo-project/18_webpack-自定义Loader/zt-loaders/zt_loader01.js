@@ -4,6 +4,6 @@ module.exports = function(content, map, meta) {
 }
 
 
-// module.exports.pitch = function() {
-//   console.log("loader pitch 01")
-// }
+module.exports.pitch = function() {
+  console.log("loader pitch 01")
+}

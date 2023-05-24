@@ -12,7 +12,7 @@ module.exports = function(content) {
   // 2.校验参数是否符合规则
   validate(loader04Schema, options)
 
-  console.log('hy-loader04:', content)
+  console.log('zt-loader04:', content)
 
   return content
 }

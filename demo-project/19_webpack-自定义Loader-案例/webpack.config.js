@@ -2,28 +2,28 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  mode: "development",
-  devtool: false,
+  mode: "production",
+  // devtool: false,
   entry: "./src/main.js",
   output: {
     path: path.resolve(__dirname, './build'),
     filename: "bundle.js"
   },
   resolveLoader: {
-    modules: ["node_modules", "./hy-loaders"]
+    modules: ["node_modules", "./zt-loaders"]
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         use: {
-          loader: "hybabel-loader"
+          loader: "zt-babel-loader"
         }
       },
       {
         test: /\.md$/,
         use: {
-          loader: "hymd-loader"
+          loader: "zt-md-loader"
         }
       },
       {

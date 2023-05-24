@@ -1,25 +1,28 @@
 # 前端学习总结
-## 一. 深入学习HTML+CSS
-* HTML常见的标签
-* CSS各种特性
+
+## 一. 深入学习 HTML+CSS
+
+- HTML 常见的标签
+- CSS 各种特性
+
 ```css
 body {
   font-size: 30px;
 }
 ```
 
+## 二. 深入学习 JavaScript
 
-## 二. 深入学习JavaScript
-* JavaScript基础语法
-* JavaScript进阶语法
-* JavaScript高级语法
+- JavaScript 基础语法
+- JavaScript 进阶语法
+- JavaScript 高级语法
 
 ```js
-const message = "Hello World"
+const message = 'Hello World'
 console.log(message)
 
 const foo = () => {
-  console.log("foo function exec~")
+  console.log('foo function exec~')
 }
 
 foo()

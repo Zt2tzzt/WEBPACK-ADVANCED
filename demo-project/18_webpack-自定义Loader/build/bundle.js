@@ -15,7 +15,7 @@
   \*********************/
 /***/ (() => {
 
-eval("const message = \"Hello World\"\r\nconsole.log(message)\r\n\r\n\n\n//# sourceURL=webpack://18_custom_loader/./src/main.js?");
+eval("throw new Error(\"Module build failed (from ./zt-loaders/zt_loader04.js):\\nValidationError: Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.\\n - configuration.age should be a number.\\n   -> 请输入年龄, 并且是number类型\\n    at validate (D:\\\\Workshop\\\\Mobile_HDD\\\\coderwhy-fromt-end-system\\\\WEBPACK-ADVANCED\\\\demo-project\\\\18_webpack-自定义Loader\\\\node_modules\\\\.pnpm\\\\schema-utils@4.0.0\\\\node_modules\\\\schema-utils\\\\dist\\\\validate.js:115:11)\\n    at module.exports (D:\\\\Workshop\\\\Mobile_HDD\\\\coderwhy-fromt-end-system\\\\WEBPACK-ADVANCED\\\\demo-project\\\\18_webpack-自定义Loader\\\\zt-loaders\\\\zt_loader04.js:13:3)\");\n\n//# sourceURL=webpack://18_custom_loader/./src/main.js?");
 
 /***/ })
 
@@ -24,7 +24,7 @@ eval("const message = \"Hello World\"\r\nconsole.log(message)\r\n\r\n\n\n//# sou
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	// This entry module doesn't tell about it's top-level declarations so it can't be inlined
 /******/ 	var __webpack_exports__ = {};
 /******/ 	__webpack_modules__["./src/main.js"]();
 /******/ 	

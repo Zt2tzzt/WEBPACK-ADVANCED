@@ -177,6 +177,8 @@ A toolkit to automate & enhance your workflow；
 
 学好 webpack，其它打包工具，都很简单；
 
+![gulp](NodeAssets/gulp.jpg)
+
 ## 四、gulp 和 webpack
 
 gulp 的核心理念是：“task runner”
@@ -205,10 +207,48 @@ gulp 相对于 webpack 的优缺点：
 npm install gulp -g
 
 # 局部安装
-npm install gulp 
+npm install gulp
 ```
 
 编写 `gulpfile.js` 文件，在其中创建一个任务：
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+// 编写简单的任务，如果不导出，那么是一个私有任务，不能被 node 执行。
+const foo = (cb) => {
+  console.log("第一个gulp任务")
+  cb() // 执行 cb，表示任务结束。
+}
+
+// 编写异步的 gulp 任务
+const bar = (cb) => {
+  setTimeout(() => {
+    console.log("bar任务被执行~")
+    cb()
+  }, 2000);
+}
+
+// 导出的任务
+module.exports = {
+  foo,
+  bar
+}
+```
+
+gulp4 之前创建任务的方式，现在也支持，但已经越来越少使用。
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+const gulp = require('gulp')
+
+// 早期编写任务的方式(gulp4.x 之前)
+gulp.task('foo', (cb) => {
+  console.log("第二个gulp任务")
+  cb()
+})
+```
 
 执行 gulp 命令：
 
@@ -216,31 +256,172 @@ npm install gulp
 npx gulp foo
 ```
 
----
+## 六、gulp 任务
 
-创建 gulp 任务
+每个 gulp 任务都是一个异步的 JavaScript 函数：
 
-gulp.task 也可创建任务，这种方式用的越来越少。
+- 此函数接受一个 `callback` 作为参数，调用 `callback` 函数，那么任务会结束；
+- 返回 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
 
----
+任务可以是 public、private 类型的：
 
-默认任务
+- **公开任务（Public tasks）**从 gulpfile 中被导出，可以通过 gulp 命令直接调用；
+- **私有任务（Private tasks）**被设计为在内部使用，通常作为 series() 或 parallel() 组合的组成部分；
 
----
+### 1.默认任务
 
-任务组合
+创建默认任务。
 
----
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
-读取和写入文件
+```js
+// 默认任务
+module.exports.default = (cb) => {
+  console.log("default task exec~")
+  cb()
+}
+```
 
-拷贝文件到指定目录。路径的特殊写法 *
+执行默认任务：
 
-> pipe 方法，是 Node 中的方法。
+```shell
+npx gulp
+```
 
----
+### 2.任务组合
 
-glob 文件匹配规则。
+通常一个函数中，能完成的任务，是有限的；
+
+所有任务逻辑，都放到一个函数中，也不方便代码的维护；
+
+所以一般会将任务进行组合。
+
+gulp 提供了两个强大的组合方法：
+
+- `series()`：串行任务组合；
+- `parallel()`：并行任务组合；
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+const { series, parallel } = require('gulp')
+
+const foo1 = (cb) => {
+  setTimeout(() => {
+    console.log("foo1 task exec~")
+    cb()
+  }, 2000)
+}
+
+const foo2 = (cb) => {
+  setTimeout(() => {
+    console.log("foo2 task exec~")
+    cb()
+  }, 1000)
+}
+
+const foo3 = (cb) => {
+  setTimeout(() => {
+    console.log("foo3 task exec~")
+    cb()
+  }, 3000)
+}
+
+const seriesFoo = series(foo1, foo2, foo3)
+const parallelFoo = parallel(foo1, foo2, foo3)
+
+module.exports = {
+  seriesFoo,
+  parallelFoo
+}
+```
+
+执行任务：
+
+```shell
+npx gulp seriesFoo
+
+# 输出
+[23:30:28] Starting 'seriesFoo'...
+[23:30:28] Starting 'foo1'...
+foo1 task exec~
+[23:30:30] Finished 'foo1' after 2.01 s
+[23:30:30] Starting 'foo2'...
+foo2 task exec~
+[23:30:31] Finished 'foo2' after 1.01 s
+[23:30:31] Starting 'foo3'...
+foo3 task exec~
+[23:30:34] Finished 'foo3' after 3.01 s
+[23:30:34] Finished 'seriesFoo' after 6.03 s
+
+npx gulp parallelFoo
+
+# 输出
+[23:31:19] Starting 'parallelFoo'...
+[23:31:19] Starting 'foo1'...
+[23:31:19] Starting 'foo2'...
+[23:31:19] Starting 'foo3'...
+foo2 task exec~
+[23:31:20] Finished 'foo2' after 1.01 s
+foo1 task exec~
+[23:31:21] Finished 'foo1' after 2 s
+foo3 task exec~
+[23:31:22] Finished 'foo3' after 3.01 s
+[23:31:22] Finished 'parallelFoo' after 3.01 s
+```
+
+### 3.读取、写入文件
+
+gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件。
+
+`src` 方法，接受参数，并从文件系统中，读取文件然后生成一个 Node 中的流（Stream）。
+
+- 它将所有匹配的文件，读取到内存中，并通过流（Stream）进行处理；
+
+- 由 src() 产生的流（stream）应当从任务（task 函数）中，返回并发出异步完成的信号；
+
+`dest` 方法，接受一个输出目录作为参数，并且它还会产生一个 Node 中的可写流(stream)。
+
+- 通过该流，将内容输出到文件中；
+
+在 Node 中，操作流（stream），提供的主要 API 是 `pipe` 方法。
+
+`pipe` 方法，接受一个转换流（Transform streams）或可写流（Writable streams）；
+
+那么转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
+
+:egg: 案例理解：讲文件拷贝到指定路径
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+const { src, dest } = require('gulp')
+
+const copyFile = () => {
+  // 1.读取文件 2.写入文件
+  return src("./src/**/*.js").pipe(dest("./dist"))
+}
+
+module.exports = {
+  copyFile
+}
+```
+
+#### 1.glob 匹配规则
+
+`src` 方法接受一个 glob 字符串，或由多个 glob 字符串组成的数组，作为参数，用于确定哪些文件需要被操作。
+
+glob 或 glob 数组必须至少匹配到一个匹配项，否则 src() 将报错；
+
+glob 的匹配规则如下：
+
+- 一个*：表示在一个字符串中，匹配任意数量的字符，包括零个匹配；如 `"*.js"`
+- 两个**：表示在多个字符串匹配中，匹配任意数量的字符串，通常用在匹配目录下的文件；如 `"./src/**/*.js"`
+- 取反!：
+  - 由于 glob 匹配时，是按照每个 glob 在数组中的位置，依次进行匹配操作的；
+  - 所以 glob 数组中的取反（negative）glob 必须跟在一个非取反（non-negative）的 glob 后面；
+  - 第一个 glob 匹配到一组匹配项，然后后面的取反 glob 删除这些匹配项中的一部分；
+  - 比如：`['script/**/*.js', '!script/vendor/']`
 
 ---
 

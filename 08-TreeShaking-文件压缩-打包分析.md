@@ -55,7 +55,7 @@ module.exports = {
 
 Scope Hoisting 是从 webpack 3 开始，增加的功能；
 
-对 webpack 打包后的代码的作用域进行提升，使得代码体积更小、运行更快；
+对 webpack 打包后的代码的作用域，进行提升，使得代码体积更小、运行更快；
 
 默认情况下，webpack 打包后的代码，会有很多的函数作用域.
 
@@ -102,7 +102,7 @@ import { sum } from './demo/math'
 console.log(sum(20, 30))
 ```
 
-可打包在同一作用域下：
+会打包在同一作用域下：
 
 demo-project\15_webpack优化-ScopeHoisting\build\js\main-bundle.js
 
@@ -117,7 +117,7 @@ demo-project\15_webpack优化-ScopeHoisting\build\js\main-bundle.js
 
 HTTP 压缩，指的是：对 http 协议传输的内容，进行压缩；
 
-是一种内置在服务器、客户端之间，改进传输速度和带宽利用率的方式；
+是一种内置在服务器和客户端之间，改进传输速度和带宽利用率的方式；
 
 HTTP 压缩的流程：
 
@@ -186,7 +186,7 @@ module.exports = {
 
 该插件还有一些其他的配置，如下：
 
-- `inject`：设置打包的资源插入的位置
+- `inject`：设置打包的资源插入的位置。
   - `true`、 `false`、`"body"`、`"head"`
 
 - `cache`：默认值为 `true`，只有当文件改变时；才会生成新的文件；

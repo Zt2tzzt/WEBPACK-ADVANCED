@@ -6,9 +6,9 @@ Loader 用于对模块的源代码，进行转换（处理）；
 
 我们已用过很多 Loader，比如 *css-loader*、*style-loader*、*babel-loader* 等。
 
-Loader 本质上是一个，导出为函数的 JavaScript 模块；
+Loader 本质上是一个，**导出为函数的 JavaScript 模块**；
 
-webpack 里，使用的 *loader-runner* 库，会调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
+webpack 里，使用 *loader-runner* 库，调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
 
 ### 1.编写一个 loader
 
@@ -231,7 +231,7 @@ module.exports = {
 
 这个 Loader，必须通过 `return` 或者 `this.callback` 来返回结果，交给下一个 loader 来处理；
 
-通常，直接使用 `return` 即可，在有错误要处理的情况下，会使用 `this.callback`，用法如下：
+通常，直接使用 `return` 即可，在有错误要处理的情况下，会使用 `this.callback`，它的用法如下：
 
 - 第一个参数，必须是 Error 或者 null；
 - 第二个参数，是一个 string 或者 Buffer；
@@ -239,11 +239,11 @@ module.exports = {
 ```js
 /** 同步的loader */
 module.exports = function(content) {
-  // this绑定对象
+  // this 绑定对象
   // 获取到同步的 allback
   const callback = this.callback
 
-  // callback进行调用:
+  // callback 进行调用:
   // 参数一: 错误信息
   // 参数二: 传递给下一个 loader 的内容
   callback(null, "哈哈哈哈")
@@ -280,13 +280,15 @@ module.exports = function(content) {
 }
 ```
 
-loader-runner 库，已经在执行 loader 时给我们提供了方法，让 loader 变成一个异步的 loader：
+loader-runner 库，已经在执行 loader 时，给我们提供了方法，
+
+让 loader 变成一个异步的 loader：
 
 ## 五、传入和获取参数
 
 在使用 loader 时，传入参数。
 
-早期时, 需要单独使用 loader-utils 库(webpack 开发) 的库来获取参数
+在早期, 需要单独使用 loader-utils 库(webpack 开发) 的库来获取参数
 
 ```shell
 npm install loader-utils -D
@@ -339,8 +341,6 @@ module.exports = {
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader04.js
 
 ```js
-const loader04Schema = require('./schema/loader04_schema.json')
-
 module.exports = function(content) {
   // 1.获取使用 loader 时, 传递进来的参数
   const options = this.getOptions()
@@ -633,7 +633,7 @@ webpack 有两个非常重要的类：`Compiler` 和 `Compilation`；
 
 插件的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 *Tapable* 库；
 
-所以，想要编写自定义插件，最好先了解一个库：Tapable
+所以，想要编写自定义插件，最好先了解 Tapable 库；
 
 Tapable 是 webpack 官方编写和维护的一个库；
 
@@ -759,7 +759,7 @@ class ZtCompiler {
       loopHook: new SyncLoopHook(["name", "age"])
     }
 
-    // 2.用 hooks 监听事件(自定义plugin)
+    // 2.用 hooks 监听事件(自定义 plugin)
     this.hooks.loopHook.tap("event1", (name, age) => {
       if (count < 5) {
         console.log("event1 事件监听执行了:", name, age)
@@ -782,12 +782,12 @@ setTimeout(() => {
 }, 2000);
 
 // 执行结果
-// event1事件监听执行了: zzt 18
-// event1事件监听执行了: zzt 18
-// event1事件监听执行了: zzt 18
-// event1事件监听执行了: zzt 18
-// event1事件监听执行了: zzt 18
-// event1事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18
+// event2 事件监听执行了: zzt 18
 ```
 
 ### 4.SyncWaterfallHook 使用
@@ -825,7 +825,7 @@ setTimeout(() => {
 
 // 执行结果
 // event1 事件监听执行了: zzt 18
-// event2 事件监听执行了: zzt 18
+// event2 事件监听执行了: { xx: 'xx', yy: 'yy' } 18
 ```
 
 ### 5.AsyncParallelHook 使用
@@ -866,7 +866,7 @@ setTimeout(() => {
   compiler.hooks.parallelHook.callAsync("zzt", 18)
 }, 0);
 
-// 执行结果
+// 执行结果，同时打印
 // event1 事件监听执行了: zzt 18
 // event2 事件监听执行了: zzt 18
 ```
@@ -911,7 +911,7 @@ setTimeout(() => {
 }, 0);
 
 // 执行结果
-// event1 事件监听执行了: zzt 18
-// event2 事件监听执行了: zzt 18
+// event1 事件监听执行了: zzt 18 // 3s 后
+// event2 事件监听执行了: zzt 18 // 3s 后
 // 所有任务都执行完成~
 ```

@@ -1,0 +1,1 @@
+(()=>{console.log("Vue代码");const o=document.createElement("h1");o.textContent="你好啊, 李银河! Hello World!",document.body.append(o),console.log("React代码"),console.log("哈哈哈哈哈"),console.log("你好啊, 李银河")})();

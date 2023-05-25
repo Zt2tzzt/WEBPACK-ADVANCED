@@ -162,7 +162,7 @@ compiler 贯穿打包全流程
 
 ## 4.run 方法
 
-lib\Compiler.js
+lib\Compiler.js G517
 
 ```js
 // 开始执行编译工作
@@ -214,7 +214,7 @@ lib\Compiler.js
 
 ```js
 compile(callback) {
-  const params = this.newCompilationParams();
+  cons··············································································t params = this.newCompilationParams();
   // beforeRun => run => compile
   // beforeCompile => compile => make => finishMake => afterCompile => done => callback
   this.hooks.beforeCompile.callAsync(params, err => {

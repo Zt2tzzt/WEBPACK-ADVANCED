@@ -16,7 +16,7 @@ CompressionPlugin
 
 1. 在 `webpack` 函数的 `createCompiler` 方法中，注册了所有的插件；
 2. 在注册插件时，会调用插件函数，或者插件对象的 `apply` 方法；
-3. 插件函数，或 `apply` 方法，会接收 `compiler` 对象，通过它来注册 Hook 的事件；
+3. 它们会接收 `compiler` 对象，通过它来注册 Hook 的事件；
 4. 某些插件，也会传入一个 `compilation` 对象，也可通过它来注册 Hook 事件；
 
 它们是如何注册到 webpack 生命周期中的？
@@ -38,9 +38,11 @@ for (const plugin of options.plugins) {
 
 如何开发自己的插件呢？
 
-大部分插件，都可以在社区中找到，推荐使用在维护，经过验证的；
+大部分插件，都可以在社区中找到，推荐使用在维护，经过验证的插件；
 
-开发一个自己的插件：将静态资源打包完成后，自动上传到服务器；
+现在，我们开发一个自己的插件，实现如下功能：
+
+- 将静态资源打包完成后，自动上传到服务器；
 
 自定义插件的过程：
 
@@ -54,7 +56,7 @@ for (const plugin of options.plugins) {
 
 3.在 webpack 配置文件中，使用 AutoUploadWebpackPlugin 类；
 
-> 【补充】：两种导出方式的不同：
+> 【补充】：编写自定义插件，两种导出方式的不同：
 >
 > ```js
 > module.exports = AutoUploadWebpackPlugin
@@ -68,7 +70,7 @@ for (const plugin of options.plugins) {
 
 ### 1.基本结构
 
-编写一个最简单的自定义插件
+编写一个最简单的自定义 Plugin
 
 ```js
 class AutoUploadWebpackPlugin {
@@ -89,17 +91,17 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 
 2.连接远程服务器 SSH
 
-- 连接远程服务器，要用到一个库 node-ssh
+- 连接远程服务器，要用到一个库 *node-ssh*
 
 3.将文件夹中资源上传到服务器中；
 
 4.销毁 ssh 连接
 
-5.完成所有操作后，调用 callback
+5.完成所有操作后，调用 `callback`
 
 编写自己的 plugin。为 plugin 传入参数。
 
-> webpack [官方文档](https://webpack.docschina.org/api/plugins/)和源码中，都有 compiler 中的 hook 说明。
+> webpack [官方文档](https://webpack.docschina.org/api/plugins/)和源码中，都有 compiler 中的 hook 调用时机说明。
 >
 > webpack plugin 贯穿于整个打包的生命周期，每个阶段都有对应的 hook 被调用；
 >
@@ -118,9 +120,8 @@ class AutoUploadWebpackPlugin {
   }
 
   apply(compiler) {
-    // console.log("AutoUploadWebpackPlugin被注册:")
     // 完成的事情: 注册 hooks 监听事件
-    // 等到 assets 已经输出到 output 目录上时, 完成自动上传的功能
+    // 等到 assets 已经输出到 output 目录中, 完成自动上传的功能
     compiler.hooks.afterEmit.tapAsync("AutoPlugin", async (compilation, callback) => {
       // 1.获取输出文件夹路径(其中资源)
       const outputPath = compilation.outputOptions.path
@@ -169,9 +170,38 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 
 > 服务器上，一般使用 nginx 进行了一些配置；
 
+在 `webpac.config.js` 中，进行如下配置：
+
+demo-project\21_webpack-自定义Plugin-案例\webpack.config.js
+
+```js
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const AutoUploadWebpackPlugin = require('./plugins/AutoUploadWebpackPlugin')
+const { PASSWORD } = require('./plugins/config')
+
+module.exports = {
+  entry: "./src/main.js",
+  output: {
+    path: path.resolve(__dirname, "./build"),
+    filename: "bundle.js"
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new AutoUploadWebpackPlugin({
+      host: "123.207.32.32",
+      username: "root",
+      password: PASSWORD,
+      remotePath: "/root/test"
+    })
+  ]
+}
+```
+
 ## 三、gulp 是什么？
 
-A toolkit to automate & enhance your workflow；
+官方定义：A toolkit to automate & enhance your workflow；
 
 一个帮你增加工作流的自动化工具包；
 
@@ -193,10 +223,10 @@ webpack 的核心理念是：“module bundler”
 
 gulp 相对于 webpack 的优缺点：
 
-- gulp 相对于 webpack 思想更加的简单、易用，更适合编写一些自动化的任务；
-- gulp 默认是不支持模块化的；
+- gulp 相对于 webpack，思想更加的单、易用，更适合编写一些自动化的任务；
+- gulp 默认不支持模块化；
   - 目前大型项目（如 Vue、React、Angular），并不会使用 gulp 来构建；
-  - 慢慢地推出历史舞台。
+  - 正在慢慢地退出历史舞台。
 
 ## 五、gulp 基本使用
 
@@ -236,14 +266,14 @@ module.exports = {
 }
 ```
 
-gulp4 之前创建任务的方式，现在也支持，但已经越来越少使用。
+如下是 gulp 4 之前创建任务的方式；现在也支持，但已经越来越少使用。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
 ```js
 const gulp = require('gulp')
 
-// 早期编写任务的方式(gulp4.x 之前)
+// 早期编写任务的方式(gulp 4.x 之前)
 gulp.task('foo', (cb) => {
   console.log("第二个gulp任务")
   cb()
@@ -261,11 +291,11 @@ npx gulp foo
 每个 gulp 任务都是一个异步的 JavaScript 函数：
 
 - 此函数接受一个 `callback` 作为参数，调用 `callback` 函数，那么任务会结束；
-- 返回 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
+- 返回一个 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
 
 任务可以是 public、private 类型的：
 
-- **公开任务（Public tasks）**从 gulpfile 中被导出，可以通过 gulp 命令直接调用；
+- **公开任务（Public tasks）**从 gulpfile.js 中被导出，可以通过 gulp 命令直接调用；
 - **私有任务（Private tasks）**被设计为在内部使用，通常作为 series() 或 parallel() 组合的组成部分；
 
 ### 1.默认任务
@@ -296,7 +326,7 @@ npx gulp
 
 所以一般会将任务进行组合。
 
-gulp 提供了两个强大的组合方法：
+gulp 提供了两个组合的方法：
 
 - `series()`：串行任务组合；
 - `parallel()`：并行任务组合；
@@ -390,7 +420,9 @@ gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件
 
 那么转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
 
-:egg: 案例理解：讲文件拷贝到指定路径
+:egg: 案例理解：
+
+讲文件拷贝到指定路径：
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -409,9 +441,9 @@ module.exports = {
 
 #### 1.glob 匹配规则
 
-`src` 方法接受一个 glob 字符串，或由多个 glob 字符串组成的数组，作为参数，用于确定哪些文件需要被操作。
+`src` 方法接受一个 glob 字符串，或由多个 glob 字符串组成的数组，作为参数；用于确定哪些文件需要被操作。
 
-glob 或 glob 数组必须至少匹配到一个匹配项，否则 src() 将报错；
+glob 或 glob 数组，必须至少匹配到一个匹配项，否则 src() 将报错；
 
 glob 的匹配规则如下：
 
@@ -425,9 +457,9 @@ glob 的匹配规则如下：
 
 ### 4.插件使用
 
-在任务中，使用 babel，terser；
+在任务中，使用 gulp 中，babel，terser 相关插件；
 
-gulp 插件的使用，去[官网](https://gulpjs.com/plugins)找插件
+gulp 插件的使用，去[官网](https://gulpjs.com/plugins)找插件；
 
 安装 gulp-babel 插件。
 
@@ -489,8 +521,3 @@ module.exports = {
   jsTask
 }
 ```
-
-
-
-
-

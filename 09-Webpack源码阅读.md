@@ -2,7 +2,7 @@
 
 在 webpack 源码目录中，创建 zzt 文件夹，用于测试。
 
-在 src 目录下，编写源码；创建 build.js 用于打包；
+在 src 目录下，编写源码；创建 `build.js` 用于打包；
 
 zzt\build.js
 
@@ -23,8 +23,8 @@ compiler.run((err, stats) => {
 
 使用调试工具，进行源码阅读。
 
-像 Vue / React 的脚手架，都是直接调用 `webpack` 函数，没有使用 webpack-cli
-
+> 像 Vue / React 的脚手架，都是直接调用 `webpack` 函数，没有使用 webpack-cli
+>
 > 读源码，不是为了面试，而是学习思想；
 
 webpack 源码非常优秀，但存在大量的回调地狱；
@@ -58,7 +58,7 @@ class Compiler {
 //...
 ```
 
-webpack 官方提供了一个库 tapable
+webpack 官方提供了一个库 *tapable*，安装该库，简单的使用；
 
 ```shell
 npm install tapable -D
@@ -148,7 +148,7 @@ const createCompiler = rawOptions => {
 
 ## 3.打包生命周期
 
-compiler 贯穿打包全流程
+compiler 贯穿打包全流程；
 
 创建 compiler 时，会创建 hooks，注册 plugin；
 
@@ -679,6 +679,7 @@ process.nextTick(() => {
     if (err) return callback(err);
 
     logger.time("seal compilation");
+    // 封存构建的模块
     compilation.seal(err => {
       logger.timeEnd("seal compilation");
       if (err) return callback(err);

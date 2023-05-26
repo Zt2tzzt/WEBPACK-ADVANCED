@@ -8,7 +8,7 @@ Loader 用于对模块的源代码，进行转换（处理）；
 
 Loader 本质上是一个，**导出为函数的 JavaScript 模块**；
 
-webpack 里，使用 *loader-runner* 库，调用这个函数，将上一个 loader 产生的结果或者资源文件，传入进去；
+webpack 里，使用 *loader-runner* 库，调用这个函数，将上一个 loader 产生的结果，或者资源文件，传入进去；
 
 ### 1.编写一个 loader
 
@@ -60,7 +60,7 @@ module.exports = {
 }
 ```
 
-> 【回顾】：`content` 配置的作用。
+> 【回顾】：`context` 配置的作用。
 
 ## 二、loader 执行顺序
 
@@ -167,13 +167,15 @@ console.log(message)
 aaaabbbb
 ```
 
-由此可知，loader 模块上的 pitch 函数，会被自动执行；它的执行顺序，与 normal loader 函数相反，是正序执行的。
+由此可知，loader 模块上的 pitch 函数，会被自动执行；
+
+它的执行顺序，与 normal loader 函数相反，是正序执行的。
 
 ### 2.执行顺序和 enforce
 
-webpack 中的 loader-runner 库，会优先执行 PitchLoader，并进行 `loaderIndex++`；
+webpack 中的 loader-runner 库，会优先执行 pitch loader，并进行 `loaderIndex++`；
 
-之后会执行 NormalLoader，并进行 `loaderIndex--`；
+之后执行 normal loader，并进行 `loaderIndex--`；
 
 如果要改变它们的执行顺序，要在 `webpack.config.js` 文件中，进行配置；
 
@@ -183,7 +185,7 @@ webpack 中的 loader-runner 库，会优先执行 PitchLoader，并进行 `load
 
 - 默认所有的 loader 都是 `normal`；
 - 在行内设置的 loader 是 `inline`（如：`import 'loader1!loader2!./test.js'`）；
-- 也可以通过 enforce 设置 `pre` 和 `post`；
+- 也可以通过 `enforce` 设置 `pre` 和 `post`；
 
 在 Pitching 和 Normal 它们的执行顺序分别是：
 
@@ -231,13 +233,15 @@ module.exports = {
 
 这个 Loader，必须通过 `return` 或者 `this.callback` 来返回结果，交给下一个 loader 来处理；
 
-通常，直接使用 `return` 即可，在有错误要处理的情况下，会使用 `this.callback`，它的用法如下：
+通常，直接使用 `return` 即可，在有错误要处理的情况下，使用 `this.callback`，它的用法如下：
 
 - 第一个参数，必须是 Error 或者 null；
 - 第二个参数，是一个 string 或者 Buffer；
 
+demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader03.js
+
 ```js
-/** 同步的loader */
+/** 同步的 loader */
 module.exports = function(content) {
   // this 绑定对象
   // 获取到同步的 allback
@@ -254,7 +258,7 @@ module.exports.pitch = function() {
 }
 ```
 
-注意：同步的 loader 中，callback 不能在异步代码中使用；
+注意：同步的 loader 中，`callback` 不能在异步代码中使用；
 
 ## 四、异步的 loader
 
@@ -264,7 +268,7 @@ module.exports.pitch = function() {
 
 这时，要使用异步的 Loader；
 
-异步 loader 与同步 loader 区分，在于 `this.async()` 调用。
+异步 loader 与同步 loader 的区分，在于 `this.async()` 调用，它返回的 `callback` 函数，可在异步代码中调用。
 
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader03.js
 
@@ -288,7 +292,7 @@ loader-runner 库，已经在执行 loader 时，给我们提供了方法，
 
 在使用 loader 时，传入参数。
 
-在早期, 需要单独使用 loader-utils 库(webpack 开发) 的库来获取参数
+在早期, 需要使用 loader-utils (webpack 开发的) 库，来获取参数：
 
 ```shell
 npm install loader-utils -D
@@ -422,8 +426,9 @@ module.exports = function(content) {
 
   // 2.获取 options
   let options = this.getOptions()
-  if (!Object.keys(options).length) {
-    // 如果 webpack.config.js 文件中，没有 babel 相关的配置，那么从 babel.config.js 中读取。
+  
+  // 如果 webpack.config.js 文件中，没有 babel 相关的配置，那么从 babel.config.js 中读取。
+  if (!Object.keys(options).length) {    
     options = require('../babel.config')
   }
 
@@ -514,7 +519,7 @@ const { marked } = require('marked')
 const hljs = require('highlight.js')
 
 module.exports = function(content) {
-  // 让 marked 库解析语法的时候将代码高亮内容标识出来
+  // 让 marked 库，解析语法的时候，将代码高亮内容标识出来
   marked.setOptions({
     highlight: function(code, lang) {
       return hljs.highlight(lang, code).value
@@ -525,7 +530,7 @@ module.exports = function(content) {
   const htmlContent = marked(content)
   // console.log(htmlContent)
 
-  // 返回的结果必须是模块化的内容
+  // 返回的结果，必须是模块化的内容
   const innerContent = "`" + htmlContent + "`"
   const moduleContent = `var code = ${innerContent}; export default code;`
 
@@ -629,19 +634,19 @@ document.body.innerHTML = code
 
 webpack 有两个非常重要的类：`Compiler` 和 `Compilation`；
 
-它们通过注入插件的方式，来监听 webpack 的所有生命周期；
+它们通过注入 Plugin 的方式，来监听 webpack 的所有生命周期；
 
-插件的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 *Tapable* 库；
+Plugin 的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 *tapable* 库；
 
-所以，想要编写自定义插件，最好先了解 Tapable 库；
+所以，想要编写自定义插件，最好先了解 tapable 库；
 
-Tapable 是 webpack 官方编写和维护的一个库；
+tapable 是 webpack 官方编写和维护的一个库；
 
-Tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插件中；
+tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插件中；
 
 ## 九、tapable 有哪些 hook
 
-同步和异步的：
+同步和异步的 hook：
 
 - 以“`sync`”开头的，是同步的 Hook；
 - 以”`async`“开头的，是异步的 Hook；两个事件处理回调，不会等待上一次处理回调结束后再执行下一次回调；
@@ -844,8 +849,7 @@ class ZtCompiler {
       parallelHook: new AsyncParallelHook(["name", "age"])
     }
 
-
-    // 2.用 hooks 监听事件(自定义plugin)
+    // 2.用 hooks 监听事件(自定义 plugin)
     this.hooks.parallelHook.tapAsync("event1", (name, age) => {
       setTimeout(() => {
         console.log("event1 事件监听执行了:", name, age)
@@ -874,6 +878,8 @@ setTimeout(() => {
 ### 6.AsyncSeriesHook 使用
 
 serial 串行 hook 的使用；使用 callback
+
+demo-project\20_webpack-tapable库使用\hooks\06_async_series使用.js
 
 ```js
 const { AsyncSeriesHook } = require('tapable')

@@ -399,7 +399,7 @@ const { src, dest } = require('gulp')
 
 const copyFile = () => {
   // 1.读取文件 2.写入文件
-  return src("./src/**/*.js").pipe(dest("./dist"))
+  return src("./src/**/*.js").pipe(dest("./dist")) // 如果 dist 文件夹不存在，会自动创建。
 }
 
 module.exports = {
@@ -423,6 +423,74 @@ glob 的匹配规则如下：
   - 第一个 glob 匹配到一组匹配项，然后后面的取反 glob 删除这些匹配项中的一部分；
   - 比如：`['script/**/*.js', '!script/vendor/']`
 
----
+### 4.插件使用
 
-gulp 文件监听，在任务中，使用 babel，terser；
+在任务中，使用 babel，terser；
+
+gulp 插件的使用，去[官网](https://gulpjs.com/plugins)找插件
+
+安装 gulp-babel 插件。
+
+它本身依赖 babel，再安装 @babel/core
+
+```shell
+pnpm add @babel/core gulp-babel -D
+```
+
+安装 babel 预设。
+
+```shell
+pnpm add @babel/preset-env
+```
+
+编写任务：
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+const { src, dest } = require('gulp')
+const babel = require('gulp-babel')
+
+const jsTask = () => {
+  return src("./src/**/*.js")
+    // .pipe(babel({presets: ["@babel/preset-env"]})) // 或者可以把 preset 相关配置，放到 babel.config.js 中。
+  	.pipe(babel())
+    .pipe(dest("./dist"))
+}
+
+module.exports = {
+  jsTask
+}
+```
+
+安装 gulp-terser 插件。
+
+```shell
+pnpm add gulp-terser -D
+```
+
+在任务中，使用 terser
+
+demo-project\22_gulp-gulp的基本使用\gulpfile.js
+
+```js
+const { src, dest } = require('gulp')
+const babel = require('gulp-babel')
+const terser = require('gulp-terser')
+
+const jsTask = () => {
+  return src("./src/**/*.js")
+    .pipe(babel())
+    .pipe(terser({ mangle: { toplevel: true } }))
+    .pipe(dest("./dist"))
+}
+
+module.exports = {
+  jsTask
+}
+```
+
+
+
+
+

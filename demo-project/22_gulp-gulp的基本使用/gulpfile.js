@@ -1,10 +1,17 @@
-const { src, dest } = require('gulp')
+const { src, dest, watch } = require('gulp')
+const babel = require('gulp-babel')
+const terser = require('gulp-terser')
 
-const copyFile = () => {
-  // 1.读取文件 2.写入文件
-  return src("./src/**/*.js").pipe(dest("./dist"))
+const jsTask = () => {
+  return src("./src/**/*.js")
+    .pipe(babel())
+    .pipe(terser({ mangle: { toplevel: true } }))
+    .pipe(dest("./dist"))
 }
 
+// watch函数监听内容的改变
+// watch("./src/**/*.js", jsTask)
+
 module.exports = {
-  copyFile
+  jsTask
 }

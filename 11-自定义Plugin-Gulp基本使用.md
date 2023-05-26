@@ -54,7 +54,7 @@ for (const plugin of options.plugins) {
 - 删除服务器原来的文件夹；
 - 上传静态资源；
 
-3.在 webpack 配置文件中，使用 AutoUploadWebpackPlugin 类；
+3.在 webpack 配置文件中，使用 `AutoUploadWebpackPlugin` 类；
 
 > 【补充】：编写自定义插件，两种导出方式的不同：
 >
@@ -87,17 +87,11 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 
 主要步骤：
 
-1.获取输出文件夹路径；
-
-2.连接远程服务器 SSH
-
-- 连接远程服务器，要用到一个库 *node-ssh*
-
-3.将文件夹中资源上传到服务器中；
-
-4.销毁 ssh 连接
-
-5.完成所有操作后，调用 `callback`
+1. 动态获取输出文件夹路径；
+2. 使用 SSH 连接远程服务器，要用到一个库 *node-ssh*；
+3. 将文件夹中资源上传到服务器中；
+4. 销毁 ssh 连接；
+5. 完成所有操作后，调用 `callback`。
 
 编写自己的 plugin。为 plugin 传入参数。
 
@@ -126,10 +120,10 @@ class AutoUploadWebpackPlugin {
       // 1.获取输出文件夹路径(其中资源)
       const outputPath = compilation.outputOptions.path
 
-      // 2.连接远程服务器 SSH
+      // 2.使用 SSH 连接远程服务器；
       await this.connectServer()
 
-      // 3.删除原有的文件夹中内容
+      // 3.删除原有的文件夹中内容；
       const remotePath = this.options.remotePath
       this.ssh.execCommand(`rm -rf ${remotePath}/*`)
 
@@ -203,7 +197,7 @@ module.exports = {
 
 官方定义：A toolkit to automate & enhance your workflow；
 
-一个帮你增加工作流的自动化工具包；
+一个帮你增强工作流的自动化工具包；
 
 学好 webpack，其它打包工具，都很简单；
 
@@ -295,8 +289,8 @@ npx gulp foo
 
 任务可以是 public、private 类型的：
 
-- **公开任务（Public tasks）**从 gulpfile.js 中被导出，可以通过 gulp 命令直接调用；
-- **私有任务（Private tasks）**被设计为在内部使用，通常作为 series() 或 parallel() 组合的组成部分；
+- **公开任务（Public tasks）**从 `gulpfile.js` 中被导出，可以通过 gulp 命令直接调用；
+- **私有任务（Private tasks）**被设计为在内部使用，通常作为 `series()` 或 `parallel()` 组合的组成部分；
 
 ### 1.默认任务
 
@@ -404,7 +398,7 @@ foo3 task exec~
 
 gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件。
 
-`src` 方法，接受参数，并从文件系统中，读取文件然后生成一个 Node 中的流（Stream）。
+`src` 方法，接受一个读取目录作为参数，并从文件系统中，读取文件然后生成一个 Node 中的流（Stream）。
 
 - 它将所有匹配的文件，读取到内存中，并通过流（Stream）进行处理；
 
@@ -431,7 +425,9 @@ const { src, dest } = require('gulp')
 
 const copyFile = () => {
   // 1.读取文件 2.写入文件
-  return src("./src/**/*.js").pipe(dest("./dist")) // 如果 dist 文件夹不存在，会自动创建。
+  // 如果 dist 文件夹不存在，会自动创建。
+  // 返回一个 stream，任务结束。
+  return src("./src/**/*.js").pipe(dest("./dist"))
 }
 
 module.exports = {
@@ -457,13 +453,11 @@ glob 的匹配规则如下：
 
 ### 4.插件使用
 
-在任务中，使用 gulp 中，babel，terser 相关插件；
+在任务中，使用 gulp 生态中，babel，terser 相关插件；
 
 gulp 插件的使用，去[官网](https://gulpjs.com/plugins)找插件；
 
-安装 gulp-babel 插件。
-
-它本身依赖 babel，再安装 @babel/core
+安装 *gulp-babel* 插件。它本身依赖 babel，再安装 *@babel/core*
 
 ```shell
 pnpm add @babel/core gulp-babel -D
@@ -486,7 +480,7 @@ const babel = require('gulp-babel')
 const jsTask = () => {
   return src("./src/**/*.js")
     // .pipe(babel({presets: ["@babel/preset-env"]})) // 或者可以把 preset 相关配置，放到 babel.config.js 中。
-  	.pipe(babel())
+    .pipe(babel())
     .pipe(dest("./dist"))
 }
 
@@ -495,7 +489,7 @@ module.exports = {
 }
 ```
 
-安装 gulp-terser 插件。
+安装 *gulp-terser* 插件。
 
 ```shell
 pnpm add gulp-terser -D

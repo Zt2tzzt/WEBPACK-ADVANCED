@@ -9,8 +9,8 @@ const jsTask = () => {
     .pipe(dest("./dist"))
 }
 
-// watch函数监听内容的改变
-// watch("./src/**/*.js", jsTask)
+// watch 函数监听内容的改变
+watch("./src/**/*.js", jsTask)
 
 module.exports = {
   jsTask

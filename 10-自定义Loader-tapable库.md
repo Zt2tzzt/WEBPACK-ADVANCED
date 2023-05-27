@@ -88,7 +88,7 @@ demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader02.js
 ```js
 /** 同步 loader */
 module.exports = function(content) {
-  console.log("hy_loader02:", content)
+  console.log("zt_loader02:", content)
   return content + "bbbb"
 }
 
@@ -102,7 +102,7 @@ demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader03.js
 ```js
 /** 同步的 loader */
 module.exports = function(content) {
-  console.log("hy_loader03:", content)
+  console.log("zt_loader03:", content)
   return content + "aaaa"
 }
 
@@ -233,7 +233,7 @@ module.exports = {
 
 这个 Loader，必须通过 `return` 或者 `this.callback` 来返回结果，交给下一个 loader 来处理；
 
-通常，直接使用 `return` 即可，在有错误要处理的情况下，使用 `this.callback`，它的用法如下：
+通常，直接使用 `return` 即可；在有错误要处理的情况下，使用 `this.callback`，它的用法如下：
 
 - 第一个参数，必须是 Error 或者 null；
 - 第二个参数，是一个 string 或者 Buffer；
@@ -268,7 +268,7 @@ module.exports.pitch = function() {
 
 这时，要使用异步的 Loader；
 
-异步 loader 与同步 loader 的区分，在于 `this.async()` 调用，它返回的 `callback` 函数，可在异步代码中调用。
+异步 loader 与同步 loader 的区别，在于 `this.async()` 调用，它返回的 `callback` 函数，可在异步代码中调用。
 
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader03.js
 
@@ -284,15 +284,13 @@ module.exports = function(content) {
 }
 ```
 
-loader-runner 库，已经在执行 loader 时，给我们提供了方法，
-
-让 loader 变成一个异步的 loader：
+loader-runner 库，在执行 loader 时，已经提供了让 loader 变成一个异步的 loader方法，
 
 ## 五、传入和获取参数
 
 在使用 loader 时，传入参数。
 
-在早期, 需要使用 loader-utils (webpack 开发的) 库，来获取参数：
+在早期, 需要使用 *loader-utils* (webpack 开发的) 库，来获取参数：
 
 ```shell
 npm install loader-utils -D
@@ -538,7 +536,7 @@ module.exports = function(content) {
 }
 ```
 
-安装 *html-webpack-plugin*
+安装 *html-webpack-plugin* 插件：
 
 ```shell
 pnpm add html-webpack-plugin -D
@@ -611,9 +609,9 @@ pnpm run build
 demo-project\19_webpack-自定义Loader-案例\src\main.js
 
 ```js
-import code from "./md/learn.md"
-import "highlight.js/styles/default.css"
-import "./css/code.css"
+import code from "./md/learn.md" // md 转换后的 html 代码
+import "highlight.js/styles/default.css" // 导入 highlight.js 的默认样式
+import "./css/code.css" // 自己编写的样式
 
 const message = "Hello World"
 console.log(message)
@@ -636,7 +634,7 @@ webpack 有两个非常重要的类：`Compiler` 和 `Compilation`；
 
 它们通过注入 Plugin 的方式，来监听 webpack 的所有生命周期；
 
-Plugin 的注入离不开各种各样的 Hook，而创建 Hook 实例，要用到 *tapable* 库；
+Plugin 的注入，离不开各种各样的 Hook，而创建 Hook 实例，要用到 *tapable* 库；
 
 所以，想要编写自定义插件，最好先了解 tapable 库；
 
@@ -654,9 +652,9 @@ tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插�
 其他的类别：
 
 - `Bail`：当有返回值时，就不会执行后续的事件触发了；
-- `Loop`：当返回值为 `true`，就会反复执行该事件，当返回值为 `undefined` 或者不返回内容，就退出事件；
+- `Loop`：当返回值为 `true`，就会反复执行该事件；当返回值为 `undefined` 或者不返回内容，就退出事件；
 - `Waterfall`：当返回值不为 `undefined` 时，会将这次返回的结果，作为下次事件的第一个参数；
-- `Parallel`：并行，会同时执行事件，并处理回调结束，再执行下一次事件处理回调；
+- `Parallel`：并行，会同时处理 hook，再执行下一次事件处理回调；
 - `Series`：串行，会等待上一个异步的 Hook，调用 `callback` 函数，再执行下一个 ；
 
 ![tapable的hook类型](NodeAssets/tapable的hook类型.jpg)
@@ -704,7 +702,7 @@ setTimeout(() => {
   compiler.hooks.syncHook.call("zzt", 18)
 }, 2000);
 
-// 执行结果
+// 执行结果：同时执行
 // event1 事件监听执行了: zzt 18
 // event2 事件监听执行了: zzt 18
 ```
@@ -809,7 +807,7 @@ class ZtCompiler {
       waterfallHook: new SyncWaterfallHook(['name', 'age'])
     }
 
-    // 2.用 hooks 监听事件(自定义plugin)
+    // 2.用 hooks 监听事件(自定义 plugin)
     this.hooks.waterfallHook.tap('event1', (name, age) => {
       console.log('event1 事件监听执行了:', name, age)
 
@@ -870,7 +868,7 @@ setTimeout(() => {
   compiler.hooks.parallelHook.callAsync("zzt", 18)
 }, 0);
 
-// 执行结果，同时打印
+// 执行结果，3s 后同时打印
 // event1 事件监听执行了: zzt 18
 // event2 事件监听执行了: zzt 18
 ```
@@ -917,7 +915,8 @@ setTimeout(() => {
 }, 0);
 
 // 执行结果
-// event1 事件监听执行了: zzt 18 // 3s 后
-// event2 事件监听执行了: zzt 18 // 3s 后
+// 3s 后打印：event1 事件监听执行了: zzt 18
+// 再 3s 后打印：event2 事件监听执行了: zzt 18
 // 所有任务都执行完成~
 ```
+

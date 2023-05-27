@@ -167,9 +167,9 @@ console.log(message)
 aaaabbbb
 ```
 
-由此可知，loader 模块上的 pitch 函数，会被自动执行；
+由此可知，loader 模块上的 `pitch` 函数，会被自动执行；
 
-它的执行顺序，与 normal loader 函数相反，是正序执行的。
+它的执行顺序，与 normal loader 函数相反，是“正序”执行的。
 
 ### 2.执行顺序和 enforce
 
@@ -596,7 +596,7 @@ module.exports = {
 }
 ```
 
-执行命令，打包
+执行命令，打包：
 
 ```shell
 pnpm run build
@@ -636,9 +636,9 @@ webpack 有两个非常重要的类：`Compiler` 和 `Compilation`；
 
 Plugin 的注入，离不开各种各样的 Hook，而创建 Hook 实例，要用到 *tapable* 库；
 
-所以，想要编写自定义插件，最好先了解 tapable 库；
+所以，想要编写自定义插件，最好先了解 *tapable* 库；
 
-tapable 是 webpack 官方编写和维护的一个库；
+*tapable* 是 webpack 官方编写和维护的一个库；
 
 tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插件中；
 
@@ -651,7 +651,7 @@ tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插�
 
 其他的类别：
 
-- `Bail`：当有返回值时，就不会执行后续的事件触发了；
+- `Bail`：当有返回值时（返回值不为 `undefined` 时），就不会执行后续的事件触发了；
 - `Loop`：当返回值为 `true`，就会反复执行该事件；当返回值为 `undefined` 或者不返回内容，就退出事件；
 - `Waterfall`：当返回值不为 `undefined` 时，会将这次返回的结果，作为下次事件的第一个参数；
 - `Parallel`：并行，会同时处理 hook，再执行下一次事件处理回调；
@@ -919,4 +919,3 @@ setTimeout(() => {
 // 再 3s 后打印：event2 事件监听执行了: zzt 18
 // 所有任务都执行完成~
 ```
-

@@ -452,7 +452,7 @@ glob 的匹配规则如下：
 
 在任务中，使用 gulp 生态中，babel，terser 相关插件；
 
-gulp 插件的使用，更多插件见[官网](https://gulpjs.com/plugins)；
+gulp 插件的使用，更多插件见[官方文档](https://gulpjs.com/plugins)；
 
 安装 *gulp-babel* 插件。它本身依赖 babel，要安装 *@babel/core*
 
@@ -526,4 +526,3 @@ module.exports = {
 ```shell
 npx gulp jsTask
 ```
-

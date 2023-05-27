@@ -1,4 +1,4 @@
-# Gulp打包文件 & Rollup基本使用
+# Gulp 打包文件 & Rollup 基本使用
 
 ## 一、gulp 文件监听
 
@@ -20,7 +20,7 @@ const jsTask = () => {
     .pipe(dest("./dist"))
 }
 
-// watch 函数监听内容的改变
+// watch 函数监听打包内容的改变
 watch("./src/**/*.js", jsTask)
 
 module.exports = {
@@ -30,7 +30,9 @@ module.exports = {
 
 ## 二、gulp 项目构建
 
-编写一个案例，使用 gulp，来开启本地服务和打包：
+使用 gulp，编写一个案例，来开启本地服务和打包：
+
+更多插件见[官方文档](https://gulpjs.com/plugins)；
 
 1.打包 html 文件；
 
@@ -70,7 +72,7 @@ pnpm add gulp-less -D
 pnpm add gulp-inject -D
 ```
 
-要求在 html 模板文件中，使用特殊注释标识。
+要在 html 模板文件中，使用特殊注释标识。
 
 demo-project\23_gulp-gulp的项目构建\src\index.html
 
@@ -187,67 +189,67 @@ module.exports = {
 
 ### 1.与 webpack 对比
 
-我们发现 Rollup 的定义、定位，和 webpack 非常的相似：
+我们发现 Rollup 的定义、定位，与 webpack 非常的相似：
 
-打包模块化的区别
+打包模块化的区别：
 
-- rollup 也是一个模块化的打包工具，但 Rollup 主要针对 ES Module 进行打包；
-- webpack 可对各种模块化规范进行打包。
+- rollup 也是一个模块化的打包工具，但 Rollup 主要针对 ESModule 模块化规范进行打包；
+- webpack 默认支持对各种模块化规范，进行打包。
 
-打包文件的区别
+打包文件的区别：
 
 - rollup 更专注于处理 JS 代码（当然也可以处理 css、font、vue 等文件）；
 - webpack 可以通过 loader，处理各种各样的文件，以及处理它们的依赖关系；
 
 思想理念的区别：
 
-- rollup 的配置和理念，相对于 webpack 来说，更加的简洁和容易理解；
+- rollup 的配置和理念，相对于 webpack 来说，更简洁、容易理解；
 
 早期 webpack 不支持 tree shaking 时，rollup 具备更强的优势；
 
 webpack 和 rollup，分别应用在什么场景？
 
-- webpack 通常用于实际项目开发过程中；
-  - 比如 react、angular 项目都是基于 webpack 的）；
+- webpack 通常用于实际的项目开发中；
+  - 比如 react、angular 的脚手架，都是基于 webpack 的）；
 - rollup 通常用于对库文件进行打包。
   - 比如 vue、react、dayjs 源码，本身都是基于 rollup 打包的；
-  - 比如 Vite 底层使用 rollup；
+  - 比如 Vite 底层基于 rollup 打包；
 
 ## 四、rollup 基本使用
 
-安装 rollup
+安装 *rollup*：
 
 ```shell
 pnpm add rollup -D
 ```
 
-使用 rollup 命令打包，要指定要应用的环境，比如：
+使用 rollup 命令，进行打包，要指定法打包宝文件，应用的环境，比如：
 
-打包后的文件，要勇于 node 环境，就要支持 CommonJS，配置参数 `-f cjs`：
+打包后的文件，要用于 node 环境，就要支持 CommonJS；配置参数 `-f cjs`：
 
 ```shell
 # 打包 CommonJS 的库
 npx rollup ./src/main.js -f cjs -o dist/bundle.js
 ```
 
-打包后的文件，要勇于 browser 环境，就要有全局对象，配置参数 `-f iife`，最好使用 `--name` 指定名字。
+打包后的文件，要用于浏览器环境，就要有全局对象，配置参数 `-f iife`，最好使用 `--name` 指定名字。
 
-- 像 *jQuery* 中，就是 `$`；
-- 像 *dayjs* 中，就是 `dayjs`。
+- 比如：*jQuery* 中，就是 `$`；
+- 比如：*dayjs* 中，就是 `dayjs`。
 
 ```shell
 # 打包浏览器的库
 npx rollup ./src/main.js -f iife --name mathUtil -o dist/bundle.js
 ```
 
-打包后的文件，要勇于 AMD 环境，配置参数 `-f amd`。
+打包后的文件，要用于 AMD 环境，配置参数 `-f amd`。
 
 ```shell
 # 打包AMD的库
 npx rollup ./src/main.js -f amd -o dist/bundle.js
 ```
 
-打包后的文件，在所有环境，都要支持，配置参数 `-f umd`，还要 `--name` 指定名字。
+打包后的文件，要在所有环境适配，配置参数 `-f umd`，还要 `--name` 指定名字。
 
 ```shell
 # 打包通用的库（必须跟上 name）
@@ -258,7 +260,7 @@ npx rollup ./src/main.js -f umd --name mathUtil -o dist/bundle.js
 
 rollup 的配置文件名称为：`rollup.config.js`：
 
-在配置文件中，对文件进行分别打包，打包出在不同环境下使用的库文件（用户可以根据不同的需求来引入）：
+在配置文件中，进行配置，打包出在不同环境下使用的库文件（用户可以根据不同的需求来引入）：
 
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 
@@ -290,7 +292,7 @@ module.exports = {
 }
 ```
 
-运行命令，根据配置文件打包
+执行命令，根据配置文件打包：
 
 ```shell
 npx rollup -c
@@ -298,9 +300,9 @@ npx rollup -c
 
 ### 1.处理 commonjs 模块
 
-当代码中使用了 *loadash* 时，没有被打包进源代码；
+比如，当代码中使用了 *loadash* 库时，该库没有被打包进源代码；
 
-因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下只会处理 es module；
+因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 es module；
 
 要解决类似于使用 commonjs 引入第三方库问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
 
@@ -312,7 +314,7 @@ pnpm add @rollup/plugin-commonjs -D
 
 ### 2.处理 node_modules 中的模块
 
-lodash 不仅使用的是 commonjs 规范，还是需要从 node_modules 中，引入的第三方库。
+*lodash* 不仅使用的是 commonjs 规范，还是需要从 node_modules 中，引入的第三方库。
 
 所以仍然不会被打包，
 
@@ -338,7 +340,7 @@ module.exports = {
   // 出口
   output: {
     format: "umd",
-    name: "whyUtils",
+    name: "zztUtils",
     file: "./build/bundle.umd.js",
     globals: {
       lodash: "_"
@@ -359,14 +361,14 @@ npx rollup -c
 
 ### 3.排除第三方包
 
-事实上，并不需要打包 lodash 代码，而是让用户自己安装。
+事实上，并不需要打包 lodash 代码，而是要让用户自己安装。
 
 在配置文件中配置：打包时，排除 *lodash*。
 
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 
 ```js
-// 默认lodash没有被打包是因为它使用commonjs, rollup默认情况下只会处理es module
+// 默认 lodash 没有被打包是因为它使用 commonjs, rollup 默认情况下只会处理 es module
 const commonjs = require('@rollup/plugin-commonjs')
 const nodeResolve = require('@rollup/plugin-node-resolve')
 
@@ -376,7 +378,7 @@ module.exports = {
   // 出口
   output: {
     format: "umd",
-    name: "whyUtils",
+    name: "zztUtils",
     file: "./build/bundle.umd.js",
     globals: {
       lodash: "_"
@@ -434,7 +436,7 @@ module.exports = {
   // 出口
   output: {
     format: "umd",
-    name: "whyUtils",
+    name: "zztUtils",
     file: "./build/bundle.umd.js",
     globals: {
       lodash: "_"
@@ -477,7 +479,7 @@ module.exports = {
   // 出口
   output: {
     format: "umd",
-    name: "whyUtils",
+    name: "zztUtils",
     file: "./build/bundle.umd.js",
     globals: {
       lodash: "_"

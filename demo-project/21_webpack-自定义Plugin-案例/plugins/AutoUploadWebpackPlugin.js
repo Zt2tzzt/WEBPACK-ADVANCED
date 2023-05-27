@@ -1,5 +1,4 @@
 const { NodeSSH } = require('node-ssh')
-const { PASSWORD } = require('./config')
 
 class AutoUploadWebpackPlugin {
   constructor(options) {

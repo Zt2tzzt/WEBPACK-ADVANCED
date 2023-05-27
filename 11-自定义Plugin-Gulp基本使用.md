@@ -16,7 +16,7 @@ CompressionPlugin
 
 1. 在 `webpack` 函数的 `createCompiler` 方法中，注册了所有的插件；
 2. 在注册插件时，会调用插件函数，或者插件对象的 `apply` 方法；
-3. 它们会接收 `compiler` 对象，通过它来注册 Hook 的事件；
+3. 它们会接收 `compiler` 对象，通过它，来注册 Hook 的事件；
 4. 某些插件，也会传入一个 `compilation` 对象，也可通过它来注册 Hook 事件；
 
 它们是如何注册到 webpack 生命周期中的？
@@ -105,7 +105,6 @@ demo-project\21_webpack-自定义Plugin-案例\plugins\AutoUploadWebpackPlugin.j
 
 ```js
 const { NodeSSH } = require('node-ssh')
-const { PASSWORD } = require('./config')
 
 class AutoUploadWebpackPlugin {
   constructor(options) {
@@ -115,7 +114,7 @@ class AutoUploadWebpackPlugin {
 
   apply(compiler) {
     // 完成的事情: 注册 hooks 监听事件
-    // 等到 assets 已经输出到 output 目录中, 完成自动上传的功能
+    // 等到 assets 已经输出到 output 目录中（触发 afterEmit 事件时）, 完成自动上传的功能
     compiler.hooks.afterEmit.tapAsync("AutoPlugin", async (compilation, callback) => {
       // 1.获取输出文件夹路径(其中资源)
       const outputPath = compilation.outputOptions.path
@@ -130,7 +129,7 @@ class AutoUploadWebpackPlugin {
       // 4.将文件夹中资源上传到服务器中
       await this.uploadFiles(outputPath, remotePath)
 
-      // 5.关闭ssh连接
+      // 5.关闭 ssh 连接
       this.ssh.dispose()
 
       // 完成所有的操作后, 调用callback()
@@ -213,11 +212,11 @@ webpack 的核心理念是：“module bundler”
 
 - webpack 是一个模块化的打包工具；
 - 可以使用各种各样的 loader 来加载不同的模块；
-- 可以使用各种各样的 plugin，在 webpack 打包的生命周期完成其他的任务；
+- 可以使用各种各样的 plugin，在 webpack 打包的生命周期，完成其他的任务；
 
 gulp 相对于 webpack 的优缺点：
 
-- gulp 相对于 webpack，思想更加的单、易用，更适合编写一些自动化的任务；
+- gulp 相对于 webpack，思想更加简单、易用，更适合编写一些自动化的任务；
 - gulp 默认不支持模块化；
   - 目前大型项目（如 Vue、React、Angular），并不会使用 gulp 来构建；
   - 正在慢慢地退出历史舞台。
@@ -260,7 +259,7 @@ module.exports = {
 }
 ```
 
-如下是 gulp 4 之前创建任务的方式；现在也支持，但已经越来越少使用。
+如下是 gulp 4 之前，创建任务的方式；现在也支持，但已经越来越少使用。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -314,11 +313,9 @@ npx gulp
 
 ### 2.任务组合
 
-通常一个函数中，能完成的任务，是有限的；
+通常一个函数中，能完成的任务，是有限的；所有的任务逻辑，都放到一个函数中，也不方便代码的维护；
 
-所有任务逻辑，都放到一个函数中，也不方便代码的维护；
-
-所以一般会将任务进行组合。
+所以，一般会将任务进行组合。
 
 gulp 提供了两个组合的方法：
 
@@ -402,9 +399,9 @@ gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件
 
 - 它将所有匹配的文件，读取到内存中，并通过流（Stream）进行处理；
 
-- 由 src() 产生的流（stream）应当从任务（task 函数）中，返回并发出异步完成的信号；
+- 由 `src()` 产生的流（stream）应当从任务（task 函数）中，返回并发出异步完成的信号；
 
-`dest` 方法，接受一个输出目录作为参数，并且它还会产生一个 Node 中的可写流(stream)。
+`dest` 方法，接受一个输出目录作为参数，并且它还会产生一个 Node 中的**可写流**。
 
 - 通过该流，将内容输出到文件中；
 
@@ -412,11 +409,11 @@ gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件
 
 `pipe` 方法，接受一个转换流（Transform streams）或可写流（Writable streams）；
 
-那么转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
+转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
 
 :egg: 案例理解：
 
-讲文件拷贝到指定路径：
+将文件拷贝到指定路径：
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -439,12 +436,12 @@ module.exports = {
 
 `src` 方法接受一个 glob 字符串，或由多个 glob 字符串组成的数组，作为参数；用于确定哪些文件需要被操作。
 
-glob 或 glob 数组，必须至少匹配到一个匹配项，否则 src() 将报错；
+glob 或 glob 数组，必须至少匹配到一个匹配项，否则 `src()` 将报错；
 
 glob 的匹配规则如下：
 
-- 一个*：表示在一个字符串中，匹配任意数量的字符，包括零个匹配；如 `"*.js"`
-- 两个**：表示在多个字符串匹配中，匹配任意数量的字符串，通常用在匹配目录下的文件；如 `"./src/**/*.js"`
+- “*”：表示在一个字符串中，匹配任意数量的字符，包括零个匹配；如 `"*.js"`
+- “**”：表示在多个字符串匹配中，匹配任意数量的字符串，通常用在匹配目录下的文件；如 `"./src/**/*.js"`
 - 取反!：
   - 由于 glob 匹配时，是按照每个 glob 在数组中的位置，依次进行匹配操作的；
   - 所以 glob 数组中的取反（negative）glob 必须跟在一个非取反（non-negative）的 glob 后面；
@@ -455,9 +452,9 @@ glob 的匹配规则如下：
 
 在任务中，使用 gulp 生态中，babel，terser 相关插件；
 
-gulp 插件的使用，去[官网](https://gulpjs.com/plugins)找插件；
+gulp 插件的使用，更多插件见[官网](https://gulpjs.com/plugins)；
 
-安装 *gulp-babel* 插件。它本身依赖 babel，再安装 *@babel/core*
+安装 *gulp-babel* 插件。它本身依赖 babel，要安装 *@babel/core*
 
 ```shell
 pnpm add @babel/core gulp-babel -D
@@ -489,6 +486,14 @@ module.exports = {
 }
 ```
 
+demo-project\22_gulp-gulp的基本使用\babel.config.js
+
+```js
+module.exports = {
+  presets: ["@babel/preset-env"]
+}
+```
+
 安装 *gulp-terser* 插件。
 
 ```shell
@@ -515,3 +520,10 @@ module.exports = {
   jsTask
 }
 ```
+
+执行命令：
+
+```shell
+npx gulp jsTask
+```
+

@@ -13,7 +13,7 @@
 
 webpack 的性能优化较多，主要有两种分类：
 
-- 优化一：**打包后的结果**（重点），上线时的性能优化；
+- 优化一：**打包后的结果**（重点），主要指上线时的性能优化；
   - 比如：分包处理、减小包体积、CDN 服务器、压缩丑化，tree shaking...
 - 优化二：**优化打包速度**，开发或者构建时，优化打包速度；
   - 比如：exclude、cache-loader...
@@ -28,14 +28,14 @@ webpack 的性能优化较多，主要有两种分类：
 
 ## 二、代码分离是什么？
 
-默认情况下，所有的 JavaScript 代码，都被打包到了一个 bundle.js 文件中，如：
+默认情况下，所有的 JS 代码，都被打包到了一个 bundle.js 文件中，如：
 
 - 模块化的业务代码；
 - 第三方依赖；
 - 暂时没有用到的模块；
 - ...
 
-此时，浏览器在加载首页时，会一次性加载所有代码，会影响首屏渲染速度，用户长时间看到的是空白页面。
+此时，浏览器在加载首页时，会一次性地加载所有代码，影响首屏渲染速度，用户可能长时间看到的是空白页面。
 
 **代码分离（Code Splitting）**，是 webpack 一个非常重要的特性：
 
@@ -52,13 +52,13 @@ webpack 的性能优化较多，主要有两种分类：
 
 Webpack 中常用的代码分离有三种方式：
 
-- 多入口：使用 `entry` 配置手动分离代码；
+- 方式一：多入口：使用 `entry` 配置手动分离代码；
 
   - 防止重复：使用 Entry Dependencies 或者 SplitChunksPlugin 去重和分离代码；
 
-- 动态导入：通过模块的内联函数（`import`）调用，来分离代码；
+- 方式二：动态导入：通过模块的内置函数（`import`）调用，来分离代码；
 
-- 自定义分包：使用 splitChunk 配置，打包第三方依赖。
+- 方式三：自定义分包：使用 splitChunk 配置，打包第三方依赖。
 
 除此之外，还有如下方式：
 
@@ -67,7 +67,7 @@ Webpack 中常用的代码分离有三种方式：
 
 ## 三、多入口（了解）
 
-webpack 默认从一个入口开始打包，形成一个依赖图。
+webpack 默认从一个入口（`./src/index.jS`）开始打包，形成一个依赖图。
 
 如果需要有多入口，每个入口分别有自己的代码逻辑，可在 webpack 配置多入口。
 
@@ -175,7 +175,7 @@ module.exports = {
 webpack 提供了两种实现动态导入的方式：
 
 - 第一种，使用 ECMAScript 中的 `import` 函数，是目前推荐的方式；
-- 第二种，使用 webpack 遗留的 `require.ensure`，已经不推荐使用（也是 Vue2 中遗留的方式）；
+- 第二种，使用 webpack 遗留的 `require.ensure`，已不推荐使用（也是 Vue2 中遗留的方式）；
 
 比如有一个模块 bar.js：
 
@@ -286,7 +286,7 @@ module.exports = {
 `maxSize`：
 
 - 将大于 maxSize 的包，拆分为不小于 minSize 的包；
-- 有时，拆分的包，可能还是会大于 maxSize，因为如果一个函数的代码大小，大于该最大值，是没法再拆分的。
+- 有时，拆分的包，可能还是会大于 maxSize，因为如果一个函数的代码大小，就大于该最大值，是没法再拆分的。
 
 `cacheGroups`：
 
@@ -295,7 +295,9 @@ module.exports = {
 - `name` 属性：拆分包的 name 属性；
 - `filename` 属性：拆分包的名称，可以使用 placeholder 属性；
 
-cacheGroups 匹配 utils 目录下的包；匹配 node_module 目录下的包，匹配 `\/`。
+`cacheGroups` 匹配 `utils` 目录下的包；匹配 `node_module` 目录下的包，
+
+- 为适配 Windows 系统，使用 `\/` 匹配。
 
 demo-project\07_webpack 分包-自定义分包\webpack.config.js
 
@@ -357,7 +359,7 @@ module.exports = {
 }
 ```
 
-> 使用 pnpmn 时，找不到 terser-webpack-plugin 包，重新安装一下。
+> 使用 pnpm 时，找不到 terser-webpack-plugin 包，重新安装一下。
 >
 > ```shell
 > pnpm add terser-webpack-plugin -D

@@ -394,7 +394,7 @@ module.exports = {
 
 ## 六、rollup 插件
 
-rollup 中，好用的插件，参考[官方文档](https://github.com/rollup/awesome)
+rollup 中，最核心的概念，就是插件，更多插件参考[官方文档](https://github.com/rollup/awesome)
 
 ### 1.babel 转换代码
 

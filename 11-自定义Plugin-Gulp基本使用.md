@@ -2,6 +2,8 @@
 
 ## 一、Plugins 回顾
 
+回顾以前用过的插件：
+
 CleanWebpackPlugin
 
 HTMLWebpackPlugin
@@ -48,7 +50,7 @@ for (const plugin of options.plugins) {
 
 1.创建 `AutoUploadWebpackPlugin` 类；
 
-2.编写 `apply` 方法：
+2.编写 `apply` 方法，在其中：
 
 - 通过 ssh 连接服务器；
 - 删除服务器原来的文件夹；
@@ -90,7 +92,7 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 1. 动态获取输出文件夹路径；
 2. 使用 SSH 连接远程服务器，要用到一个库 *node-ssh*；
 3. 将文件夹中资源上传到服务器中；
-4. 销毁 ssh 连接；
+4. 完成后销毁 ssh 连接；
 5. 完成所有操作后，调用 `callback`。
 
 编写自己的 plugin。为 plugin 传入参数。
@@ -163,7 +165,7 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 
 > 服务器上，一般使用 nginx 进行了一些配置；
 
-在 `webpac.config.js` 中，进行如下配置：
+在 `webpac.config.js` 中，进行如下配置，为 `AutoUploadWebpackPlugin` 传参：
 
 demo-project\21_webpack-自定义Plugin-案例\webpack.config.js
 
@@ -216,7 +218,7 @@ webpack 的核心理念是：“module bundler”
 
 gulp 相对于 webpack 的优缺点：
 
-- gulp 相对于 webpack，思想更加简单、易用，更适合编写一些自动化的任务；
+- gulp 相对于 webpack，思想更加简单、易用，更适合编写一些**自动化**的任务；
 - gulp 默认不支持模块化；
   - 目前大型项目（如 Vue、React、Angular），并不会使用 gulp 来构建；
   - 正在慢慢地退出历史舞台。
@@ -284,6 +286,7 @@ npx gulp foo
 每个 gulp 任务都是一个异步的 JavaScript 函数：
 
 - 此函数接受一个 `callback` 作为参数，调用 `callback` 函数，那么任务会结束；
+  - 官方文档中写作 `cb`，按照该规范，编写时也写作 `cb`;
 - 返回一个 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
 
 任务可以是 public、private 类型的：
@@ -395,7 +398,7 @@ foo3 task exec~
 
 gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件。
 
-`src` 方法，接受一个读取目录作为参数，并从文件系统中，读取文件然后生成一个 Node 中的流（Stream）。
+`src` 方法，接受一个读取目录作为参数，并从文件系统（fs）中，读取文件，然后生成一个 Node 中的流（Stream）。
 
 - 它将所有匹配的文件，读取到内存中，并通过流（Stream）进行处理；
 

@@ -4,7 +4,7 @@
 
 gulp api 中的 `watch()` 方法。
 
-利用文件系统的监控程序（file system watcher），将发生的更改与任务执行进行关联。
+利用文件系统（fs）的监控程序（file system watcher），将发生的更改与 gulp 任务执行进行关联。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -185,7 +185,7 @@ module.exports = {
 官方对 rollup 的定义：
 
 - “Rollup is a module bundler for JavaScript which compiles small pieces of code into something larger and more complex, such as a library or application”.
-- Rollup 是一个 JavaScript 的模块化打包工具，可以将小的代码片段，编译到一个大的、复杂的代码中（模块化的概念），比如一个打包库或者一个应用程序；
+- Rollup 是一个 JS 的模块化打包工具，可以将小的代码片段，编译到一个大的、复杂的代码中（模块化的概念），比如一个打包库或者一个应用程序；
 
 ### 1.与 webpack 对比
 
@@ -193,12 +193,12 @@ module.exports = {
 
 打包模块化的区别：
 
-- rollup 也是一个模块化的打包工具，但 Rollup 主要针对 ESModule 模块化规范进行打包；
+- rollup 也是一个模块化的打包工具，但 Rollup 主要针对 **ESModule 模块化规范**进行打包；
 - webpack 默认支持对各种模块化规范，进行打包。
 
 打包文件的区别：
 
-- rollup 更专注于处理 JS 代码（当然也可以处理 css、font、vue 等文件）；
+- rollup 更**专注于处理 JS** 代码（当然也可以处理 css、font、vue 等文件）；
 - webpack 可以通过 loader，处理各种各样的文件，以及处理它们的依赖关系；
 
 思想理念的区别：
@@ -211,8 +211,8 @@ webpack 和 rollup，分别应用在什么场景？
 
 - webpack 通常用于实际的项目开发中；
   - 比如 react、angular 的脚手架，都是基于 webpack 的）；
-- rollup 通常用于对库文件进行打包。
-  - 比如 vue、react、dayjs 源码，本身都是基于 rollup 打包的；
+- rollup 通常用于对**库文件**进行打包。
+  - 比如 vue、react、dayjs 源码，都是基于 rollup 打包的；
   - 比如 Vite 底层基于 rollup 打包；
 
 ## 四、rollup 基本使用
@@ -223,7 +223,7 @@ webpack 和 rollup，分别应用在什么场景？
 pnpm add rollup -D
 ```
 
-使用 rollup 命令，进行打包，要指定法打包宝文件，应用的环境，比如：
+使用 rollup 命令，进行打包，要指定打包文件，应用的环境，比如：
 
 打包后的文件，要用于 node 环境，就要支持 CommonJS；配置参数 `-f cjs`：
 
@@ -302,7 +302,7 @@ npx rollup -c
 
 比如，当代码中使用了 *loadash* 库时，该库没有被打包进源代码；
 
-因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 es module；
+因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 ESModule；
 
 要解决类似于使用 commonjs 引入第三方库问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
 
@@ -314,7 +314,7 @@ pnpm add @rollup/plugin-commonjs -D
 
 ### 2.处理 node_modules 中的模块
 
-*lodash* 不仅使用的是 commonjs 规范，还是需要从 node_modules 中，引入的第三方库。
+*lodash* 不仅使用的是 commonjs 规范，还需要从 node_modules 中，引入。
 
 所以仍然不会被打包，
 
@@ -330,7 +330,7 @@ demo-project\24_rollup-rollup的库打包\rollup.config.js
 
 ```js
 // 默认 lodash 没有被打包，是因为它使用 commonjs；
-// rollup 默认情况下，只会处理 es module
+// rollup 默认情况下，只会处理 ESModule
 const commonjs = require('@rollup/plugin-commonjs')
 const nodeResolve = require('@rollup/plugin-node-resolve')
 
@@ -361,7 +361,7 @@ npx rollup -c
 
 ### 3.排除第三方包
 
-事实上，并不需要打包 lodash 代码，而是要让用户自己安装。
+事实上，作为一个库，并不需要打包 lodash 的代码，而是要让用户自己安装。
 
 在配置文件中配置：打包时，排除 *lodash*。
 

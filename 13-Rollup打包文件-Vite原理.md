@@ -495,24 +495,28 @@ npm install vite –g npm install vite -d
 npx vite
 ```
 
-开发阶段，使用 vite，开启服务
+开发阶段，使用 vite，开启服务，主要做了三件事：
 
+- 引入文件时，自动添加后缀名；
 
-可去掉引入文件的后缀名。
+- 将要引入的第三方模块，放到一个文件中，以便浏览器一次性请求下来。
 
-可修改引入 lodash 的路径，vite 会将要加载的文件，放到一个文件中，以便浏览器一次性请求下来。
+  - 比如在浏览器中，加载的 lodash-es  模块，都在一个文件里。
 
-可在项目中直接引入 ts 代码。
+  - 但要修改引入 lodash-es 的方式，如下。
 
+    ```js
+    import _ from 'lodash-es'
+    ```
 
+- 转换 ts、jsx...特殊语法，
+  - 比如：可在项目中直接引入 ts 代码。
 
-vite 会开启一个服务器，使用 connect 库，更适合请求的转发（早期用的 koa）
+vite 会开启一个服务器，底层使用 *connect* 库，更适合请求的转发（早期用的 koa）
 
 开发阶段，vite 开启的服务器，会去读取 ts 代码，通过 esbuild，直接转成 js 代码（但名称还是 xxx.tx）
 
----
-
-vite 对 css 的支持。
+## 六、vite 支持 css
 
 编写 css，在项目中引入。
 

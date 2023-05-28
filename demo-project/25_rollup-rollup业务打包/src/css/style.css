@@ -1,0 +1,8 @@
+body {
+  background-color: skyblue;
+}
+
+.title {
+  color: red;
+  user-select: none;
+}

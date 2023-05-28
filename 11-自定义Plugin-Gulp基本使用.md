@@ -198,7 +198,7 @@ module.exports = {
 
 官方定义：A toolkit to automate & enhance your workflow；
 
-一个帮你增强工作流的自动化工具包；
+一个帮你增强工作流的**自动化工具包**；
 
 学好 webpack，其它打包工具，都很简单；
 

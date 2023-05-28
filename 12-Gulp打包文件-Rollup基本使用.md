@@ -187,6 +187,8 @@ module.exports = {
 - “Rollup is a module bundler for JavaScript which compiles small pieces of code into something larger and more complex, such as a library or application”.
 - Rollup 是一个 JS 的模块化打包工具，可以将小的代码片段，编译到一个大的、复杂的代码中（模块化的概念），比如一个打包库或者一个应用程序；
 
+rollup 通常作为**库打包工具**
+
 ### 1.与 webpack 对比
 
 我们发现 Rollup 的定义、定位，与 webpack 非常的相似：

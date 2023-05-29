@@ -510,6 +510,7 @@ npx vite
     ```
 
 - 转换 ts、jsx...特殊语法，
+
   - 比如：可在项目中直接引入 ts 代码。
 
 vite 会开启一个服务器，底层使用 *connect* 库，更适合请求的转发（早期用的 koa）
@@ -518,53 +519,255 @@ vite 会开启一个服务器，底层使用 *connect* 库，更适合请求的�
 
 ## 六、vite 支持 css
 
-编写 css，在项目中引入。
+vite 默认支持 css 的处理，直接在项目中导入 css 即可；
 
-编写 less，在项目中引入。编写一些 dom 操作。
+vite 也默认支持 css 预处理器，比如 less；直接在项目中导入 less 即可；
 
-安装 less 工具（虽然 vite 可自动解析 less，但需要 less 工具），
+- vite 可自动解析 less，但要安装 *less* 编译器；
 
-同理，安装 postcss，postcss-preset-env 去处理 css 文件。
+```shell
+pnpm add less -D
+```
 
-配置 postcss.config.js 中；加上浏览器前缀
+vite 默认支持 postcss 的转换：
 
----
+- 但要安装 *postcss* 和 *postcss-preset-env* 去处理 css 文件
 
-vite 对 ts 的支持
+```shell
+pnpm add postcss postcss-preset-env -D
+```
 
-原生支持，开发阶段，直接使用 esbuild 编译。生产环境，还是用 babel 转换的。
+配置 `postcss.config.js`，加上浏览器前缀；
 
----
+demo-project\26_vite-vite工具的使用\postcss.config.js
 
-vite 对 vue 的支持。
+```js
+module.exports = {
+  plugins: [require("postcss-preset-env")]
+}
+```
 
-安装对应的插件。
+编写 css
 
-在 vite.config.js  中，进行配置。可直接使用 `export default` 这样的 es6 语法，vite 默认支持。
+demo-project\26_vite-vite工具的使用\src\css\style.css
 
-在其中，使用 defineConfig 函数，有更好的提示。
+```css
+body {
+  background-color: skyblue;
+}
+```
 
----
+编写 less
 
-vite 对 react 的支持。
+demo-project\26_vite-vite工具的使用\src\css\normal.less
 
-安装 react、react-dom，编写 react 代码。
+```less
+@mainColor: red;
+@mainSize: 20px;
 
-同样地，jsx, tsx，开发阶段，直接使用 esbuild 编译。生产环境，还是用 babel 转换的。
+.title {
+  font-size: @mainSize;
+  color: @mainColor;
 
----
+  user-select: none;
+}
+```
 
-vite 项目打包。
+在项目中引入 css、less；编写一些 dom 操作。
 
----
+demo-project\26_vite-vite工具的使用\src\main.jsx
 
-vite 脚手架
+```js
+import "./css/style.css"
+import "./css/normal.less"
 
-创建项目 27-...
+// DOM操作
+const titleEl = document.createElement("h2")
+titleEl.textContent = "你好啊, 李银河!"
+titleEl.className = "title"
+document.body.append(titleEl)
+```
+
+## 七、vite 支持 ts
+
+vite 对 TypeScript 是原生支持的：
+
+- 开发阶段会直接使用 ESBuild 来完成编译：在项目中直接引入即可；
+- 生产环境，还是用 rollup 进行打包，用 babel 进行编译的
+
+开发阶段，查看浏览器中的请求，会发现请求的依然是后缀名为 “.ts” 的文件：
+
+这是因为 vite 中的服务器 Connect，会对请求进行转发；获取 ts 编译后的代码，返回给浏览器，浏览器可以直接进行解析；
+
+> 注意：在 vite2 中，已经不再使用 Koa 了，而是使用 Connect 来搭建的本地服务器。
+
+demo-project\26_vite-vite工具的使用\src\ts\format.ts
+
+```typescript
+export function formatPrice(price: number): string {
+  return "¥" + price
+}
+```
+
+demo-project\26_vite-vite工具的使用\src\main.jsx
+
+```js
+import { formatPrice } from './ts/format'
+
+// ts的代码
+console.log(formatPrice(10000))
+```
+
+## 八、vite 支持 vue
+
+vite 对 vue 提供第一优先级支持：
+
+- Vue 3 单文件组件支持：安装 *@vitejs/plugin-vue* 插件。
+- Vue 3 JSX 支持：安装 *@vitejs/plugin-vue-jsx* 插件。
+- Vue 2 支持：安装 *underfin/vite-plugin-vue2* 插件。
+
+现在一般使用 vue3，安装如下插件：
+
+```shell
+pnpm add @vitejs/plugin-vue -D
+```
+
+在 `vite.config.js` 中配置插件：
+
+- 可直接使用 `export default` 这样的 ESModule 语法，vite 默认支持。
+- 使用 `defineConfig` 函数，有更好的提示。
+
+demo-project\26_vite-vite工具的使用\vite.config.js
+
+```js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [
+    vue()
+  ]
+})
+```
+
+demo-project\26_vite-vite工具的使用\src\vue\App.vue
+
+```vue
+<template>
+  <div class="app">
+    <h2>App计数器: {{ count }}</h2>
+    <button @click="increment">+1</button>
+    <button @click="decrement">-1</button>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(100)
+function increment() {
+  count.value++
+}
+function decrement() {
+  count.value--
+}
+</script>
+
+<style scoped>
+</style>
+```
+
+demo-project\26_vite-vite工具的使用\src\main.jsx
+
+```js
+import VueApp from './vue/App.vue'
+
+// Vue代码渲染
+const app = createApp(VueApp)
+app.mount(document.querySelector("#app"))
+```
+
+## 九、vite 支持 react
+
+vite 默认支持对 .jsx 和 .tsx 文件的处理，同样开箱即用，同样的：
+
+- 开发阶段，通过 ESBuild 来完成的编译：
+- 生产环境，用 rollup 进行打包，用 babel 进行编译的
+
+所以，直接在项目中引入 react 的代码即可；
+
+将 `main.js` 的后缀名，修改为 `.jsx`；
+
+安装 *react*、*react-dom*；
+
+```shell
+pnpm add react react-dom
+```
+
+编写 react 代码。
+
+demo-project\26_vite-vite工具的使用\src\react\App.jsx
+
+```jsx
+import React, { useState } from 'react'
+
+function App() {
+  const [count, setCount] = useState(100)
+
+  return (
+    <div className="app">
+      <h2>React App计数器: {count}</h2>
+      <button onClick={e => setCount(count+1)}>+1</button>
+      <button onClick={e => setCount(count-1)}>-1</button>
+    </div>
+  )
+}
+
+export default App
+```
+
+demo-project\26_vite-vite工具的使用\src\main.jsx
+
+```js
+import ReactApp from './react/App.jsx'
+import React from 'react'
+import ReactDom from 'react-dom/client'
+
+// React 代码渲染
+const root = ReactDom.createRoot(document.querySelector("#root"))
+root.render(<ReactApp />)
+```
+
+## 十、vite 项目打包
+
+打包项目，执行命令：
+
+```shell
+npx vite build
+```
+
+开启一个本地服务来预览打包后的效果，执行命令：
+
+```shell
+npx vite preview
+```
+
+## 十一、vite 脚手架
+
+在开发中，几乎不会使用 vite 从零搭建项目，vite 提供了对应的脚手架工具；
+
+实际上，Vite 提供了两个工具：
+
+- *vite*：相当于是一个构件工具，类似于webpack、rollup；
+- *@vitejs/create-app*：类似 *vue-cli*、*create-react-app*；
+
+使用 vite 脚手架，创建项目：
 
 ```shell
 # 使用 vite 脚手架，创建各种项目
 npm create vite
+yarn create vite
+pnpm create vite
 
 # 使用基于 vite 的 vue 脚手架，创建 vue 项目。
 npm create vue
@@ -572,12 +775,28 @@ npm create vue
 
 更多配置查看官方文档。
 
----
+## 十二、ESBuild 解析
 
-ESBuild 解析。
+ESBuild 的特点：
 
-ESBuild 构建速度了解。
+- 超快的构建速度，并且不需要缓存；
+- 支持 ES6 和 CommonJS 的模块化；
+- 支持 ES6 的 Tree Shaking；
+- 支持 Go、JavaScript 的 API（本身由 Go 编写）；
+- 支持 TypeScript、JSX 等语法编译；
+- 支持 SourceMap；
+- 支持代码压缩；
+- 支持扩展其他插件；
 
-为什么这么快？
+ESBuild 构建速度和其它贡酒对比。
+
+![ESBuild构建速度](NodeAssets/ESBuild构建速度.jpg)
+
+ESBuild 为什么这么快呢？
+
+- 使用 Go 语言编写，可以直接转换成机器代码，而无需经过字节码；
+- ESBuild 可以充分利用 CPU 的多内核，尽可能让它们饱和运行；
+- ESBuild 是从零开始编写的，没有依赖第三方库，从一开始就能够考虑各种性能问题；
+- 等等....
 
 为什么生产环境不用 ESBuild 打包，详见[官方文档](https://cn.vitejs.dev/guide/why.html#why-not-bundle-with-esbuild)。

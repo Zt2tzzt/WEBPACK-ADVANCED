@@ -2,13 +2,13 @@
 
 ## 一、runtime 分包
 
+runtime 相关的代码，指的是：在运行环境中，解析、加载、模块信息的代码；
+
 在 `webpack.config.js` 中，配置 `optimization.runtimeChunk`。
 
 表示 runtime 相关的代码，是否要抽取到一个单独的 chunk 中：
 
-runtime 相关的代码，指的是：在运行环境中，解析、加载、模块信息的代码；
-
-- 比如 component、bar 两个模块，通过 `import` 函数动态导入，就是通过 runtime 代码完成的；
+- 比如 component、bar 两个模块，通过 `import` 函数**动态导入**，就是通过 runtime 代码完成的；
 
 将 runtime 代码抽离出来后，有利于浏览器缓存策略：
 
@@ -41,7 +41,7 @@ module.exports = {
 
 webpack v4.6.0+，增加了对预获取、预加载的支持。
 
-在使用 `import` 函数动态导入时，使用如下内置指令，来告知浏览器：
+在使用 `import` 函数**动态导入**时，使用如下内置指令，来告知浏览器：
 
 - prefetch (预获取)：未来某些导航下可能需要的资源
 - preload (预加载)：当前导航下可能需要资源
@@ -54,7 +54,7 @@ prefetch 与 preload 指令有何不同？
 
 开发时，推荐使用 prefetch。
 
-在代码中，配置 about，category 模块动态加导入时，使用 prefetch，使用魔法注释。
+在代码中，配置 about，category 模块动态加导入时，使用 prefetch，要用魔法注释。
 
 demo-project\07_webpack 分包-自定义分包\src\main.js
 
@@ -139,19 +139,19 @@ demo-project\08_webpack 分包-CDN 服务器\build\index.html
 
 ### 2.第三方库引用 CDN
 
-通常比较知名的开源框架，会将打包后的源码，放到比较知名的，免费的 CDN 服务器上：
+通常比较知名的开源框架、库，会将打包后的源码，放到比较知名的，免费的 CDN 服务器上：
 
 - 国际上知名的 CDN 服务器有：unpkg、JSDelivr、cdnjs；
 - 国内好用的 CDN 服务器有：bootcdn；
 
-在项目中，引入的第三方框架，使用 CDN 服务器上的资源，有两步：
+在项目中，引入的第三方框架、库，使用 CDN 服务器上的资源，有两步：
 
 1. 通过 webpack 配置，来排除第三方库的打包：
 2. 在 html 模块中，自行加入对应的 CDN 服务器地址；
 
 :egg: 案例理解：
 
-比如，项目中使用了 axios、react 两个库。
+比如，项目中使用了 *axios*、*react* 两个库。
 
 demo-project\08_webpack 分包-CDN 服务器\src\main.js
 
@@ -190,6 +190,7 @@ demo-project\08_webpack 分包-CDN 服务器\index.html
   </head>
   <body>
     <div id="root"></div>
+    
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.0/axios.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   </body>
@@ -202,7 +203,7 @@ shimming 是一个概念，是某一类功能的统称，用于**预置全局变
 
 shimming 直译为：垫片；表示给代码填充一些垫片来处理一些问题；
 
-- 比如：项目依赖一个第三方的库，该库本身又依赖 *lodash*，但没有对 *lodash* 进行导入（认为全局存在 lodash），
+- 比如：项目依赖一个第三方的库，该库本身又依赖 *lodash*，但没有对 *lodash* 进行导入（默认认为全局存在 lodash），
 - 那么就要通过 `ProvidePlugin` 来实现 shimming 的效果；
   - key，value 与上面 CDN 的 `externals` 意义相反；
 
@@ -243,9 +244,9 @@ module.exports = {
 }
 ```
 
-> 因为 axios 库的导出方式，要使用 axios.default 获取导出的实例。
+> 因为 axios 库的导出方式，要使用 `axios.default` 获取导出的实例。
 
-Webpack 的理念，是使前端开发更加模块化，不推荐随意的使用 shimming。
+Webpack 的理念，是使前端开发更加模块化，不推荐随意地使用 shimming。
 
 ## 五、css 提取（掌握）
 
@@ -289,7 +290,7 @@ module.exports = {
 
 一般在生产环境下，使用该插件；使用后，就不需要使用 *styled-loader*；
 
-一般在开发环境中使用 *styled-loader*；
+一般在开发环境下，使用 *styled-loader*；
 
 ## 六、placeholder hash
 
@@ -312,7 +313,7 @@ placeholder 中，有几个 hash 相关的占位符，分别是：**hash**、**c
 
 - 比如：`index.js`，引入了一个 `style.css`，打包时，该文件要被抽取到一个独立的 css 文件中；
 - 这个 css 文件在命名时，如果使用的是 `chunkhash`；那么当 `index.js` 文件的内容发生变化时，css 文件的命名，也会发生变化；
-- 这时，使用 contenthash；打包文件名不会改变。
+- 这时，使用 `contenthash`；打包文件名不会改变。
 
 `contentHash` 和 `chunkHash` 的区别，在于**非多入口**的代码分包，名称会有所不同
 

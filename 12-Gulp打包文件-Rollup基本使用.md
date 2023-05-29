@@ -4,7 +4,7 @@
 
 gulp api 中的 `watch()` 方法。
 
-利用文件系统（fs）的监控程序（file system watcher），将发生的更改与 gulp 任务执行进行关联。
+利用文件系统（fs）的监控程序（file system watcher），将要打包内容中，发生的更改，与 gulp 任务执行进行关联。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -32,7 +32,7 @@ module.exports = {
 
 使用 gulp，编写一个案例，来开启本地服务和打包：
 
-更多插件见[官方文档](https://gulpjs.com/plugins)；
+更多 gulp 插件见[官方文档](https://gulpjs.com/plugins)；
 
 1.打包 html 文件；
 
@@ -94,7 +94,7 @@ demo-project\23_gulp-gulp的项目构建\src\index.html
 </html>
 ```
 
-注入时，设置相对路径。
+注入时，设置相对路径 `{ relative: true }`。
 
 6.组合任务，
 
@@ -146,7 +146,7 @@ const lessTask = () => {
     .pipe(dest("./dist"))
 }
 
-// 4.在 html 中注入js和css
+// 4.在 html 中注入 js 和 css
 const injectTask = () => {
   return src('./dist/**/*.html')
     .pipe(inject(src(['./dist/**/*.js', './dist/**/*.css']), { relative: true }))
@@ -185,13 +185,13 @@ module.exports = {
 官方对 rollup 的定义：
 
 - “Rollup is a module bundler for JavaScript which compiles small pieces of code into something larger and more complex, such as a library or application”.
-- Rollup 是一个 JS 的模块化打包工具，可以将小的代码片段，编译到一个大的、复杂的代码中（模块化的概念），比如一个打包库或者一个应用程序；
+- Rollup 是一个 JS 的模块化打包工具，可以将小的代码片段，编译到一个大的、复杂的代码中（模块化的概念），比如一个库或者一个应用程序；
 
 rollup 通常作为**库打包工具**
 
 ### 1.与 webpack 对比
 
-我们发现 Rollup 的定义、定位，与 webpack 非常的相似：
+我们发现 Rollup 的定义、定位，与 webpack 非常相似：
 
 打包模块化的区别：
 
@@ -304,7 +304,7 @@ npx rollup -c
 
 比如，当代码中使用了 *loadash* 库时，该库没有被打包进源代码；
 
-因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 ESModule；
+因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
 
 要解决类似于使用 commonjs 引入第三方库问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
 
@@ -316,7 +316,7 @@ pnpm add @rollup/plugin-commonjs -D
 
 ### 2.处理 node_modules 中的模块
 
-*lodash* 不仅使用的是 commonjs 规范，还需要从 node_modules 中，引入。
+*lodash* 不仅使用的是 commonjs 规范，还需要从 node_modules 中引入。
 
 所以仍然不会被打包，
 
@@ -344,6 +344,7 @@ module.exports = {
     format: "umd",
     name: "zztUtils",
     file: "./build/bundle.umd.js",
+    // 指定全局变量 _ 表示 lodash
     globals: {
       lodash: "_"
     }
@@ -363,7 +364,7 @@ npx rollup -c
 
 ### 3.排除第三方包
 
-事实上，作为一个库，并不需要打包 lodash 的代码，而是要让用户自己安装。
+事实上，作为一个给用户使用的第三方库，并不需要打包 lodash 的代码，而是要让用户自己安装 lodash。
 
 在配置文件中配置：打包时，排除 *lodash*。
 
@@ -408,7 +409,7 @@ rollup 中，最核心的概念，就是插件，更多插件参考[官方文档
 npm install @rollup/plugin-babel @babel/core @babel/preset-env -D
 ```
 
-修改配置文件：配置 `babel.config.js` 文件；
+配置 `babel.config.js` 文件；
 
 demo-project\24_rollup-rollup的库打包\babel.config.js
 
@@ -420,7 +421,7 @@ module.exports = {
 }
 ```
 
-配置 `babelHelpers`，用于添加 polyfill。
+在 `rollup.config.js` 中，配置 `babelHelpers`，用于添加 polyfill。
 
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 
@@ -464,7 +465,7 @@ module.exports = {
 npm install @rollup/plugin-terser -D
 ```
 
-修改配置文件
+在 `rollup.config.js` 中，进行配置：
 
 ```js
 // 默认lodash没有被打包是因为它使用commonjs, rollup默认情况下只会处理es module

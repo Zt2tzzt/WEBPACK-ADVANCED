@@ -35,7 +35,7 @@ webpack 源码非常优秀，但存在大量的回调地狱；
 
 SyncHook、SyncBailHook...等等，源自于 *tapable* 库。
 
-lib\Compiler.js
+lib\Compiler.js G119
 
 ```js
 class Compiler {
@@ -64,14 +64,14 @@ webpack 官方提供了一个库 *tapable*，安装该库，简单的使用；
 npm install tapable -D
 ```
 
-其中的核心代码如下：用于监听事件
+其中的核心代码如下：用于监听事件（后续会详细介绍）；
 
 ```js
 import { AsyncSeriesHook } from 'tapable'
 
 // 1.创建 hook
 this.hook = {
-  run new AsyncSeriesHook(['compiler'])
+  run: new AsyncSeriesHook(['compiler'])
 }
 
 // 2.监听事件
@@ -88,9 +88,9 @@ this.hooks.run.callAsync('abc', () => {
 
 注册插件可传函数、对象。
 
-对象中必须要有 `apply` 方法
+对象中必须要有 `apply` 方法。
 
-lib\webpack.js
+lib\webpack.js G61
 
 ```js
 /**
@@ -154,13 +154,13 @@ compiler 贯穿打包全流程；
 
 之后 compilation 会在编译模块时，创建出来；
 
-再把结果交给 compiler；
-
-再由 compiler 将结果输出。
+再把结果交给 compiler；再由 compiler 将结果输出。
 
 ![webpack整个执行流程解析](NodeAssets/webpack整个执行流程解析.png)
 
 ## 4.run 方法
+
+调用 run 方法，开始执行编译工作。
 
 lib\Compiler.js G517
 
@@ -348,7 +348,9 @@ this.handleModuleCreation(
 
 ## 8.从入口分解模块
 
-在 `this.factorizeModule` 中，因式分解，对入口 `mian.js` 中，引入的模块，进行分解；
+在 `this.factorizeModule` 中，因式分解；
+
+对入口 `mian.js` 中，引入的模块，进行分解；
 
 lib\Compilation.js G1771
 
@@ -562,7 +564,7 @@ _doBuild(options, compilation, resolver, fs, hooks, callback) {
 
 在 `runloader` 方法中，使用 loader 构建模块。
 
-使用了单独的库 loader-runner。
+使用了单独的库 *loader-runner*。
 
 lib\NormalModule.js
 

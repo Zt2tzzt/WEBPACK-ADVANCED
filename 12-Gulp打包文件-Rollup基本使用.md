@@ -4,7 +4,7 @@
 
 gulp api 中的 `watch()` 方法。
 
-利用文件系统（fs）的监控程序（file system watcher），将要打包内容中，发生的更改，与 gulp 任务执行进行关联。
+利用文件系统（fs）的监控程序（file system watcher），将要打包的内容中，发生的更改，与 gulp 任务执行进行关联。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -207,15 +207,15 @@ rollup 通常作为**库打包工具**
 
 - rollup 的配置和理念，相对于 webpack 来说，更简洁、容易理解；
 
-早期 webpack 不支持 tree shaking 时，rollup 具备更强的优势；
+适用场景的区别：
 
-webpack 和 rollup，分别应用在什么场景？
-
-- webpack 通常用于实际的项目开发中；
-  - 比如 react、angular 的脚手架，都是基于 webpack 的）；
 - rollup 通常用于对**库文件**进行打包。
   - 比如 vue、react、dayjs 源码，都是基于 rollup 打包的；
   - 比如 Vite 底层基于 rollup 打包；
+- webpack 通常用于实际的项目开发中；
+  - 比如 react、angular 的脚手架，都是基于 webpack 的）；
+- 早期 webpack 不支持 tree shaking 时，rollup 具备更强的优势；
+
 
 ## 四、rollup 基本使用
 
@@ -401,12 +401,12 @@ rollup 中，最核心的概念，就是插件，更多插件参考[官方文档
 
 ### 1.babel 转换代码
 
-在 rollup 中，将 ES6 转成 ES5 代码，使用 babel。
+在 rollup 中，将 ES6+ 转成 ES5 代码，使用 babel。
 
 安装 rollup 的 babel 插件 *@rollup/plugin-babel*，并安装 *@babel/core*、*@babel/preset-env*：
 
 ```shell
-npm install @rollup/plugin-babel @babel/core @babel/preset-env -D
+pnpm add @rollup/plugin-babel @babel/core @babel/preset-env -D
 ```
 
 配置 `babel.config.js` 文件；

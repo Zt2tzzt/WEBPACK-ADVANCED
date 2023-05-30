@@ -216,7 +216,6 @@ rollup 通常作为**库打包工具**
   - 比如 react、angular 的脚手架，都是基于 webpack 的）；
 - 早期 webpack 不支持 tree shaking 时，rollup 具备更强的优势；
 
-
 ## 四、rollup 基本使用
 
 安装 *rollup*：

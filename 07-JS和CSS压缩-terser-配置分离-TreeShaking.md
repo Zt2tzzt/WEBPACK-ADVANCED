@@ -2,22 +2,19 @@
 
 ## 一、Terser
 
-*Terser* 是一个用于 JavaScript Parser（解析）、Mangler（绞肉机），Compressor（压缩机）的工具集；
+_Terser_ 是一个用于 JavaScript **Parser（解析）**、**Mangler（绞肉机）**，**Compressor（压缩机）**的工具集；
 
 webpack 默认打包的 bumdle，没有进行压缩。
 
-*Terser* 工具，可用于压缩、丑化代码，让 bundle 变得更小。
+_Terser_ 工具，可用于压缩、丑化代码，让 bundle 变得更小。
 
-*uglify-js* 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
+_uglify-js_ 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
 
-*Terser* 从 *uglify-es* 库 fork 过来，并且保留它原来的大部分 API 并适配 *uglify-es*、*uglify-js@3* 等；
+_Terser_ 从 _uglify-es_ 库 fork 过来，并且保留它原来的大部分 API 并适配 _uglify-es_、_uglify-js@3_ 等；
 
 Terser 是一个独立的工具，可以单独安装：
 
 ```shell
-# 全局安装
-npm install terser -g
-
 # 局部安装
 npm install terser -D
 ```
@@ -37,7 +34,7 @@ terser js/file1.js -o foo.min.js -c -m
 
 命令中，符号的含义，和可传的参数：
 
-`-c`: compress option，更多参数详见[文档](https://github.com/terser/terser#compress-options)
+`-c`: compress option（更多参数详见[文档](https://github.com/terser/terser#compress-options)）
 
 - `arrows`：将类或对象中的函数，转成箭头函数；
 - `arguments`：将函数中使用 `arguments[index]` 转成对应的形参名称；
@@ -56,13 +53,15 @@ toplevel=true, keep_classnames=true, keep_fnames=true
 
 ### 2.在 webpack 中使用
 
-在 webpack 中，配置 `minimizer` 属性（默认 `production` 模式下，有使用 `TerserPlugin`，来处理代码）；
+在 webpack 中，配置 `minimizer` 属性
 
-如果对默认配置不满意，也可以自己创建 `TerserPlugin` 的实例，并覆盖相关的配置；
+- 默认 `production` 模式下，有使用 `TerserPlugin`，来处理代码；
 
-首先，配置 `minimize: true`；
+如果对默认配置不满意，也可自己创建 `TerserPlugin` 的实例，并覆盖相关的配置；
 
-- 表示对代码进行压缩（默认 `production` 模式下，已经打开了）
+首先，配置 `minimize: true`；表示对代码进行压缩。
+
+- 默认 `production` 模式下，已经打开了
 
 然后，在 `minimizer` 创建一个 `TerserPlugin`，有如下属性可配置：
 
@@ -90,7 +89,7 @@ module.exports = {
 
     // 代码优化: TerserPlugin => 让代码更加简单 => Terser
     minimizer: [
-      // JS压缩的插件: TerserPlugin
+      // JS 压缩的插件: TerserPlugin
       new TerserPlugin({
         extractComments: false,
         terserOptions: {
@@ -114,7 +113,7 @@ webpack 中的 `TerserPlugin`，底层用的就是 _Terser_ 工具。
 
 （掌握），webpack 默认没有配置 css 压缩，通常要自行配置。
 
-CSS 压缩，通常是去除无用的空白（空格，换行）；很难修改选择器、属性的名称、值等；
+CSS 压缩，是指去除无用的空白（空格，换行）；而不是修改选择器、属性的名称、值等；
 
 要使用一个插件：_css-minimizer-webpack-plugin_；底层使用 cssnano 工具来优化、压缩 CSS（该工具也可以单独使用）；
 
@@ -124,7 +123,7 @@ CSS 压缩，通常是去除无用的空白（空格，换行）；很难修改�
 npm install css-minimizer-webpack-plugin -D
 ```
 
-2.在 `optimization.minimizer` 中配置
+2.在 `optimization.minimizer` 中配置：
 
 `parallel` 可不配置，默认也是 `true`。
 
@@ -150,7 +149,7 @@ module.exports = {
 
 ## 四、配置文件抽取
 
-webpack 配置文件抽取，分生产、开发环境，抽取配置文件。
+webpack 配置文件抽取，分生产、开发环境。
 
 在 `package.json` 中 `"build"`，`"serve"` 命令后，加上 `--env` 命令。
 
@@ -228,7 +227,7 @@ const getCommonConfig = function (isProdution) {
         {
           test: /\.css$/,
           use: [
-            // // 'style-loader', //开发阶段
+            // // 'style-loader', // 开发阶段
             // MiniCssExtractPlugin.loader, // 生产阶段
             isProdution ? MiniCssExtractPlugin.loader : 'style-loader',
             'css-loader'
@@ -249,7 +248,7 @@ const getCommonConfig = function (isProdution) {
   }
 }
 
-// webpack允许导出一个函数
+// webpack 允许导出一个函数
 module.exports = function (env) {
   const isProduction = env.production
   let mergeConfig = isProduction ? prodConfig : devConfig
@@ -257,7 +256,9 @@ module.exports = function (env) {
 }
 ```
 
-复制两份 `comm.config.js`，更名为 `dev.config.js` 和 `prod.config.js`；
+拷贝两份 `comm.config.js`，更名为 `dev.config.js` 和 `prod.config.js`；
+
+在其中，去掉公共的配置，进行个性化配置：
 
 demo-project\13_webpack 优化-配置的分离\config\dev.config.js
 
@@ -324,8 +325,8 @@ module.exports = {
         },
         vendors: {
           // /node_modules/
-          // window上面 /\
-          // mac上面 /
+          // window 上面要匹配 /\
+          // mac 上面要匹配 /
           test: /[\\/]node_modules[\\/]/,
           filename: 'js/[id]_vendors.js'
         }
@@ -371,21 +372,21 @@ Tree Shaking 是一个术语，在计算机中，表示消除死代码（dead_co
 
 - 未调用的纯函数，无副作用，可以放心的消除（在进行函数式编程时，尽量使用纯函数的原因之一）；
 
-Tree Shaking 也被应用于其他的语言，比如 JavaScript、Dart；
+处理 JS，Tree Shaking 也被应用于其他的语言，比如：Dart；
 
-JavaScript 的 Tree Shaking：
+JS 的 Tree Shaking：
 
 - 最早源自打包工具 rollup；
-- 依赖于 ES Module 的静态语法分析（静态分析模块的依赖关系）；
+- 依赖于 ESModule 的静态语法分析（静态分析模块的依赖关系）；
 - webpack 2 正式内置支持了 ES2015 模块，和检测未使用模块的能力；
 - webpack 4 正式扩展了这个能力，可通过 `package.json` 的 `sideEffects` 属性作为标记，告知 webpack 在编译时，哪些文件可以安全的删除掉；
-- webpack 5 中，也提供了对部分 CommonJS 模块化方案的 tree shaking 支持；详见[更新日志](https://github.com/webpack/changelog-v5#commonjs-tree-shaking)。
+- webpack 5 中，提供了对部分 CommonJS 模块化方案的 tree shaking 支持；详见[更新日志](https://github.com/webpack/changelog-v5#commonjs-tree-shaking)。
 
 ### 1.webpack 中使用
 
 在 webpack 中，实现 Tree Shaking，可采用两种不同的方案：
 
-- `usedExports`：自动标记未被使用的函数，再通过 Terser 工具，来进行优化；
+- `usedExports`：标记未被使用的函数，再通过 _Terser_ 工具，来进行优化；
 - `sideEffects`：跳过整个模块/文件，直接查看该文件，是否有副作用；
 
 ### 2.usedExports
@@ -420,7 +421,8 @@ console.log(sum(20, 30))
 
 为清晰地看到 `usedExports` 的效果，
 
-- 配置 `mode: development`；注释 `minimize`、`minimizer` 配置；
+- 配置 `mode: development`；
+- 注释 `minimize`、`minimizer` 配置；
 
 配置 `usedExports: true`：
 
@@ -434,7 +436,7 @@ module.exports = {
   optimization: {
     // minimize: true,
     // minimizer: {...}
-    
+
     // 导入模块时, 分析模块中的哪些函数有被使用, 哪些函数没有被使用.
     usedExports: true
   }
@@ -443,7 +445,7 @@ module.exports = {
 
 `usedExports` 会使用注释，在打包后的文件，标识可删除的代码，
 
-demo-project\14_webpack优化-TreeShaking\build\js\main-bundle.js
+demo-project\14_webpack 优化-TreeShaking\build\js\main-bundle.js
 
 ```js
 // unused harmony export mul；
@@ -464,25 +466,23 @@ function mul(num1, num2) [
 demo-project\14_webpack 优化-TreeShaking\src\demo\parse-lyric.js
 
 ```js
-// 模块的副作用代码
 // 推荐: 在平时编写模块的时候, 尽量编写纯模块
+// 模块的副作用代码，举例如下
 window.lyric = '哈哈哈哈哈'
 ```
 
 > 推荐在平时编写模块化代码时，尽量使用”纯模块“。
 
-这种情况，需要使用 `sideEffects` 配置，告诉 webpack 项目中存在副作用的模块，以便更好地进行 tree shaking；
+这种情况，需要使用 `sideEffects` 配置；告诉 webpack，项目中存在副作用的模块，以便更好地进行 tree shaking；
 
 ### 3.sideEffects
 
 `sideEffects` 用于告知 webpack compiler，哪些模块有副作用：
 
-- 副作用在这里，可理解为：代码有执行一些特殊的任务，不能仅仅通过 export 来判断这段代码的意义；
+- 副作用在这里，可理解为：代码有执行一些特殊的任务，不能仅仅通过 `export` 来判断这段代码的意义；
 - React、JS 的纯函数中，都涉及副作用的概念。
 
-在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；
-
-可以安全的删除，所有未用到 `exports`（没有副作用代码）；
+在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；可以安全的删除，所有未用到 `exports`（没有副作用代码）；
 
 demo-project\14_webpack 优化-TreeShaking\package.json
 
@@ -492,9 +492,9 @@ demo-project\14_webpack 优化-TreeShaking\package.json
 }
 ```
 
-通常，在项目入口，引入 css 代码，默认也会当作没被使用的代码，被 tree shaking 掉。
+默认情况下，在项目入口，引入 css 代码，默认也会当作没被使用的代码，被 tree shaking 掉。
 
-配置项目中的 css 文件，不要被 tree shaking；
+配置 `sideEffects`，使得项目中的 css 文件，不要被 tree shaking；
 
 同时，也配置项目中有副作用的代码，不要被 tree shaking：
 
@@ -512,4 +512,3 @@ demo-project\14_webpack 优化-TreeShaking\package.json
 
 - 在 `webpack.config.js` 中，配置 `optimization.usedExports = true`，来帮助 Terser 进行优化；
 - 在 `package.json` 中，配置 `sideEffects`，对打包进行优化；
-

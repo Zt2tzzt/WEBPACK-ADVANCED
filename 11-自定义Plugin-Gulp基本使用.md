@@ -95,7 +95,7 @@ module.exports.AutoUploadWebpackPlugin = AutoUploadWebpackPlugin
 4. 完成后销毁 ssh 连接；
 5. 完成所有操作后，调用 `callback`。
 
-编写自己的 plugin。为 plugin 传入参数。
+编写自己的 plugin。为它传入参数。
 
 > webpack [官方文档](https://webpack.docschina.org/api/plugins/)和源码中，都有 compiler 中的 hook 调用时机说明。
 >
@@ -125,7 +125,7 @@ class AutoUploadWebpackPlugin {
       await this.connectServer()
 
       // 3.删除原有的文件夹中内容；
-      const remotePath = this.options.remotePath
+      const { remotePath } = this.options
       this.ssh.execCommand(`rm -rf ${remotePath}/*`)
 
       // 4.将文件夹中资源上传到服务器中
@@ -208,7 +208,7 @@ module.exports = {
 
 gulp 的核心理念是：“task runner”
 
-- 定义一系列任务，然后基于文件 Stream 的构建流；使用 gulp 的插件体系，来完成这些任务；
+- 定义一系列任务，然后基于文件的构建流(Stream)；使用 gulp 的插件体系，来完成这些任务；
 
 webpack 的核心理念是：“module bundler”
 
@@ -228,10 +228,6 @@ gulp 相对于 webpack 的优缺点：
 安装 gulp：
 
 ```shell
-# 全局安装
-npm install gulp -g
-
-# 局部安装
 npm install gulp
 ```
 
@@ -285,8 +281,8 @@ npx gulp foo
 
 每个 gulp 任务都是一个异步的 JavaScript 函数：
 
-- 此函数接受一个 `callback` 作为参数，调用 `callback` 函数，那么任务会结束；
-  - 官方文档中写作 `cb`，按照该规范，编写时也写作 `cb`;
+- 此函数接受一个 `cb`(callback) 作为参数，调用 `cb` 函数，那么任务会结束；
+
 - 返回一个 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
 
 任务可以是 public、private 类型的：
@@ -410,7 +406,7 @@ gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件
 
 在 Node 中，操作流（stream），提供的主要 API 是 `pipe` 方法。
 
-`pipe` 方法，接受一个转换流（Transform streams）或可写流（Writable streams）；
+`pipe` 方法，接受一个**转换流（Transform streams）**或**可写流（Writable streams）**；
 
 转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
 
@@ -426,7 +422,7 @@ const { src, dest } = require('gulp')
 const copyFile = () => {
   // 1.读取文件 2.写入文件
   // 如果 dist 文件夹不存在，会自动创建。
-  // 返回一个 stream，任务结束。
+  // return 一个 stream，表示任务结束。
   return src("./src/**/*.js").pipe(dest("./dist"))
 }
 
@@ -457,16 +453,10 @@ glob 的匹配规则如下：
 
 gulp 插件的使用，更多插件见[官方文档](https://gulpjs.com/plugins)；
 
-安装 *gulp-babel* 插件。它本身依赖 babel，要安装 *@babel/core*
+安装 *gulp-babel* 插件。它本身依赖 babel，要安装 *@babel/core*、*@babel/preset-env*
 
 ```shell
-pnpm add @babel/core gulp-babel -D
-```
-
-安装 babel 预设。
-
-```shell
-pnpm add @babel/preset-env
+pnpm add gulp-babel @babel/core @babel/preset-env -D
 ```
 
 编写任务：
@@ -488,6 +478,8 @@ module.exports = {
   jsTask
 }
 ```
+
+把 preset 相关配置，放到 `babel.config.js` 中
 
 demo-project\22_gulp-gulp的基本使用\babel.config.js
 

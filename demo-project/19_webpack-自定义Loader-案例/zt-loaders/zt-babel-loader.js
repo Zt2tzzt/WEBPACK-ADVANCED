@@ -11,11 +11,11 @@ module.exports = function(content) {
   }
 
   // 使用Babel转换代码
-  babel.transform(content, options, (err, result) => {
+  babel.transform(content, options, (err, res) => {
     if (err) {
       callback(err)
     } else {
-      callback(null, result.code)
+      callback(null, res.code)
     }
   })
 

@@ -73,6 +73,7 @@ module.exports = {
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader01.js
 
 ```js
+/** 同步的 loader */
 module.exports = function(content, map, meta) {
   console.log("zt_loader01:", content)
   return content
@@ -86,7 +87,7 @@ module.exports.pitch = function() {
 demo-project\18_webpack-自定义Loader\zt-loaders\zt_loader02.js
 
 ```js
-/** 同步 loader */
+/** 同步的 loader */
 module.exports = function(content) {
   console.log("zt_loader02:", content)
   return content + "bbbb"
@@ -173,9 +174,10 @@ aaaabbbb
 
 ### 2.执行顺序和 enforce
 
-webpack 中的 loader-runner 库，会优先执行 pitch loader，并进行 `loaderIndex++`；
+webpack 中的 loader-runner 库，
 
-之后执行 normal loader，并进行 `loaderIndex--`；
+- 会优先执行 pitch loader，并进行 `loaderIndex++`；
+- 之后执行 normal loader，并进行 `loaderIndex--`；
 
 如果要改变它们的执行顺序，要在 `webpack.config.js` 文件中，进行配置；
 
@@ -431,11 +433,11 @@ module.exports = function(content) {
   }
 
   // 使用 Babel 转换代码
-  babel.transform(content, options, (err, result) => {
+  babel.transform(content, options, (err, res) => {
     if (err) {
       callback(err)
     } else {
-      callback(null, result.code)
+      callback(null, res.code)
     }
   })
 }
@@ -644,7 +646,7 @@ tapable 管理着需要的 Hook，这些 Hook 可以被应用到 webpack 的插�
 
 ## 九、tapable 有哪些 hook
 
-同步和异步的 hook：
+主要分为同步和异步的 hook：
 
 - 以“`sync`”开头的，是同步的 Hook；
 - 以”`async`“开头的，是异步的 Hook；两个事件处理回调，不会等待上一次处理回调结束后再执行下一次回调；

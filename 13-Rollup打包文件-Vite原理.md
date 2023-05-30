@@ -122,6 +122,8 @@ function decrement() {
 </style>
 ```
 
+在 `index.js` 中，引入：
+
 demo-project\25_rollup-rollup业务打包\src\index.js
 
 ```js
@@ -176,13 +178,13 @@ module.exports = {
 
 执行命令打包，发现报错了；
 
-因为在打包的 vue 代码中，用到 `process.env.NODE_ENV`
+因为在打包的 vue 代码中，用到 `process.env.NODE_ENV` 全局变量。
 
-> 【补充】：判断全等时，通常把常量放在前面，如 `if('zzt' === name)`
+> 【补充】：判断全等时，通常把常量放在前面，如 `if('zzt' === name)` 这是一个好习惯。
 
 webpack 中，不会出现这个问题，是因为使用了 `definePlugin()` 这个插件，注入了全局环境变量，
 
-在 rollup 中，模拟这个效果；
+rollup 中，模拟这个效果；
 
 安装 *@rollup/plugin-replace* 插件，
 
@@ -323,7 +325,7 @@ demo-project\25_rollup-rollup业务打包\package.json
 
 在 `rollup.config.js` 配置文件中：
 
-- 根据环境变量，判断是否为“生产环境”打包。动态生成 `plugins` 数组。
+- 根据环境变量，判断此次打包，是否为“生产环境”打包；动态生成 `plugins` 数组。
 - `replace` 插件配置 `preventAssignment: true`；
 
 demo-project\25_rollup-rollup业务打包\rollup.config.js
@@ -419,10 +421,10 @@ Vite 主要由两部分组成：
 
 Vite 旨在利用生态系统中的新进展，解决上述问题：
 
-- 浏览器开始原生支持 ES 模块，且越来越多 JavaScript 工具使用可直接被编译成机器码并运行的语言编写（如 Go）。
+- 浏览器开始原生支持 ES 模块，且越来越多 JavaScript 工具，使用“可直接被编译成机器码并运行”的语言编写（如 Go 语言）。
 - the rise of JavaScript tools written in compile-to-native languages.
 
-vite 4 中，开始使用 rollup 3；
+vite 4 中，才开始使用 rollup 3（以前用 rollup 2 打包）；
 
 vite 在开发阶段，开启一个服务，会对要转换的代码，做简单转换，比如；
 
@@ -478,9 +480,8 @@ demo-project\26_vite-vite工具的使用\index.html
 
 事实上，vite 就帮助我们解决了上面三个问题。
 
-在开发阶段，vite 直接将 ES6+ 代码，跑在浏览器上；
-
-生产阶段使用 rollup 进行打包。
+- 在开发阶段，vite 直接将 ES6+ 代码，跑在浏览器上；
+- 在生产环境，使用 rollup 进行打包。
 
 ## 五、vite 安装
 
@@ -677,6 +678,8 @@ function decrement() {
 <style scoped>
 </style>
 ```
+
+在 `main.js` 中，引入：
 
 demo-project\26_vite-vite工具的使用\src\main.jsx
 

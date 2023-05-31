@@ -100,7 +100,7 @@ demo-project\23_gulp-gulp的项目构建\src\index.html
 
 7.开启本地服务器
 
-安装 *browser-sync* 插件（它是非 gulp 专用的插件，可以在别的地方使用）；
+安装 *browser-sync* 插件（非 gulp 专用的插件，可在别的地方使用）；
 
 ```shell
 pnpm add browser-sync -D
@@ -303,9 +303,11 @@ npx rollup -c
 
 比如，当代码中使用了 *loadash* 库时，该库没有被打包进源代码；
 
-因为 lodash 使用 commonjs 模块化规范；rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
+因为 lodash 使用 commonjs 模块化规范；
 
-要解决类似于使用 commonjs 引入第三方库问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
+rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
+
+要解决类似于使用 commonjs 引入模块无法打包的问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
 
 安装 *@rollup/plugin-commonjs* 库：
 
@@ -318,6 +320,8 @@ pnpm add @rollup/plugin-commonjs -D
 *lodash* 不仅使用的是 commonjs 规范，还需要从 node_modules 中引入。
 
 所以仍然不会被打包，
+
+要解决项目中引入第三方依赖，无法打包的问题：
 
 还需要安装 *@rollup/plugin-node-resolve* 库：
 
@@ -420,7 +424,7 @@ module.exports = {
 }
 ```
 
-在 `rollup.config.js` 中，配置 `babelHelpers`，用于添加 polyfill。
+在 `rollup.config.js` 的 `babel` 插件配置中，配置 `babelHelpers`，用于添加 polyfill。
 
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 

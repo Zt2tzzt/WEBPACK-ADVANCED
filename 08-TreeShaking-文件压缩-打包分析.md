@@ -6,9 +6,9 @@ CSS 也可以进行 Tree Shaking。需要借助插件；
 
 > CSS 中的标签选择器，一般不做 tree shaking
 
-在早期，使用 *PurifyCss* 插件（已不再维护），来完成 CSS 的 tree shaking；
+早期，使用 *PurifyCss* 插件（已不再维护），来完成 CSS 的 tree shaking；
 
-目前使用 *PurgeCSS* 插件，可删除未使用的 CSS；
+目前，使用 *PurgeCSS* 插件，可**删除未使用的 CSS**；
 
 安装 PurgeCss 的 webpack 插件：
 
@@ -23,7 +23,7 @@ npm install purgecss-webpack-plugin -D
   - `{ nodir: true }`: 表示分析不是文件夹的内容。
 - `safelist`：表示分析时排除某些标签。
 
-Purgecss 也可以对 less 文件进行处理（所以，它是对打包后的 css 进行 tree shaking 操作）；
+Purgecss 也可以对 less 文件进行处理（它是对打包后的 css 进行 tree shaking 操作的）；
 
 demo-project\14_webpack优化-TreeShaking\config\prod.config.js
 
@@ -55,18 +55,18 @@ module.exports = {
 
 Scope Hoisting 是从 webpack 3 开始，增加的功能；
 
-对 webpack 打包后的代码的作用域，进行提升，使得代码体积更小、运行更快；
+对 webpack 打包后，代码的作用域，进行提升，使得代码体积更小、运行更快；
 
 默认情况下，webpack 打包后的代码，会有很多的函数作用域.
 
-- 比如最外层的 IIFE（Immediately Invoked Function Expression）：
+- 比如外层的 IIFE（Immediately Invoked Function Expression）：
 
 Scope Hoisting 可将函数合并到一个模块中来运行；
 
 webpack 已经内置了对应的模块：
 
-- 在 production 模式下，默认这个模块就会启用；
-- 在 development 模式下，需要自行配置打开；
+- 在 `mode: production` 模式下，默认这个模块就会启用；
+- 在 `mode: development` 模式下，需要自行配置打开；
 
 :egg: 案例理解；
 
@@ -138,7 +138,7 @@ HTTP 压缩的流程：
 
 webpack 可实现 HTTP 压缩的第一步操作，使用 `CompressionPlugin`。
 
-1.安装 compression-webpack-plugin：
+1.安装 *compression-webpack-plugin*：
 
 ```shell
 npm install compression-webpack-plugin -D
@@ -195,6 +195,8 @@ module.exports = {
 
 根据环境判断，进行配置：
 
+demo-project\17_webpack优化-打包分析\config\comm.config.js
+
 ```js
 const getCommonConfig = function(isProdution) {
   return {
@@ -226,7 +228,9 @@ const getCommonConfig = function(isProdution) {
 
 ## 五、打包时间分析
 
-如果希望看到每个 loader、每个 Plugin 在打包时，消耗的时间，可借助于一个插件：*speed-measure-webpack-plugin*
+如果希望看到每个 loader、每个 Plugin 在打包时，消耗的时间；
+
+可借助于一个插件：*speed-measure-webpack-plugin*
 
 1.安装 speed-measure-webpack-plugin 插件
 
@@ -237,7 +241,7 @@ npm install speed-measure-webpack-plugin -D
 2.使用 speed-measure-webpack-plugin 插件
 
 - 创建插件导出的对象 `SpeedMeasurePlugin`；
-- 使用 `smp.wrap` 包裹导出的 webpack 配置；
+- 使用 `smp.wrap`，包裹导出的 webpack 配置；
 
 demo-project\17_webpack优化-打包分析\config\comm.config.js
 
@@ -312,5 +316,5 @@ module.exports = {
 
 3.打包后，会在 `8888` 端口上，提供服务，可以直接的看到每个包的大小。
 
-- 比如有一个包是通过一个 Vue 组件打包的，但是非常的大，那么我们可以考虑是否可以拆分出多个组件，并且对其进行懒加载；
-- 比如一个图片或者字体文件特别大，是否可以对其进行压缩或者其他的优化处理；
+- 比如有一个包，是通过一个 Vue 组件打包的，但是非常的大，那么我们可以考虑是否可以拆分出多个组件，并且对其进行懒加载；
+- 比如一个图片，或者字体文件特别大，是否可以对其进行压缩或者其他的优化处理；

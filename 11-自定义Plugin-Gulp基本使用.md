@@ -134,7 +134,7 @@ class AutoUploadWebpackPlugin {
       // 5.关闭 ssh 连接
       this.ssh.dispose()
 
-      // 完成所有的操作后, 调用callback()
+      // 完成所有的操作后, 调用 callback()
       callback()
     })
   }
@@ -236,7 +236,8 @@ npm install gulp
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
 ```js
-// 编写简单的任务，如果不导出，那么是一个私有任务，不能被 node 执行。
+// 编写简单的 gulp 任务；
+// 如果不导出，那么是一个私有任务，不能被 node 执行。
 const foo = (cb) => {
   console.log("第一个gulp任务")
   cb() // 执行 cb，表示任务结束。
@@ -279,9 +280,9 @@ npx gulp foo
 
 ## 六、gulp 任务
 
-每个 gulp 任务都是一个异步的 JavaScript 函数：
+每个 gulp 任务，都是一个异步的 JavaScript 函数：
 
-- 此函数接受一个 `cb`(callback) 作为参数，调用 `cb` 函数，那么任务会结束；
+- 此函数接收一个 `cb`(callback) 作为参数，调用 `cb` 函数，那么任务会结束；
 
 - 返回一个 stream、promise、event emitter、child process、observable 类型的函数，任务也会结束；
 
@@ -392,7 +393,7 @@ foo3 task exec~
 
 ### 3.读取、写入文件
 
-gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件。
+gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上，存放的文件。
 
 `src` 方法，接受一个读取目录作为参数，并从文件系统（fs）中，读取文件，然后生成一个 Node 中的流（Stream）。
 
@@ -406,13 +407,11 @@ gulp 提供了 `src` 和 `dest` 方法，用于处理计算机上存放的文件
 
 在 Node 中，操作流（stream），提供的主要 API 是 `pipe` 方法。
 
-`pipe` 方法，接受一个**转换流（Transform streams）**或**可写流（Writable streams）**；
-
-转换流或者可写流，拿到数据之后，对数据进行处理，再次传递给下一个转换流或者可写流；
+`pipe` 方法，接受一个**转换流（Transform streams）**或**可写流（Writable streams）**，它们拿到数据之后，对数据进行处理，再次传递给下一个转换流，或者可写流；
 
 :egg: 案例理解：
 
-将文件拷贝到指定路径：
+将 src 目录下，所有 js 文件，拷贝到指定 dist 路径下：
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 
@@ -433,7 +432,7 @@ module.exports = {
 
 #### 1.glob 匹配规则
 
-`src` 方法接受一个 glob 字符串，或由多个 glob 字符串组成的数组，作为参数；用于确定哪些文件需要被操作。
+`src` 方法接受一个 glob 字符串，或由多个 glob 字符串，组成的数组，作为参数；用于确定哪些文件需要被操作。
 
 glob 或 glob 数组，必须至少匹配到一个匹配项，否则 `src()` 将报错；
 

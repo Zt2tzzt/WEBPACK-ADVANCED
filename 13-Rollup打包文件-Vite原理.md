@@ -78,7 +78,7 @@ demo-project\25_rollup-rollup业务打包\src\index.js
 import "./css/style.css"
 
 //...
-// DOM操作
+// DOM 操作
 const titleEl = document.createElement("h2")
 titleEl.textContent = "我是标题, 哈哈哈"
 titleEl.className = "title"
@@ -300,7 +300,7 @@ module.exports = {
 }
 ```
 
-本地服务启动时，开启文件监听
+本地服务启动时，开启文件监听：
 
 ```shell
 npx rollup -c -w
@@ -399,7 +399,7 @@ vite 官方的定位：下一代前端开发与构建工具；
 - 所以要通过构建工具，来对代码进行转换、编译；
   - 类似的工具有 webpack、rollup、parcel；
 - 随着项目越来越大，需要处理的 JS 代码，呈指数级增长，模块越来越多；
-- 构建工具需要很长的时间，才能开启服务器；HMR 也需要几秒钟才能在浏览器反应出来；
+- 构建工具需要很长的时间，才能开启服务器；HMR 也需要几秒钟，才能在浏览器反应出来；
 - 所以也有这样的说法：天下苦 webpack 久矣；
 
 Vite (法语意为 "快速的"，发音 /vit/) 是一种新型前端构建工具，能够显著提升前端开发体验。
@@ -415,9 +415,9 @@ Vite 主要由两部分组成：
 
 - 这也正是我们对 “打包”这个概念熟悉的原因：“打包”就是使用工具抓取、处理，并将源码中的模块，串联成可以在浏览器中运行的文件。
 - 时过境迁，我们见证了诸如 webpack、Rollup、Parcel 等工具的变迁，它们极大地改善了前端开发者的开发体验。
-- 然而，当我们开始构建越来越大型的应用时（如包含数千个模块的大型项目相当普遍），需要处理的 JS 代码量，也呈指数级增长。
+- 然而，当构建越来越大型的应用时（如包含数千个模块的大型项目），需要处理的 JS 代码量，也呈指数级增长。
 - 基于 JS 开发的工具，就会开始遇到性能瓶颈：通常需要很长时间（甚至是几分钟！）才能启动开发服务器；
-- 即使使用模块热替换（HMR），文件修改后的效果，也需要几秒钟才能在浏览器中反映出来。
+- 即使使用“热模块替换（HMR）”，文件修改后的效果，也需要几秒钟才能在浏览器中反映出来。
 
 Vite 旨在利用生态系统中的新进展，解决上述问题：
 
@@ -480,7 +480,7 @@ demo-project\26_vite-vite工具的使用\index.html
 
 事实上，vite 就帮助我们解决了上面三个问题。
 
-- 在开发阶段，vite 直接将 ES6+ 代码，跑在浏览器上；
+- 在开发阶段，vite 开启本地服务器，通过 ESBuild 转换 ES6+ 代码，发送给浏览器；
 - 在生产环境，使用 rollup 进行打包。
 
 ## 五、vite 安装
@@ -575,7 +575,7 @@ demo-project\26_vite-vite工具的使用\src\css\normal.less
 }
 ```
 
-在项目中引入 css、less；编写一些 dom 操作。
+在项目中引入 css、less；编写一些 dom 操作，测试样式是否生效。
 
 demo-project\26_vite-vite工具的使用\src\main.jsx
 
@@ -628,7 +628,7 @@ vite 对 vue 提供第一优先级支持：
 - Vue 3 JSX 支持：安装 *@vitejs/plugin-vue-jsx* 插件。
 - Vue 2 支持：安装 *underfin/vite-plugin-vue2* 插件。
 
-现在一般使用 vue3，安装如下插件：
+现在一般使用 vue3，所以安装如下插件：
 
 ```shell
 pnpm add @vitejs/plugin-vue -D
@@ -798,9 +798,10 @@ ESBuild 构建速度和其它贡酒对比。
 
 ESBuild 为什么这么快呢？
 
-- 使用 Go 语言编写，可以直接转换成机器代码，而无需经过字节码；
+- 使用 Go 语言编写，无需经过字节码，直接转换成机器码运行；
 - ESBuild 可以充分利用 CPU 的多核，尽可能让它们饱和运行；
 - ESBuild 是从零开始编写的，没有依赖第三方库，从一开始就能够考虑各种性能问题；
 - 等等....
 
 为什么生产环境不用 ESBuild 打包，详见[官方文档](https://cn.vitejs.dev/guide/why.html#why-not-bundle-with-esbuild)。
+

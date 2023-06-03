@@ -307,7 +307,7 @@ npx rollup -c
 
 rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
 
-要解决类似于使用 commonjs 引入模块无法打包的问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
+要解决类似于使用 commonjs 引入模块无法打包的问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。解决办法如下：
 
 安装 *@rollup/plugin-commonjs* 库：
 
@@ -367,7 +367,7 @@ npx rollup -c
 
 ### 3.排除第三方包
 
-事实上，作为一个给用户使用的第三方库，并不需要打包 lodash 的代码，而是要让用户自己安装 lodash。
+事实上，作为一个给用户使用的第三方库，并不需要打包 lodash 的代码，而是要让用户自己安装 lodash；
 
 在配置文件中配置：打包时，排除 *lodash*。
 

@@ -4,7 +4,7 @@
 
 ### 1.css 文件处理
 
-处理 css 文件，安装 *rollup-plugin-postcss* 插件，还要安装 *postcss*、*postcss-preset-env*、：
+处理 css 文件，安装 *rollup-plugin-postcss* 插件，还要安装 *postcss*、*postcss-preset-env*：
 
 ```shell
 pnpm add rollup-plugin-postcss postcss postcss-preset-env -D
@@ -15,7 +15,7 @@ pnpm add rollup-plugin-postcss postcss postcss-preset-env -D
 demo-project\25_rollup-rollup业务打包\rollup.config.js
 
 ```js
-// 默认lodash没有被打包是因为它使用commonjs, rollup默认情况下只会处理es module
+// 默认 lodash 没有被打包是因为它使用 commonjs, rollup 默认情况下只会处理 es module
 const commonjs = require('@rollup/plugin-commonjs')
 const nodeResolve = require('@rollup/plugin-node-resolve')
 const postcss = require('rollup-plugin-postcss')
@@ -441,7 +441,7 @@ vite 在开发阶段，开启一个服务，会对要转换的代码，做简单
 
 目前，浏览器原生支持模块化；
 
-但如果不借助于其他工具，浏览器直接运行使用 ESModule 模块化规范的代码，有如下问题：
+但如果不借助于其他工具，浏览器直接运行 ESModule 模块化规范的代码，有如下问题：
 
 1.引入模块时，必须明确写后缀名；
 
@@ -450,7 +450,7 @@ vite 在开发阶段，开启一个服务，会对要转换的代码，做简单
 - 如 loadash，加载了上百个模块的 js 代码
 - 浏览器要将所有的 js 文件请求下来，要发送很多的 http 请求，效率低。
 
-3.如果代码中，有 ts、jsx、vue、less...代码，浏览器还是不识别的。
+3.如果代码中，有 ts、jsx、vue、less...代码，浏览器仍是不识别的。
 
 :egg: 案例理解：印证以上前两个问题。
 
@@ -467,7 +467,7 @@ pnpm add lodash-es
 demo-project\26_vite-vite工具的使用\src\main.js
 
 ```js
-import _ from '../node_modules/lodash-es/lodash.default.js'
+import _ from '../node_modules/lodash-es/lodash.default.js' // 使用完整路径，明确的后缀名
 ```
 
 demo-project\26_vite-vite工具的使用\index.html
@@ -597,11 +597,13 @@ vite 对 TypeScript 是原生支持的：
 - 开发阶段，会直接使用 ESBuild 来完成编译：在项目中直接引入即可；
 - 生产环境，还是用 rollup 进行打包，用 babel 进行编译的。
 
-开发阶段，查看浏览器中的请求，会发现请求的依然是后缀名为 “.ts” 的文件：
+开发阶段，查看浏览器中的请求，会发现：请求的依然是后缀名为 “.ts” 的文件：
 
 这是因为 vite 中的服务器 Connect，会对请求进行转发；获取 ts 编译后的代码，返回给浏览器，浏览器可以直接进行解析；
 
 > 注意：在 vite 2 中，已经不再使用 Koa 了，而是使用 Connect 来搭建的本地服务器。
+
+编写 ts 代码：
 
 demo-project\26_vite-vite工具的使用\src\ts\format.ts
 
@@ -718,7 +720,7 @@ function App() {
 
   return (
     <div className="app">
-      <h2>React App计数器: {count}</h2>
+      <h2>React App 计数器: {count}</h2>
       <button onClick={e => setCount(count+1)}>+1</button>
       <button onClick={e => setCount(count-1)}>-1</button>
     </div>
@@ -801,7 +803,6 @@ ESBuild 为什么这么快呢？
 - 使用 Go 语言编写，无需经过字节码，直接转换成机器码运行；
 - ESBuild 可以充分利用 CPU 的多核，尽可能让它们饱和运行；
 - ESBuild 是从零开始编写的，没有依赖第三方库，从一开始就能够考虑各种性能问题；
-- 等等....
+- ....
 
 为什么生产环境不用 ESBuild 打包，详见[官方文档](https://cn.vitejs.dev/guide/why.html#why-not-bundle-with-esbuild)。
-

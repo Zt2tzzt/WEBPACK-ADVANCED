@@ -129,7 +129,7 @@ demo-project\25_rollup-rollup业务打包\src\index.js
 ```js
 import App from './vue/App.vue'
 
-// 编写Vue代码
+// 编写 Vue 代码
 const app = createApp(App)
 app.mount(document.querySelector("#app"))
 ```
@@ -786,7 +786,7 @@ npm create vue
 ESBuild 的特点：
 
 - 超快的构建速度，并且不需要缓存；
-- 支持 ES6 和 CommonJS 的模块化；
+- 支持 ESModule 和 CommonJS 的模块化；
 - 支持 ES6 的 Tree Shaking；
 - 支持 Go、JavaScript 的 API（本身由 Go 编写）；
 - 支持 TypeScript、JSX 等语法编译；
@@ -794,7 +794,7 @@ ESBuild 的特点：
 - 支持代码压缩；
 - 支持扩展其他插件；
 
-ESBuild 构建速度和其它贡酒对比。
+ESBuild 构建速度和其它工具对比。
 
 ![ESBuild构建速度](NodeAssets/ESBuild构建速度.jpg)
 

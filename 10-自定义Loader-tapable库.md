@@ -231,7 +231,7 @@ module.exports = {
 
 ## 三、同步的 loader
 
-默认创建的 Loader，就是同步的 Loader；
+默认创建的 Loader，就是**同步的 Loader**；
 
 这个 Loader，必须通过 `return` 或者 `this.callback` 来返回结果，交给下一个 loader 来处理；
 
@@ -286,7 +286,7 @@ module.exports = function(content) {
 }
 ```
 
-loader-runner 库，在执行 loader 时，已经提供了让 loader 变成一个异步的 loader方法，
+loader-runner 库，在执行 loader 时，已经提供了让 loader 变成一个异步的 loader 方法，
 
 ## 五、传入和获取参数
 
@@ -606,7 +606,8 @@ pnpm run build
 
 输出 `index.html` 文件，在其中展示 md 文本。
 
-可自行编写样式；也可使用 *highlight.js* 提供的默认 css 样式。
+- 可自行编写样式；
+- 也可使用 *highlight.js* 提供的默认 css 样式。
 
 demo-project\19_webpack-自定义Loader-案例\src\main.js
 
@@ -671,9 +672,9 @@ pnpm add tapable
 
 使用时，一般分为三个步骤：
 
-1. 创建 hook
-2. 用 hook 监听事件
-3. 用 hook 发送事件
+1. 创建 hook；
+2. 用 hook 监听事件；
+3. 用 hook 发送事件。
 
 demo-project\20_webpack-tapable库使用\hooks\01_sync_基本使用.js
 

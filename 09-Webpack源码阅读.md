@@ -463,7 +463,7 @@ this.buildQueue = new AsyncQueue({
 });
 ```
 
-在 `module.needBuild` 方法中，判断哪些模块需要构建
+在 `module.needBuild` 方法中，判断哪些模块需要构建：
 
 - 有些模块已经构建过，就不用构建了。
 

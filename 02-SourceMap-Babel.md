@@ -5,9 +5,9 @@
 前端工程化项目，打包后的代码，运行在浏览器上，是经过压缩的：
 
 - 比如：babel 会将 ES6 代码转换成 ES5；
+- 比如：TS 经由 babel 转成 JS；
 - 比如：压缩后，代码行号、列号，会不一致；
 - 比如：丑化压缩时，变量名称会改变；
-- 比如：TS 经由 babel 转成 JS；
 
 也就是说，打包后的代码，在浏览器运行报错，需要调试时（debug），是很困难的。
 
@@ -120,7 +120,7 @@ demo-project\02-source-map\index.html
 </html>
 ```
 
-使用 liveServer 打开 `iundex.html` 文件，显示了错误信息，但位置不准确。
+使用 liveServer 打开 `iundex.html` 文件，显示了错误信息，但报错的位置不准确。
 
 ```txt
 in.js:5 Uncaught ReferenceError: address is not defined
@@ -208,7 +208,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 使用 source-map，有两个步骤：
 
-1. webpack 在打包时，配置 `devtool` 根据源文件，生成 source-map 文件；
+1. webpack 在打包时，配置 `devtool`，根据源文件，生成 source-map 文件；
 
 2. 打包好的代码，最后添加了一个注释，它指向 source-map 文件，比如：
 
@@ -224,9 +224,11 @@ demo-project\02-source-map\build\boundle.js.map
 
 最初，生成的 source-map 文件大小,是原始文件的 10 倍;
 
-第二版，减少了约 50%；第三版，又减少了 50%；
+第二版，减少了约 50%；
 
-所以目前，一个 133kb 的文件，最终的 source-map 的大小，大概在 300kb。
+第三版，又减少了 50%；
+
+目前，一个 133kb 的文件，最终的 source-map 的大小，大概在 300kb。
 
 目前的 source-map 文件，通常有如下属性：
 
@@ -252,7 +254,7 @@ demo-project\02-source-map\build\boundle.js.map
 `devtool` 选项，设值下面几个值，不会生成 source-map 文件：
 
 - `false`：不使用 source-map，也就是没有任何和 source-map 相关的内容。
-- `none`：`production` 模式下的默认值（什么值都不写） ，不生成 source-map。
+- `none`：`production` 模式下的默认值（什么值都不写），不生成 source-map。
 - `eval`：`development` 模式下的默认值，不生成 source-map；
   - 但会在 `eval` 执行的代码中，添加 `//# sourceURL=`；
   - 浏览器在执行时解析，并且在调试面板中，生成对应的一些文件目录，方便调试代码；
@@ -266,7 +268,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 ### 1."eval"
 
-见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解 1.
+见上方 [一、source-map 是什么？](#一、source-map 是什么？)，案例理解 1.
 
 ### 2."source-map"
 
@@ -274,7 +276,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 浏览器会根据这个注释，找到 source-map 文件，解析，还原出源文件；
 
-见上方[一、source-map 是什么？](#一、source-map 是什么？)，案例理解 2.
+见上方 [一、source-map 是什么？](#一、source-map 是什么？)，案例理解 2.
 
 ### 3.“eval-source-map”
 
@@ -577,7 +579,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
 
 安装 Babel 的预设，并在命令中使用。
 
-会自动开启“严格模式”。
+自动开启“严格模式”。
 
 ```shell
 npm install @babel/preset-env -D

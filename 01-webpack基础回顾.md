@@ -19,9 +19,9 @@ webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包
 
 - jsp，asp
 
-前后端分离：
+前后端分离（本质上还是后端渲染）：
 
-- ajax + jQuery；本质上还是后端渲染。
+- ajax + jQuery；
 
 前端渲染（现代的 JS 应用程序）
 

@@ -8,9 +8,7 @@
 - @babel/plugin-transform-react-jsx
 - @babel/plugin-transform-react-display-name
 
-在开发中，不需要一个个去安装这些插件；
-
-使用 preset 来配置即可：
+在开发中，通常使用 preset 来配置即可：
 
 安装 _@babel/preset-react_
 
@@ -74,11 +72,12 @@ demo-project\04_webpack 服务器\index.html
 </html>
 ```
 
-将 react 渲染到 `div#root` 中：
+将 react 渲染到模板的 `div#root` 中：
 
 demo-project\04_webpack 服务器\src\index.js
 
 ```js
+import ReactDom from "react-dom/client";
 import App from './react/App'
 
 // 5.编写react代码
@@ -114,9 +113,9 @@ module.exports = {
 
 ### 1.resolve extensions
 
-webpack 中 [resolve extensions 配置](https://webpack.docschina.org/configuration/resolve/#resolveextensions)，用于在打包时，解析添加的后缀名
+webpack 中 [resolve extensions 配置](https://webpack.docschina.org/configuration/resolve/#resolveextensions)，用于在打包时，解析添加的后缀名：
 
-有三个默认值：`'.js', '.json', '.wasm'`
+有三个默认值：`'.js', '.json', '.wasm'`，在覆盖时，也要写进来。
 
 demo-project\04_webpack 服务器\webpack.config.js
 
@@ -143,7 +142,9 @@ TypeScript 代码，最终需要转换成 JavaScript 代码。
 npm install typescript -D
 ```
 
-TS 代码会根据 `tsconfig.json` 文件，进行编译，初始化该配置文件，否则无法使用 tsc 编译 TS 代码：
+TS 代码会根据 `tsconfig.json` 文件，进行编译；
+
+用 tsc 初始化该配置文件，否则无法使用 tsc 编译 TS 代码：
 
 ```shell
 tsc --init
@@ -207,7 +208,7 @@ npm run build
 npm install @babel/preset-typescript -D
 ```
 
-配置 `babel.config.js` 文件，用于 `webpack.config.js` 中配置的 babel-loader。
+将 `webpack.config.js` 中对 babel-loader 的配置，抽取到 `babel.config.js` 文件。
 
 demo-project\04_webpack 服务器\babel.config.js
 
@@ -231,15 +232,20 @@ module.exports = {
 
 使用 ts-loader（本质上用 TypeScript Compiler 编译）：
 
-- 来直接编译 TypeScript，只能将 ts 代码转换成 js 代码；
+- 编译 TypeScript 时，只能将 ts 代码转换成 js 代码；
 - 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
 
-使用 babel-loader（用 Babel 编译）
+使用 babel-loader（用 Babel 编译）：
 
 - 可直接编译 ts 代码，转成 js 代码，并且可以添加 polyfill 的功能；
 - 但是，不会对类型进行检测；
 
-在开发中，如果要同时满足：代码转换、polyfill 添加，则需要使用如下最佳实践方案。
+在开发中，如果要同时满足：
+
+- 代码转换；
+- polyfill 添加，
+
+则需要使用如下最佳实践方案。
 
 ### 5.最佳实践
 
@@ -317,7 +323,9 @@ module.exports = {
 }
 ```
 
-watch 模式的缺点：没有具备 live loading（热加载）的功能，自动重新编译后，需要刷新页面才有效果。
+watch 模式的缺点：
+
+没有具备 live loading（热加载）的功能；自动重新编译后，需要刷新页面才有效果。
 
 ## 五、webpack-dev-server
 
@@ -348,7 +356,7 @@ demo-project\04_webpack 服务器\package.json
 
 ### 1.static
 
-devServer 中的 `contentBase` 已弃用；
+`devServer` 中的 `contentBase` 已弃用；
 
 代替它的是 `static` 属性。
 
@@ -356,8 +364,7 @@ devServer 中的 `contentBase` 已弃用；
 
 它的主要作用是：指定从哪里来查找，打包后的资源所依赖的一些资源；
 
-- 比如在 `index.html` 中，需要依赖一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
-- 怎么在 `index.html` 中，去引入这个文件？
+- 比如在 `index.html` 模板中，去引入一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
 
   - 这样引入：`<script src="./public/abc.js"></script>`；打包后，浏览器是无法通过相对路径，去找到这个文件夹的；
   - 所以，应该这样引入：`<script src="/abc.js"></script>`；再使用 `static` 属性，让 `index.html` 去查找到这个文件的存在。
@@ -423,7 +430,7 @@ HMR 的好处，2 点：
 在实际开发项目时，不需要经常手动写 `module.hot.accept` 代码；2 个例子：
 
 - vue 开发中，_vue-loader_ 支持 vue 组件的 HMR，提供开箱即用的体验。
-- react 开发中，_react-refresh_（_React Hot Loader_ 已弃用）实时调整 react 组件。
+- react 开发中，_react-refresh_（_React Hot Loader_已弃用）实时调整 react 组件。
 
 HMR 原理的理解，2 方面，。
 
@@ -446,7 +453,8 @@ webpack-dev-server 会创建两个服务：
 >
 > Socket 连接：也称“长连接”，用于及时通讯（微信，聊天，直播送礼物，进场）
 >
-> - 经过 3 次或 5 次握手，通过心跳包建立连接通道，客户端和服务器，可随时互相发送消息。
+> - 经过 3 次或 5 次握手，通过心跳包建立连接通道，
+> - 客户端和服务器，可随时互相发送消息。
 >
 > Http 连接，短链接：
 >
@@ -550,7 +558,9 @@ module.exports = {
 
 `changeOrigin`：它表示：是否更新代理后请求的 `headers` 中 `host` 地址；
 
-源码位置：demo-project\04_webpack 服务器\node_modules\http-proxy\lib\http-proxy\common.js
+源码位置：
+
+demo-project\04_webpack 服务器\node_modules\http-proxy\lib\http-proxy\common.js
 
 ```js
 if (options.changeOrigin) {

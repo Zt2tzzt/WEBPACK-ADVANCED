@@ -22,9 +22,9 @@ npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block
 
 ### 2.babel-preset
 
-如果一个个去安装插件，意味着要手动管理大量插件;
+如果一个个去安装 babel 插件，意味着要手动管理大量插件;
 
-在 webpack 中，使用 babel 预设（babel preset），来加载对应的插件列表；
+通常使用 babel 预设（babel preset），来加载对应的插件列表；
 
 常见的 babel 预设，有三个：
 
@@ -111,7 +111,7 @@ babel 添加了为代码进行**语法转化**的功能。
 - CSS，一般用 _postcss_ 做转化。
 - JS 一般用 _babel_ 做转化。
 
-适配新版本浏览器时，通常不需要转化；在适配旧浏览器时，需要转换。
+适配新版本浏览器时，通常不需要转化；适配旧浏览器时，才需要转换。
 
 所以，是否要做兼容，取决于要适配的浏览器。
 
@@ -151,6 +151,8 @@ not dead
 _browserslist_ 工具，用来获取符合条件的浏览器信息，以决定是否需要进行兼容性的支持：其中引用了 caniuse-lite 工具；
 
 _caniuse-lite_ 工具，用于条件查询数据，来自于 caniuse 的网站上；
+
+_browserslist_ 源码中，有引用 _caniuse-lite_ 工具：
 
 demo-project\03_babel 核心使用\node_modules\browserslist\index.js
 
@@ -336,7 +338,7 @@ ECMA 是 “ECMAScript” 规范下的 JavaScript 语言标准化的机构；
 
 ECMAScript 规范，定义了 JavaScript 如何一步一步的进化、发展；
 
-TC39 遵循的原则是：分阶段加入不同的语言特性，新流程涉及四个不同的 Stage
+TC39 遵循的原则是：分阶段加入不同的语言特性，新流程涉及五个不同的 Stage
 
 - Stage 0：strawman（稻草人），任何尚未提交作为正式提案的讨论、想法变更或者补充，都被认为是第 0 阶段的"稻草人"；
 - Stage 1：proposal（提议），提案已经被正式化，并期望解决此问题，还需要观察与其他提案的相互影响；

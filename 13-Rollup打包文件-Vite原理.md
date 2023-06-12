@@ -100,7 +100,7 @@ demo-project\25_rollup-rollup业务打包\src\vue\App.vue
 ```vue
 <template>
   <div class="app">
-    <h2>App计数器: {{ count }}</h2>
+    <h2>App 计数器: {{ count }}</h2>
     <button @click="increment">+1</button>
     <button @click="decrement">-1</button>
   </div>
@@ -190,7 +190,7 @@ rollup 中，模拟这个效果；
 
 修改 `rollup.config.js`；打包时，将变量插入到源代码中；
 
-- 配置时，使用 `JSON.stringfy('production')` 或者 ``‘“production”’``
+- 配置时，使用 `JSON.stringfy('production')` 或者 ``‘“production”’``。
 
 demo-project\25_rollup-rollup业务打包\rollup.config.js
 
@@ -363,15 +363,14 @@ const isProduction = process.env.NODE_ENV === "production"
 if (isProduction) {
   plugins.push(terser())
 } else {
-  const extraPlugins = [
+  plugins.push(
     serve({
       port: 8000,
       open: true,
       contentBase: "."
     }),
     livereload()
-  ]
-  plugins.push(...extraPlugins)
+  )
 }
 
 module.exports = {
@@ -428,8 +427,8 @@ vite 4 中，才开始使用 rollup 3（以前用 rollup 2 打包）；
 
 vite 在开发阶段，开启一个服务，会对要转换的代码，做简单转换，达到浏览器可直接运行的地步即可，比如；
 
-- ES6 语法 => 不转换；
-- TS => ES6+
+- ES6+ JS 语法 => 不转换；
+- TS => ES6+ JS
 - jsx 语法 => 简单转换
 - vue 语法 => 简单转换。
 
@@ -515,7 +514,7 @@ import _ from 'lodash-es'
 
 - 比如：可在项目中直接引入 ts 代码。
 
-vite 会开启一个服务器，底层使用 *connect* 库，更适合请求的转发（早期用的 koa）
+vite 会开启一个服务器，底层**使用 *connect* 库**，更适合请求的转发（早期用的 koa）
 
 开发阶段，vite 开启的服务器，会去读取 ts 代码，通过 esbuild，直接转成 js 代码（但名称还是 xxx.tx）
 
@@ -583,7 +582,7 @@ demo-project\26_vite-vite工具的使用\src\main.jsx
 import "./css/style.css"
 import "./css/normal.less"
 
-// DOM操作
+// DOM 操作
 const titleEl = document.createElement("h2")
 titleEl.textContent = "你好啊, 李银河!"
 titleEl.className = "title"
@@ -612,6 +611,8 @@ export function formatPrice(price: number): string {
   return "¥" + price
 }
 ```
+
+引入 ts 代码。
 
 demo-project\26_vite-vite工具的使用\src\main.jsx
 
@@ -648,9 +649,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  plugins: [
-    vue()
-  ]
+  plugins: [vue()]
 })
 ```
 
@@ -770,7 +769,7 @@ npx vite preview
 使用 vite 脚手架，创建项目：
 
 ```shell
-# 使用 vite 脚手架，创建各种项目，可以是 vue、react...
+# 使用 vite 脚手架，创建项目，可以是 vue、react、... 项目
 npm create vite
 yarn create vite
 pnpm create vite

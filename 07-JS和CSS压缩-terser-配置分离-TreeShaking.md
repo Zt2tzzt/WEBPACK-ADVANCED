@@ -2,17 +2,17 @@
 
 ## 一、Terser
 
-_Terser_ 是一个用于 JavaScript **Parser（解析）**、**Mangler（绞肉机）**，**Compressor（压缩机）**的工具集；
-
 webpack 默认打包的 bumdle，没有进行压缩。
+
+_Terser_ 是一个用于 JavaScript **Parser（解析）**、**Mangler（绞肉机）**，**Compressor（压缩机）**的工具集。
 
 _Terser_ 工具，可用于压缩、丑化代码，让 bundle 变得更小。
 
-_uglify-js_ 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，且目前也已不再维护；
+> _uglify-js_ 是早期用来压缩、丑化 JS 代码的库，它不支持 ES6+ 的语法，目前也已不再维护；
 
 _Terser_ 从 _uglify-es_ 库 fork 过来，并且保留它原来的大部分 API 并适配 _uglify-es_、_uglify-js@3_ 等；
 
-Terser 是一个独立的工具，可以单独安装：
+*Terser* 是一个独立的工具，可以单独安装：
 
 ```shell
 # 局部安装
@@ -113,9 +113,11 @@ webpack 中的 `TerserPlugin`，底层用的就是 _Terser_ 工具。
 
 （掌握），webpack 默认没有配置 css 压缩，通常要自行配置。
 
-CSS 压缩，是指去除无用的空白（空格，换行）；而不是修改选择器、属性的名称、值等；
+CSS 压缩，是指**去除无用的空白（空格，换行）**；而不是修改选择器、属性的名称、值等；
 
-要使用一个插件：_css-minimizer-webpack-plugin_；底层使用 cssnano 工具来优化、压缩 CSS（该工具也可以单独使用）；
+要使用一个插件：_css-minimizer-webpack-plugin_；
+
+- 底层使用 cssnano 工具来优化、压缩 CSS（该工具也可以单独使用）；
 
 1.安装 css-minimizer-webpack-plugin：
 
@@ -166,7 +168,7 @@ demo-project\13_webpack 优化-配置的分离\package.json
 
 webpack 的配置文件 `comm.config.js` 中，使用 `module.exports` 导出一个**函数**。
 
-webpack 会执行这个函数，加载返回的对象。
+webpack 会自动执行这个函数，加载返回的对象。
 
 1.在导出的函数中，会传入 `env` 对象，在其中获取环境变量。
 
@@ -366,9 +368,9 @@ module.exports = {
 
 ## 五、tree shaking
 
-Tree Shaking 是一个术语，在计算机中，表示消除死代码（dead_code）；
+Tree Shaking 是一个术语，在计算机中，表示**消除死代码（dead_code）**；
 
-该思想最早起源于 LISP 语言，用于消除未调用的代码；
+该思想最早起源于 **LISP** 语言，用于消除未调用的代码；
 
 - 未调用的纯函数，无副作用，可以放心的消除（在进行函数式编程时，尽量使用纯函数的原因之一）；
 
@@ -482,7 +484,7 @@ window.lyric = '哈哈哈哈哈'
 - 副作用在这里，可理解为：代码有执行一些特殊的任务，不能仅仅通过 `export` 来判断这段代码的意义；
 - React、JS 的纯函数中，都涉及副作用的概念。
 
-在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；可以安全的删除，所有未用到 `exports`（没有副作用代码）；
+在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；所有未用到 `exports`（没有副作用代码）都可以安全的删除；
 
 demo-project\14_webpack 优化-TreeShaking\package.json
 

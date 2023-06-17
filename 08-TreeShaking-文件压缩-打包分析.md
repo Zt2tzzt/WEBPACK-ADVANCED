@@ -6,7 +6,7 @@ CSS 也可以进行 Tree Shaking。需要借助插件；
 
 > CSS 中的标签选择器，一般不做 tree shaking
 
-早期，使用 *PurifyCss* 插件（已不再维护），来完成 CSS 的 tree shaking；
+早期，使用 *PurifyCss* 插件（已不再维护），来完成；
 
 目前，使用 *PurgeCSS* 插件，可**删除未使用的 CSS**；
 
@@ -21,7 +21,7 @@ npm install purgecss-webpack-plugin -D
 - `paths`：表示要检测哪些目录下的内容；
   - 使用 Node 的 `glob` 模块（如果没有该模块，安装一下）；
   - `{ nodir: true }`: 表示分析不是文件夹的内容。
-- `safelist`：表示分析时排除某些标签。
+- `safelist`：表示分析时，排除某些标签。
 
 Purgecss 也可以对 less 文件进行处理（它是对打包后的 css 进行 tree shaking 操作的）；
 
@@ -32,7 +32,6 @@ const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
 const glob = require('glob')
 
 module.exports = {
-  
   plugins: [
     // 对 CSS 进行 TreeShaking
     new PurgeCSSPlugin({
@@ -63,14 +62,14 @@ Scope Hoisting 是从 webpack 3 开始，增加的功能；
 
 Scope Hoisting 可将函数合并到一个模块中来运行；
 
-webpack 已经内置了对应的模块：
+webpack 已经内置了对应的设置：
 
 - 在 `mode: production` 模式下，默认这个模块就会启用；
 - 在 `mode: development` 模式下，需要自行配置打开；
 
 :egg: 案例理解；
 
-在配置文件中，进行配置：
+使用 webpack 内置的模块，在配置文件中，进行配置：
 
 demo-project\15_webpack优化-ScopeHoisting\config\prod.config.js
 
@@ -113,19 +112,17 @@ demo-project\15_webpack优化-ScopeHoisting\build\js\main-bundle.js
   \*********************************/function(){window.lyric="哈哈哈哈哈",console.log(function sum(o,e){return o+e}(20,30));console.log("Hello World"),function foo(o,e){console.log("foo function exec~"),console.log(o,e)}();var o=document.createElement("div");o.className="title",o.textContent="哈哈哈哈",document.body.append(o)}},function(o){var e;e="./src/demo.js",o(o.s=e)}]);
 ```
 
-## 三、HTTP 压缩
+## 三、HTTP 传输压缩
 
 HTTP 压缩，指的是：对 http 协议传输的内容，进行压缩；
 
 是一种内置在服务器和客户端之间，改进传输速度和带宽利用率的方式；
 
-HTTP 压缩的流程：
+HTTP 传输压缩的流程：
 
-第一步，要压缩的静态资源，在服务器返回结果前，就已经被压缩了（在 webpack 中完成）；
-
-第二步，浏览器向服务器发送请求时，会告知服务器，支持哪些压缩格式；
-
-第三步，服务器返回对应格式的压缩文件，并且在响应头中告知浏览器；
+1. 要压缩的静态资源，在服务器返回结果前，就已经被压缩了（在 webpack 中完成）；
+2. 浏览器向服务器发送请求时，会告知服务器，支持哪些压缩格式；
+3. 服务器返回浏览器对应格式的压缩文件，并且在响应头中告知浏览器；
 
 常见的压缩格式。
 

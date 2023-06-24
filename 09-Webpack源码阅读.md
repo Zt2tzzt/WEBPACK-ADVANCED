@@ -58,11 +58,13 @@ class Compiler {
 //...
 ```
 
-webpack 官方提供了一个库 *tapable*，安装该库，简单的使用；
+webpack 官方提供了一个库 *tapable*，安装该库。
 
 ```shell
 npm install tapable -D
 ```
+
+简单的使用；
 
 其中的核心代码如下：用于监听事件（后续会详细介绍）；
 
@@ -728,6 +730,7 @@ const onCompiled = (err, compilation) => {
   process.nextTick(() => {
     logger = compilation.getLogger("webpack.Compiler");
     logger.time("emitAssets");
+    // 输出打包文件
     this.emitAssets(compilation, err => {
       logger.timeEnd("emitAssets");
       if (err) return finalCallback(err);

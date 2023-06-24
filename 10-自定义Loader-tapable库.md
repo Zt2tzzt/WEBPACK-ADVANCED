@@ -189,7 +189,7 @@ webpack 中的 loader-runner 库，
 - 在行内设置的 loader 是 `inline`（如：`import 'loader1!loader2!./test.js'`）；
 - 也可以通过 `enforce` 设置 `pre` 和 `post`；
 
-在 Pitching 和 Normal 它们的执行顺序分别是：
+在 Pitching 和 Normal Loader 它们的执行顺序分别是：
 
 - `post`, `inline`, `normal`, `pre`；
 - `pre`, `normal`, `inline`, `post`；
@@ -413,7 +413,7 @@ module.exports = function(content) {
 pnpm add @babel/core -D
 ```
 
-编写 `zt-babel-loader.js`
+编写 `zt-babel-loader.js`；
 
 demo-project\19_webpack-自定义Loader-案例\zt-loaders\zt-babel-loader.js
 

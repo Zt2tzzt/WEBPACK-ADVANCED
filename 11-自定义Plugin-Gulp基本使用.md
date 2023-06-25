@@ -17,7 +17,7 @@ CompressionPlugin
 这些 Plugin，是如何注册到 webpack 的生命周期中的？
 
 1. 在 `webpack` 函数的 `createCompiler` 方法中，注册了所有的插件；
-2. 在注册插件时，会调用插件函数，或者插件对象的 `apply` 方法；
+2. 在注册插件时，会调用插件函数，或对象插件的 `apply` 方法；
 3. 它们会接收 `compiler` 对象，通过它，来注册 Hook 的事件；
 4. 某些插件，也会传入一个 `compilation` 对象，也可通过它来注册 Hook 事件；
 
@@ -124,7 +124,7 @@ class AutoUploadWebpackPlugin {
       // 2.使用 SSH 连接远程服务器；
       await this.connectServer()
 
-      // 3.删除原有的文件夹中内容；
+      // 3.删除远程服务器中，原有的文件夹中内容；
       const { remotePath } = this.options
       this.ssh.execCommand(`rm -rf ${remotePath}/*`)
 
@@ -200,7 +200,7 @@ module.exports = {
 
 一个帮你增强工作流的**自动化工具包**；
 
-学好 webpack，其它打包工具，都很简单；
+> 学好 webpack，其它打包工具，都很简单；
 
 ![gulp](NodeAssets/gulp.jpg)
 
@@ -208,7 +208,7 @@ module.exports = {
 
 gulp 的核心理念是：“task runner”
 
-- 定义一系列任务，然后基于文件的构建流(Stream)；使用 gulp 的插件体系，来完成这些任务；
+- 定义一系列任务，然后基于**文件的构建流(Stream)**；使用 gulp 的插件体系，来完成这些任务；
 
 webpack 的核心理念是：“module bundler”
 

@@ -323,7 +323,7 @@ pnpm add @rollup/plugin-commonjs -D
 
 所以仍然不会被打包，
 
-要解决项目中引入第三方依赖，无法打包的问题：
+要解决项目中，从 node_modules 中，引入第三方依赖，无法打包的问题：
 
 还需要安装 *@rollup/plugin-node-resolve* 库：
 
@@ -431,7 +431,7 @@ module.exports = {
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 
 ```js
-// 默认lodash没有被打包是因为它使用commonjs, rollup默认情况下只会处理es module
+// 默认 lodash 没有被打包是因为它使用 commonjs, rollup 默认情况下只会处理 es module
 const commonjs = require('@rollup/plugin-commonjs')
 const nodeResolve = require('@rollup/plugin-node-resolve')
 

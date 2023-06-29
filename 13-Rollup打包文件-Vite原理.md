@@ -538,7 +538,7 @@ vite 默认支持 postcss 的转换：
 pnpm add postcss postcss-preset-env -D
 ```
 
-配置 `postcss.config.js`，加上浏览器前缀；
+配置 `postcss.config.js`，为 css 特性，加上浏览器前缀；
 
 demo-project\26_vite-vite工具的使用\postcss.config.js
 
@@ -631,7 +631,7 @@ vite 对 vue 提供第一优先级支持：
 - Vue 3 JSX 支持：安装 *@vitejs/plugin-vue-jsx* 插件。
 - Vue 2 支持：安装 *underfin/vite-plugin-vue2* 插件。
 
-现在一般使用 vue3，所以安装如下插件：
+现在一般使用 vue 3，所以安装如下插件：
 
 ```shell
 pnpm add @vitejs/plugin-vue -D
@@ -697,7 +697,7 @@ app.mount(document.querySelector("#app"))
 vite 默认支持对 .jsx、.tsx 文件的处理，同样开箱即用；
 
 - 开发阶段，通过 ESBuild 来完成的编译：
-- 生产环境，用 rollup 进行打包，用 babel 进行编译的
+- 生产环境，用 rollup 进行打包，用 babel 进行编译的。
 
 所以，直接在项目中引入 react 的代码即可；
 

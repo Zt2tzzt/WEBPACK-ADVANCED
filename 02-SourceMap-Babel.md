@@ -4,8 +4,7 @@
 
 前端工程化项目，打包后的代码，运行在浏览器上，是经过压缩的：
 
-- 比如：babel 会将 ES6 代码转换成 ES5；
-- 比如：TS 经由 babel 转成 JS；
+- 比如：babel 会将 ES6 代码转换成 ES5；将 TS 转成 JS；
 - 比如：压缩后，代码行号、列号，会不一致；
 - 比如：丑化压缩时，变量名称会改变；
 
@@ -222,7 +221,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 ## 三、source-map 分析
 
-最初，生成的 source-map 文件大小,是原始文件的 10 倍;
+最初，生成的 source-map 文件大小,，是原始文件的 10 倍;
 
 第二版，减少了约 50%；
 
@@ -272,7 +271,7 @@ demo-project\02-source-map\build\boundle.js.map
 
 ### 2."source-map"
 
-会生成一个独立的 source-map 文件，并在 `bundle.js` 文件中有一个注释，指向 source-map 文件；
+会生成一个独立的 source-map 文件，并在 `bundle.js` 文件中有一个注释，指向该 source-map 文件；
 
 浏览器会根据这个注释，找到 source-map 文件，解析，还原出源文件；
 
@@ -570,7 +569,7 @@ Babel 支持（脱离 webpack）在命令行单独运行：
    ```
 
    ```shell
-   npx babel src --out-dir dist --plugins=@babel/plugin-transform-block-scoping,babel/plugin-transform-arrow-function
+   npx babel src --out-dir dist --plugins=@babel/plugin-transform-block-scoping,babel/ plugin-transform-arrow-function
    ```
 
 ### 3.预设 preset
@@ -589,7 +588,7 @@ npm install @babel/preset-env -D
 npx babel demo.js --out-dir dist --presets=@babel/preset-env
 ```
 
-> 安装库的方式如 “@babel/core”，表示代码仓库通过 monoRepo 的方式来管理。
+> 安装库的方式，类似于 “@xxx/xxxx”，表示代码仓库通过 monoRepo 的方式来管理。
 
 ## 七、Babel 底层原理
 
@@ -608,6 +607,4 @@ Babel 编译器的工作流程，3 点：对应的步骤，理解原理图。
 
 ![Babel的执行流程](NodeAssets/Babel的执行流程.jpg)
 
-[github 上，优秀的小型编译器项目](https://github.com/jamiebuilds/the-super-tiny-compiler)
-
-将 lisp 语言的代码，转成 C 语言的代码。
+[github 上，优秀的小型编译器项目](https://github.com/jamiebuilds/the-super-tiny-compiler)，将 lisp 语言的代码，转成 C 语言的代码。

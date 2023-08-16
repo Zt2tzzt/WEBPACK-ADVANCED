@@ -10,7 +10,8 @@ webpack 是一个为现代 JavaScript 应用程序而生的静态模块化打包
 
 - 打包 bundler：webpack 是一个打包工具；
 - 静态的 static：webpack 将前端工程化项目，打包成静态资源（部署到静态服务器）；
-- 模块化 module：webpack 默认支持各种模块化开发，比如：ES Module、CommonJS、AMD...；
+- 模块化 module：webpack 默认支持各种模块化开发，
+  - 比如：ES Module、CommonJS、AMD...；
 - 现代的 modern：正是因为，现代前端开发，面临各种各样的问题，才催生了 webpack 的出现和发展；
 
 回顾：前端项目开发模式，发展的三个阶段：
@@ -119,7 +120,7 @@ demo-project\02-source-map\build\boundle.js
 
 `mode` 配置选项：用于告知 webpack 使用响应模式的内置优化：
 
-- `production`：默认值，准备打包上线的时候设置，打包的文件会被压缩和丑化。
+- `production`：默认值，准备打包上线的时候设置，打包的文件会被**压缩和丑化**。
 - `development`：一般在开发阶段设置。
 - `none`：不使用任何默认优化选项（只有 `entry`，`output` 两个配置，其它都不加）。
 

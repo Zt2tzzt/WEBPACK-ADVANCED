@@ -230,7 +230,7 @@ module.exports = {
 
 ### 4.总结
 
-使用 ts-loader（本质上用 TypeScript Compiler 编译）：
+使用 ts-loader（本质上用 TypeScript Compiler （tsc）编译）：
 
 - 编译 TypeScript 时，只能将 ts 代码转换成 js 代码；
 - 如果还要添加 polyfill，那么是无能为力的；需要借助于 babel；
@@ -249,11 +249,11 @@ module.exports = {
 
 ### 5.最佳实践
 
-（事实上，[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明）
+事实上，[TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html)，有对其进行说明：
 
 既使用 babel 来完成代码的转换，也使用 tsc 来进行类型的检查。
 
-1.在 "scripts" 中添加了两个脚本，用于类型检查；
+1.在 package.json 文件的  "scripts" 中添加了两个脚本，用于类型检查；
 
 demo-project\04_webpack 服务器\package.json
 
@@ -362,7 +362,7 @@ demo-project\04_webpack 服务器\package.json
 
 `devServer` 中 `static`，对于访问打包后的资源，其实并没有太大的作用；
 
-它的主要作用是：指定从哪里来查找，打包后的资源所依赖的一些资源；
+它的主要作用是：指定从哪里来查找，打包后的资源所依赖的一些静态资源；
 
 - 比如在 `index.html` 模板中，去引入一个 `abc.js` 文件，这个文件存放在 `public` 文件夹中；
 
@@ -466,7 +466,8 @@ devServer 中使用 host 设置主机地址，可设置两个值：
 
 `locahost`（默认值）：
 
-- 本质是域名，会被解析为 `127.0.0.1`，它是**回环地址（loop back address）**，意思是主机自己发送的包，被自己接收。
+- 本质是域名，会被解析为 `127.0.0.1`，即**回环地址（loop back address）**；
+- 意思是主机自己发送的包，被自己接收。
 - 正常的数据包，经过**应用层-传输层-网络层-数据链路层-物理层**，在回环地址中，数据包在“网络层”被获取到，不会经过后面 2 层。
 - 比如，监听 `127.0.0.1` 时，在同一个网段下的主机中，通过 ip 地址是不能访问的;
 
@@ -531,7 +532,8 @@ module.exports = {
 
 `devServer` 中的 `proxy` 配置：
 
-- `target`：表示的是代理到的目标地址，比如 `/api/moment` 会被代理到 `http://localhost:8888/api/moment`；
+- `target`：表示的是代理到的目标地址，
+  - `target: 'http://localhost:8888'`，表示 `/api/moment` 会被代理到 `http://localhost:8888/api/moment`；
 - `pathRewrite`：默认情况下，`/api` 也会被写入到 URL 中，如果希望删除，可以使用 `pathRewrite`；
 - `changeOrigin`：它表示是否更新代理后请求的 `headers` 中 `host` 地址；
 

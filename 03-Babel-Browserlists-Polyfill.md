@@ -22,7 +22,7 @@ npm install @babel/plugin-transform-arrow-function @babel/plugin-transform-block
 
 ### 2.babel-preset
 
-如果一个个去安装 babel 插件，意味着要手动管理大量插件;
+如果一个个去安装 babel 插件，意味着要手动管理大量插件；
 
 通常使用 babel 预设（babel preset），来加载对应的插件列表；
 
@@ -37,6 +37,8 @@ npm install @babel/preset-env -D
 ```
 
 2.在 `webpoack.config.js` 文件中做配置：
+
+demo-project\03_babel核心使用\webpack.config.js
 
 ```javascript
 module.exports = {
@@ -120,7 +122,7 @@ babel 添加了为代码进行**语法转化**的功能。
 - 比如 Chrome、Safari、IE、Edge、Chrome for Android、UC Browser、QQ Browser...；
 - 决定是否要兼容它们，通常在脚手架中进行了配置，其中很重要的一点，是浏览器的市场占有率。
 
-浏览器市场占有率，通常在 [caniuse](https://caniuse.com/usage-table) 则个网站进行查询；
+浏览器市场占有率，通常在 [caniuse](https://caniuse.com/usage-table) 这个网站进行查询；
 
 ## 四、browserslist
 
@@ -340,13 +342,13 @@ ECMAScript 规范，定义了 JavaScript 如何一步一步的进化、发展；
 
 TC39 遵循的原则是：分阶段加入不同的语言特性，新流程涉及五个不同的 Stage
 
-- Stage 0：strawman（稻草人），任何尚未提交作为正式提案的讨论、想法变更或者补充，都被认为是第 0 阶段的"稻草人"；
-- Stage 1：proposal（提议），提案已经被正式化，并期望解决此问题，还需要观察与其他提案的相互影响；
-- Stage 2：draft（草稿），Stage 2 的提案应提供规范初稿、草稿；
+- **Stage 0：strawman（稻草人）**，任何尚未提交作为正式提案的讨论、想法变更或者补充，都被认为是第 0 阶段的"稻草人"；
+- **Stage 1：proposal（提议）**，提案已经被正式化，并期望解决此问题，还需要观察与其他提案的相互影响；
+- **Stage 2：draft（草稿）**，Stage 2 的提案应提供规范初稿、草稿；
   - 此时，语言的实现者开始观察 runtime 的具体实现是否合理；
-- Stage 3：candidate（候补），建议的候选提案。在这个高级阶段，规范的编辑人员和评审人员必须在最终规范上签字;
+- **Stage 3：candidate（候补）**，建议的候选提案。在这个高级阶段，规范的编辑人员和评审人员必须在最终规范上签字;
   - 该阶段的提案，不会有太大的改变，在对外发布之前只是修正一些问题；
-- Stage 4：finished（完成），进入 Stage 4 的提案将包含在 ECMAScript 的下一个修订版中；
+- **Stage 4：finished（完成）**，进入 Stage 4 的提案将包含在 ECMAScript 的下一个修订版中；
 
 ## 十一、Babel 的 Stage-X 设置
 

@@ -170,15 +170,15 @@ webpack 的配置文件 `comm.config.js` 中，使用 `module.exports` 导出一
 
 webpack 会自动执行这个函数，加载返回的对象。
 
-1.在导出的函数中，会传入 `env` 对象，在其中获取环境变量。
+Ⅰ、在导出的函数中，会传入 `env` 对象，在其中获取环境变量。
 
-2.安装 _webpack-merge_ 插件。在 `comm.config.js` 中，使用
+Ⅱ、安装 _webpack-merge_ 插件。在 `comm.config.js` 中，使用
 
 ```shell
 pnpm add webpack-merge -D
 ```
 
-3.在 `comm.config.js` 中，动态的加载 `MiniCssExtractPlugin.loader`
+Ⅲ、在 `comm.config.js` 中，动态的加载 `MiniCssExtractPlugin.loader`
 
 demo-project\13_webpack 优化-配置的分离\config\comm.config.js
 
@@ -374,7 +374,7 @@ Tree Shaking 是一个术语，在计算机中，表示**消除死代码（dead_
 
 - 未调用的纯函数，无副作用，可以放心的消除（在进行函数式编程时，尽量使用纯函数的原因之一）；
 
-处理 JS，Tree Shaking 也被应用于其他的语言，比如：Dart；
+除了 JS，Tree Shaking 也被应用于其他的语言，比如：Dart；
 
 JS 的 Tree Shaking：
 
@@ -458,12 +458,14 @@ function mul(num1, num2) [
 
 这段注释的意义是，告知 _Terser_ 在优化时，可以删除掉这段代码；
 
-- 若配置 `usedExports: false`，mul 函数没有被 Tersr 移除掉；
-- 若配置 `usedExports: true`，mul 函数才被 Terser 移除掉；
+- 若配置 `usedExports: false`，`mul` 函数没有被 Tersr 移除掉；
+- 若配置 `usedExports: true`，`mul` 函数才被 Terser 移除掉；
 
 所以，`usedExports` 实现 Tree Shaking，是结合 _Terser_ 来完成的。
 
-然而，`usedExports` 没办法做到，删除整个没有使用的模块，因为考虑到，引用的模块，可能存在**副作用**，比如下方代码：
+然而，`usedExports` 没办法做到，删除整个没有使用的模块，
+
+因为考虑到，引用的模块，可能存在**副作用**，比如下方代码：
 
 demo-project\14_webpack 优化-TreeShaking\src\demo\parse-lyric.js
 
@@ -484,7 +486,9 @@ window.lyric = '哈哈哈哈哈'
 - 副作用在这里，可理解为：代码有执行一些特殊的任务，不能仅仅通过 `export` 来判断这段代码的意义；
 - React、JS 的纯函数中，都涉及副作用的概念。
 
-在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack 项目中，没有使用副作用的代码；所有未用到 `exports`（没有副作用代码）都可以安全的删除；
+在 `package.json` 中，配置 `"sideEffects": false`，告知 webpack，项目中没有使用副作用的代码；
+
+所有未用到 `exports`（没有副作用代码）都可以安全的删除；
 
 demo-project\14_webpack 优化-TreeShaking\package.json
 

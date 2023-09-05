@@ -17,8 +17,8 @@ CompressionPlugin
 这些 Plugin，是如何注册到 webpack 的生命周期中的？
 
 1. 在 `webpack` 函数的 `createCompiler` 方法中，注册了所有的插件；
-2. 在注册插件时，会调用插件函数，或对象插件的 `apply` 方法；
-3. 它们会接收 `compiler` 对象，通过它，来注册 Hook 的事件；
+2. 在注册插件时，如果是函数类型的插件，会调用；如果是对象类型的插件，会调用其中的 `apply` 方法；
+3. 其中会接收 `compiler` 对象，通过它，来注册 Hook 的事件；
 4. 某些插件，也会传入一个 `compilation` 对象，也可通过它来注册 Hook 事件；
 
 它们是如何注册到 webpack 生命周期中的？
@@ -221,7 +221,7 @@ gulp 相对于 webpack 的优缺点：
 - gulp 相对于 webpack，思想更加简单、易用，更适合编写一些**自动化**的任务；
 - gulp 默认不支持模块化；
   - 目前大型项目（如 Vue、React、Angular），并不会使用 gulp 来构建；
-  - 正在慢慢地退出历史舞台。
+- gulp 正在慢慢地退出历史舞台。
 
 ## 五、gulp 基本使用
 
@@ -258,7 +258,9 @@ module.exports = {
 }
 ```
 
-如下是 gulp 4 之前，创建任务的方式；现在也支持，但已经越来越少使用。
+如下是 gulp 4 之前，创建任务的方式如下；
+
+虽然现在也支持，但已经越来越少使用。
 
 demo-project\22_gulp-gulp的基本使用\gulpfile.js
 

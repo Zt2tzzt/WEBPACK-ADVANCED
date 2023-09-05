@@ -261,7 +261,7 @@ npx rollup ./src/main.js -f umd --name mathUtil -o dist/bundle.js
 
 rollup 的配置文件名称为：`rollup.config.js`：
 
-在配置文件中，进行配置，打包出在不同环境下使用的库文件（用户可以根据不同的需求来引入）：
+在配置文件中，进行配置，打包出，在不同环境下使用的库文件（用户可以根据不同的需求来引入）：
 
 demo-project\24_rollup-rollup的库打包\rollup.config.js
 
@@ -303,9 +303,8 @@ npx rollup -c
 
 比如，当代码中使用了 *loadash* 库时，该库没有被打包进源代码；
 
-因为 lodash 使用 commonjs 模块化规范；
-
-rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
+- 因为 lodash 使用 commonjs 模块化规范；
+- rollup 默认情况下，只会处理 ESModule 模块化规范的代码；
 
 要解决类似于使用 commonjs 引入模块无法打包的问题，详见[官方文档](https://rollupjs.org/introduction/#compatibility)。
 
